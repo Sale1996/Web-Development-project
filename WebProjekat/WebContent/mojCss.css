@@ -1,0 +1,155 @@
+
+ .leftcolumn {   
+     float: left;
+     width: 25%;
+ }
+
+ /* Right column */
+ .rightcolumn {
+     float: left;
+     width: 75%;
+     background-color: #f1f1f1;
+     padding-left: 20px;
+ }
+ 
+ .card {
+     background-color: white;
+     padding: 20px;
+     margin-top: 20px;
+ }
+ 
+ 
+ 
+ /*korisceno za dugme koje sluzi za pretragu*/
+ .button {
+   display: inline-block;
+   border-radius: 4px;
+   background-color: #993ED0;
+   border: none;
+   color: #FFFFFF;
+   text-align: center;
+   font-size: 12px;
+   padding: 10px;
+   width: 100px;
+   transition: all 0.5s;
+   cursor: pointer;
+   margin: 5px;
+ }
+
+ .button span {
+   cursor: pointer;
+   display: inline-block;
+   position: relative;
+   transition: 0.5s;
+ }
+
+ .button span:after {
+   content: '\23ec';
+   position: absolute;
+   opacity: 0;
+   top: 0;
+   right: -20px;
+   transition: 0.5s;
+ }
+
+ .button:hover span {
+   padding-right: 25px;
+ }
+
+ .button:hover span:after {
+   opacity: 1;
+   right: 0;
+ }
+ /* korisceno za tabele koje sluze za top 10 proizvoda #3D8AB1*/
+    .tableTOP10{
+      display: inline-block;
+      background-color: rgba(0, 0, 0, 0);
+      border: 1;
+      color: #FFFFFF;
+      text-align: center;
+      font-size: 20px;
+      border-radius: 15px;
+       
+border: 1px solid #905FAB;
+padding: 20px; 
+border-spacing: 16px;
+border-collapse: separate;  
+    }
+    /* korisceno za tabele za sve artikle*/
+    .tableSVIArtikli{
+      display: inline-block;
+      background-color: rgba(0, 0, 0, 0);
+      border: 1;
+      color: #000000;
+      text-align: center;
+      font-size: 20px;
+     
+padding: 20px; 
+border-spacing: 20px;
+border-collapse: separate;  
+    }
+    
+    .tableTOP10naziv{
+      font-size: 25px;
+    }
+    
+    
+    
+    /* SLEDECA PODESAVANJA SU NAMENJENA ZA PRIKAZ DETALJA O ARTIKLU U VIDU POP UP PROZORA!*/
+    
+    /* Popup container - can be anything you want */
+	.popup {
+	    position: relative;
+	    display: inline-block;
+	    cursor: pointer;
+	    -webkit-user-select: none;
+	    -moz-user-select: none;
+	    -ms-user-select: none;
+	    user-select: none;
+	}
+	
+	/* The actual popup */
+	.popup .popuptext {
+	    visibility: hidden;
+	    width: 160px;
+	    background-color: #555;
+	    color: #fff;
+	    text-align: center;
+	    border-radius: 6px;
+	    padding: 8px 0;
+	    position: absolute;
+	    z-index: 1;
+	    bottom: 125%;
+	    left: 50%;
+	    margin-left: -80px;
+	}
+	
+	/* Popup arrow */
+	.popup .popuptext::after {
+	    content: "";
+	    position: absolute;
+	    top: 100%;
+	    left: 50%;
+	    margin-left: -5px;
+	    border-width: 5px;
+	    border-style: solid;
+	    border-color: #555 transparent transparent transparent;
+	}
+	
+	/* Toggle this class - hide and show the popup */
+	.popup .show {
+	    visibility: visible;
+	    -webkit-animation: fadeIn 1s;
+	    animation: fadeIn 1s;
+	}
+	
+	/* Add animation (fade in the popup) */
+	@-webkit-keyframes fadeIn {
+	    from {opacity: 0;} 
+	    to {opacity: 1;}
+	}
+	
+	@keyframes fadeIn {
+	    from {opacity: 0;}
+	    to {opacity:1 ;}
+	}

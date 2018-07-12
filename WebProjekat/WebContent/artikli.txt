@@ -1,0 +1,8 @@
+1;Pasulj;350;Izvanredan pasulj domace kuhinje sa belim lukom i mesom;400;jelo;Zvezda
+2;Paprikas;280;Lovacki paprikas zaljucen;400;jelo;Zvezda
+3;Pica madjarica;360;Pica za ljubitelje ljute kuhinje;200;jelo;Karibik
+4;Pica kapricoza;250;La classico pica;180;jelo;Karibik
+5;Pivo Lav;150;Svetlo pivo;500;pice;Zvezda
+6;Vino Crveno;180;Crveno vino;320;pice;Zvezda
+7;Coca cola;100;Hladno pice;200;pice;Karibik
+8;Limunada;100;Hladno pice;200;pice;Karibik

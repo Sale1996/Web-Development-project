@@ -1,0 +1,2 @@
+1;Zvezda;Karadjordjeva 101;Domaca kuhinja
+2;Karibik;Bulevar oslobodjenja 11a;Picerija
