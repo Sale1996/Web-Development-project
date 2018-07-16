@@ -3,7 +3,7 @@ function addTop10ArtikalTr(artikal) {
 	let tr = $('<tr></tr>');
 	let tdNaziv = $('<td class="tableTOP10naziv">' + artikal.naziv + '</td>');
 	let tdCena = $('<td>' + artikal.jedinicnaCena + ' din' + '</td>');
-	let tdDugme = $('<td><button class="button" hidden="false">Kupi</button> </td>')
+	let tdDugme = $('<td><button class="button kupacNijeUlogovan" >Kupi</button> </td>')
 	
 	tr.append(tdNaziv).append(tdCena).append(tdDugme); // ovde samo dodajemo u kolone tabele vidis naziv pa cena pa link
 	if(artikal.tip == "jelo"){
@@ -51,7 +51,7 @@ function addSviArtikli(artikli){
 				artikal.kolicina + ' ' + kolicinskaMera +' </br><b>Restoran:</b> '+ artikal.restoran +'</span> </div></td>');
 		
 		let tdCena = $('<td>' + artikal.jedinicnaCena + ' din' + '</td>');
-		let tdDugme = $('<td><button class="button" hidden="false">Kupi</button> </td>');
+		let tdDugme = $('<td><button class="button kupacNijeUlogovan">Kupi</button> </td>');
 		tr.append(tdNaziv).append(tdCena).append(tdDugme); // ovde samo dodajemo u kolone tabele vidis naziv pa cena pa link
 		broj++;
 
@@ -79,7 +79,8 @@ function ispisiRestorane(restorani){
 		
 		let tdNaziv = $('<td> <div class="popup" onclick="iskociPopUP(\'' + restoran.naziv +  '\')"><p style=\"color: #765FAB; font-size: 40px;\" ><b>' + restoran.naziv
 				+ '</b></p> <span class="popuptext" id="' + restoran.naziv 
-				+'"><b>Naziv:</b> '+ restoran.naziv +' </br><b>Adresa:</b> '+ restoran.adresa +' </br><b>Kategorija:</b> '+ restoran.kategorija +'</span> </div>' +
+				+'"><b>Naziv:</b> '+ restoran.naziv +' </br><b>Adresa:</b> '+ restoran.adresa +' </br><b>Kategorija:</b> '+ restoran.kategorija +'</span>'+
+				' </div><div><i id="srceOmiljeniRestoran" class="heart fa fa-heart-o kupacNijeUlogovan"></i></div>' +
 				
 				'</br> <button class="button" id="dugmePretragaArtikalaPoRestoranu"><a href="rest/artikli/izlistajArtikle/' +restoran.naziv + '"><p style="color: white">Pogledaj artikle!</p></a></button></td> ');
 		
@@ -121,6 +122,8 @@ $(document).ready(function() {
 			
 		}
 		});
+	
+
 	
 	/*
 	 * event koji reaguje na click na dugme PRETRAGA i koji nam otvara zadatku pretragu, odnosno zatvara ako je vec otvorena
@@ -175,6 +178,7 @@ $(document).ready(function() {
 				
 				//prikazujemo dugme za pretragu i ispisujemo opet proizvode
 				$("#dugmeTogglePretraga").show();
+				$("#dugmePonistavanjaFilteraArtikala").hide();
 				addSviArtikli(artikli);
 			}
 		});
@@ -204,6 +208,9 @@ $(document).ready(function() {
 				$("#tabelaSviArtikli3  tr").remove();
 				$("#dugmeTogglePretraga").hide();
 				$("#dugmeKojeBriseListuRestorana").show();
+				$("#dugmePonistavanjaFilteraArtikala").hide();
+				$('#formaPretragaArtikala').hide();
+
 
 				ispisiRestorane(restorani);
 			}
@@ -234,6 +241,18 @@ $(document).ready(function() {
 			}
 		})
 	});
+	
+	$(document).on("click","#popUpLoginForm",function(e){
+		e.preventDefault();
+		$("#modal-wrapper").show();
+	});
+	
+	$(document).on("click","#popUpRegisterForm",function(e){
+		e.preventDefault();
+		$("#modal-wrapper2").show();
+	});
+	
+	
 	/*
 	 * Ovaj event reaguje na trazenje artikala znaci dace one artikle prema pretragi
 	 * */
@@ -270,8 +289,10 @@ $(document).ready(function() {
 		
 		
 	});
+	
+	
 		
-	});
+});
 
 
 function iskociPopUP(ime) {

@@ -60,6 +60,15 @@
    opacity: 1;
    right: 0;
  }
+ /*ovo koristimo kako bi sakrili dugmad KUPI */
+ .kupacNijeUlogovan {
+  visibility: hidden;
+ }
+ 
+ 
+ 
+ 
+ 
  /* korisceno za tabele koje sluze za top 10 proizvoda #3D8AB1*/
     .tableTOP10{
       display: inline-block;
@@ -70,10 +79,10 @@
       font-size: 20px;
       border-radius: 15px;
        
-border: 1px solid #905FAB;
-padding: 20px; 
-border-spacing: 16px;
-border-collapse: separate;  
+	  border: 1px solid #905FAB;
+	  padding: 20px; 
+	  border-spacing: 16px;
+	  border-collapse: separate;  
     }
     /* korisceno za tabele za sve artikle*/
     .tableSVIArtikli{
@@ -84,9 +93,9 @@ border-collapse: separate;
       text-align: center;
       font-size: 20px;
      
-padding: 20px; 
-border-spacing: 20px;
-border-collapse: separate;  
+      padding: 20px; 
+      border-spacing: 20px;
+      border-collapse: separate;  
     }
     
     .tableTOP10naziv{
@@ -152,4 +161,90 @@ border-collapse: separate;
 	@keyframes fadeIn {
 	    from {opacity: 0;}
 	    to {opacity:1 ;}
+	}
+	
+	
+	/*
+	* Slede podesavanja ZA LOGIN i REGISTER POP UP PROZORE !
+	*/
+	
+	.inputLoginPOPUP {
+	    width: 60%;
+	    padding: 12px 20px;
+	    margin: 8px 26px;
+	    display: inline-block;
+	    border: 1px solid #3e8cbb;
+	    box-sizing: border-box;
+		font-size:16px;
+	}
+
+
+
+	/* The Modal (background) */
+	.modal {
+		display:none;
+	    position: fixed;
+	    z-index: 1;
+	    left: 0;
+	    top: 0;
+	    width: 100%;
+	    height: 100%;
+	    overflow: auto;
+	    background-color: rgba(0,0,0,0.4);
+	}
+	
+	/* Modal Content Box  #fefefe #888*/
+	.modal-content {
+	    background-color: #fefefe;
+	    margin: 4% auto 15% auto;
+	    border: 1px solid #888;
+	    width: 40%; 
+		padding-bottom: 30px;
+	}
+	
+	/* The Close Button (x) */
+	.closePopUpLogin {
+	    position: absolute;
+	    right: 25px;
+	    top: 0;
+	    color: #000;
+	    font-size: 35px;
+	    font-weight: bold;
+	}
+	.closePopUpLogin:hover,.close:focus {
+	    color: purple;
+	    cursor: pointer;
+	}
+	
+	/* Add Zoom Animation */
+	.animate {
+	    animation: zoom 0.6s
+	}
+	@keyframes zoom {
+	    from {transform: scale(0)} 
+	    to {transform: scale(1)}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/*
+	ULOGOVAN KUPAC 
+	ULOGOVAN KUPAC
+	ULOGOVAN KUPAC
+	ULOGOVAN KUPAC
+	
+	*/
+	
+	/*
+		za prikaz itema koji ce sluziti da kaze koji je restoran omiljeni 
+	*/
+	.heart {
+	  font-size: 25px;
+		color:red;
 	}

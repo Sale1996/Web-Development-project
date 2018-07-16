@@ -12,6 +12,14 @@
         <link rel="stylesheet" href="assets/fonts/stylesheet.css">
         <link rel="stylesheet" href="assets/css/font-awesome.min.css">
         <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+        <script src="assets/js/vendor/jquery-1.11.2.min.js"></script>
+        <script src="assets/js/vendor/bootstrap.min.js"></script>
+        <script src="assets/js/jquery.easypiechart.min.js"></script>
+        <script src="assets/js/jquery.mixitup.min.js"></script>
+        <script src="assets/js/jquery.easing.1.3.js"></script>
+
+        <script src="assets/js/plugins.js"></script>
+        <script src="assets/js/main.js"></script>
 
 
         <!--For Plugins external css-->
@@ -22,19 +30,17 @@
 
         <!--Theme Responsive css-->
         <link rel="stylesheet" href="assets/css/responsive.css" />
-        <link rel="stylesheet" href="mojCss.css"/>
 
         <script src="assets/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
         <script src="jquery-3.3.1.min.js"></script>
+        
+        <link rel="stylesheet" href="mojCss.css"/>      
         <script src="pocetnaStranica.js"></script>
-         <script src="assets/js/vendor/jquery-1.11.2.min.js"></script>
-        <script src="assets/js/vendor/bootstrap.min.js"></script>
-        <script src="assets/js/jquery.easypiechart.min.js"></script>
-        <script src="assets/js/jquery.mixitup.min.js"></script>
-        <script src="assets/js/jquery.easing.1.3.js"></script>
-
-        <script src="assets/js/plugins.js"></script>
-        <script src="assets/js/main.js"></script>
+        <script src="ulogovanKupac.js"></script>
+        
+        
+        
+      
         
         
         
@@ -82,13 +88,24 @@
 
 
                                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                                        <ul class="nav navbar-nav navbar-right">
-                                            <li>
-                                            <a href="#counter">Uloguj se</a>
-                                            
-                                            </li>
-                                            <li><a href="#contact">Registruj se</a></li>
-                                        </ul>    
+                                      <!-- Za neregistvoranog koristnika imacemo samo 2 precice Uloguj se i Registruj se -->
+                                    	<div id="navigacijaPreciceNeregistrovaniKorisnik">
+	                                        <ul class="nav navbar-nav navbar-right">
+	                                            <li>
+	                                            <a id="popUpLoginForm" href="#">Uloguj se</a>
+	                                            
+	                                            </li>
+	                                            <li><a id="popUpRegisterForm" href="#">Registruj se</a></li>
+	                                        </ul>  
+                                        </div>  
+                                        <!-- Za kupca kao precice imacemo korpu, nalog (sa njegovim informacijama) i precicu za odjavljivanje -->
+                                        <div id="navigacijaPreciceNeregistrovaniKorisnik" class="kupacNijeUlogovan">
+	                                        <ul class="nav navbar-nav navbar-right">
+	                                            <li><a  href="#">Korpa</a></li>
+	                                            <li><a  href="#">Nalog</a></li>
+	                                            <li><a  href="#">Odjavi se</a></li>
+	                                        </ul>  
+                                        </div> 
                                     </div>
 
                                 </div>
@@ -266,6 +283,64 @@
         </div>
 
        
+       
+       <!-- POP UP WINDOW ZA LOGIN -->
+       <div id="modal-wrapper" class="modal">
+  
+		  <form class="modal-content animate" >
+		        
+		    <div class="imgcontainer">
+		      <span onclick="document.getElementById('modal-wrapper').style.display='none'" class="closePopUpLogin" title="Close PopUp">&times;</span>
+		      <h2 style="text-align:center; color: #8C7797">Ulogujte se</h2>
+		    </div>
+		
+		    <div class="container" >
+		      
+		      <input class="inputLoginPOPUP"  type="text" placeholder="Unesi korisnicko ime" name="uname">
+		      <input class="inputLoginPOPUP"  type="password" placeholder="Unesi lozinku"  name="psw">  
+		      </br>      
+		      <input class="button" style="margin-left: 28%; margin-right: 42%" style="background-color: #5F8DAB" type="submit" value="Loguj se">
+		    </div>
+		    
+		  </form>
+  
+	   </div>
+	    
+	   <!--  POP UP WINDOW ZA REGISTER -->
+	   <div id="modal-wrapper2" class="modal">
+  
+		  <form class="modal-content animate" id="formaRegistvoranjaKorisnika">
+		        
+		    <div class="imgcontainer" >
+		      <span onclick="document.getElementById('modal-wrapper2').style.display='none'" class="closePopUpLogin" title="Close PopUp">&times;</span>
+		      <h2 style="text-align:center; color: #8C7797">Registrujte se</h2>
+		    </div>
+		
+		    <div class="container" >
+		      
+		      <input id="korisnickoImeInputRegistracija" class="inputLoginPOPUP"  type="text" placeholder="Unesi korisnicko ime" name="uname">
+		      </br><p id="errorKorisnickoIme" style="margin-left: 2%;color : #E84E6D;font-weight: bold;font-size: 17"></p>
+		      <input id="lozinka1Registracija" class="inputLoginPOPUP"  type="password" placeholder="Unesi lozinku"  name="psw">  
+		      </br><p id="errorLozinka" style="margin-left: 2%;color : #E84E6D;font-weight: bold;font-size: 17"></p>		      
+		      <input id="lozinka2Registracija" class="inputLoginPOPUP"  type="password" placeholder="Ponovo unesite lozinku"  name="psw2">  
+		      <input id="imeRegistracija" class="inputLoginPOPUP"  type="text" placeholder="Unesi ime" name="imeime">
+		      </br><p id="errorIme" style="margin-left: 2%;color : #E84E6D;font-weight: bold;font-size: 17"></p>
+		      <input id="prezimeRegistracija" class="inputLoginPOPUP"  type="text" placeholder="Unesi prezime" name="imeprezime">
+		      </br><p id="errorPrezime" style="margin-left: 2%;color : #E84E6D;font-weight: bold;font-size: 17"></p>
+		      <input id="telefonRegistracija" class="inputLoginPOPUP"  type="text" placeholder="Unesi kontakt telefon" name="telefon">
+		      </br><p id="errorTelefon" style="margin-left: 2%;color : #E84E6D;font-weight: bold;font-size: 17"></p>
+		      <input id="emailRegistracija" class="inputLoginPOPUP"  type="email" name="email" placeholder="Email">
+		      </br><p id="errorEmail" style="margin-left: 2%; color : #E84E6D;font-weight: bold;font-size: 17"></p>
+		      
+		      
+		      </br>      
+		      <input class="button" style="margin-left: 28%; margin-right: 42%" style="background-color: #5F8DAB" type="submit" value="Registruj se">
+		     
+		    </div>
+		    
+		  </form>
+  
+	   </div>
 
     </body>
 </html>
