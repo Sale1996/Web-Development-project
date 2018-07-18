@@ -65,6 +65,9 @@
   visibility: hidden;
  }
  
+ .ovoJeZaKupca{
+ }
+ 
  
  
  
@@ -248,3 +251,16 @@
 	  font-size: 25px;
 		color:red;
 	}
+	
+	.tableNalogKorisnika{
+      display: inline-block;
+      background-color: rgba(0, 0, 0, 0);
+      border: 1;
+      color: #000000;
+      text-align: left;
+      font-size: 20px;
+     
+      padding: 20px; 
+      border-spacing: 20px;
+      border-collapse: separate;  
+    }

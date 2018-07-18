@@ -30,7 +30,10 @@ public class KupacService {
 		}
 	}
 	
-	
+	/*
+	 * Poziva se prilikom registracije korisnika (kupca) i kao povratnu vrednost vraca string koji sluzi da nas obavesti ako ima 
+	 * vec registrovanog korisnika sa datim korisnickim imenom ili emailom.
+	 * */
 	@POST
 	@Path("/")
 	@Produces(MediaType.TEXT_PLAIN)
@@ -39,6 +42,7 @@ public class KupacService {
 		
 		return dao.dodajNovogKorisnika(kupac);
 	} 
+
 	
 	
 	

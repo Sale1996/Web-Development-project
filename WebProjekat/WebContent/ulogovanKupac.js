@@ -91,4 +91,31 @@ $(document).ready(function() {
 		
 	});
 	
+	$(document).on("click","#OtvoriNalogKorisnika",function(e){
+		e.preventDefault();
+		$.ajax({
+			url: 'rest/korisnik', //url
+			type: "GET" ,
+			success : function(kupac) {
+				$("#nalogKorisnika").show();
+				
+				$("#ImeIPrezime").text(kupac.ime+" "+kupac.prezime);
+				//sada cemo da popunimo tabelu informacijama o korisniku sa linkom izmeni
+				let trIme= $('<tr><td><b>Ime:</b></td><td>'+ kupac.ime +' </td></tr>');
+				let trPrezime= $('<tr><td><b>Prezime:</b></td><td>'+ kupac.prezime +' </td></tr>');
+				let trUloga = $('<tr><td><b>Uloga:</b></td><td>'+ kupac.uloga +' </td></tr>');
+				let trTelefon= $('<tr><td><b>Kontakt telefon:</b></td><td>'+ kupac.kontaktTelefon +' </td></tr>');
+				let trEmail=$('<tr><td><b>Email:</b></td><td>'+ kupac.emailAdresa +' </td></tr>');
+				let trDatumRegistracije=$('<tr><td><b>Datum registracije:</b></td><td>'+ kupac.datum +' </td></tr>');
+				$("#podaciOKorisniku tbody").append(trIme).append(trPrezime).append(trUloga).append(trTelefon).append(trEmail).append(trDatumRegistracije);
+				
+			}
+			
+		});
+		
+	});
+	
+	
+	
+	
 });

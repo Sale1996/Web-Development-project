@@ -101,5 +101,15 @@ public class KupacDAO {
 		
 		return vrati;
 	}
+
+	public HashMap<String, Kupac> getKupci() {
+		return kupci;
+	}
+
+	public void setKupci(HashMap<String, Kupac> kupci) {
+		this.kupci = kupci;
+	}
+	
+	 
 	
 }

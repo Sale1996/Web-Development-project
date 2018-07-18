@@ -1,8 +1,9 @@
 package beans;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Date;
 
-import sun.util.calendar.BaseCalendar.Date;
 
 public class Korisnik {
    protected String korisnickoIme;
@@ -14,9 +15,13 @@ public class Korisnik {
    protected String kontaktTelefon;
    protected String emailAdresa;
    protected LocalDateTime datumRegistracije;
+ //  protected Date datum;
    
    public Korisnik(){
 		this.datumRegistracije = LocalDateTime.now();
+	//	Instant instant= datumRegistracije.toInstant(null);
+		//datum = Date.from(instant);
+		
 
    }
    
@@ -33,6 +38,8 @@ public class Korisnik {
 			this.kontaktTelefon = kontaktTelefon;
 			this.emailAdresa = emailAdresa;
 			this.datumRegistracije = LocalDateTime.now();
+			//Instant instant= datumRegistracije.toInstant(null);
+			//datum = Date.from(instant);
 			
 }
 
@@ -40,6 +47,7 @@ public class Korisnik {
 
 	public String getKorisnickoIme() {
 		return korisnickoIme;
+		
 	}
 	public void setKorisnickoIme(String korisnickoIme) {
 		this.korisnickoIme = korisnickoIme;
@@ -98,6 +106,18 @@ public class Korisnik {
 	public void setLozinka2(String lozinka2) {
 		this.lozinka2 = lozinka2;
 	}
-   
+
+
+/*
+	public Date getDatum() {
+		return datum;
+	}
+
+
+
+	public void setDatum(Date datum) {
+		this.datum = datum;
+	}
+   */
 
 }

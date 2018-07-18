@@ -3,7 +3,7 @@ function addTop10ArtikalTr(artikal) {
 	let tr = $('<tr></tr>');
 	let tdNaziv = $('<td class="tableTOP10naziv">' + artikal.naziv + '</td>');
 	let tdCena = $('<td>' + artikal.jedinicnaCena + ' din' + '</td>');
-	let tdDugme = $('<td><button class="button kupacNijeUlogovan" >Kupi</button> </td>')
+	let tdDugme = $('<td><button class="button ovoJeZaKupca" >Kupi</button> </td>')
 	
 	tr.append(tdNaziv).append(tdCena).append(tdDugme); // ovde samo dodajemo u kolone tabele vidis naziv pa cena pa link
 	if(artikal.tip == "jelo"){
@@ -51,7 +51,7 @@ function addSviArtikli(artikli){
 				artikal.kolicina + ' ' + kolicinskaMera +' </br><b>Restoran:</b> '+ artikal.restoran +'</span> </div></td>');
 		
 		let tdCena = $('<td>' + artikal.jedinicnaCena + ' din' + '</td>');
-		let tdDugme = $('<td><button class="button kupacNijeUlogovan">Kupi</button> </td>');
+		let tdDugme = $('<td><button class="button ovoJeZaKupca">Kupi</button> </td>');
 		tr.append(tdNaziv).append(tdCena).append(tdDugme); // ovde samo dodajemo u kolone tabele vidis naziv pa cena pa link
 		broj++;
 
@@ -80,7 +80,7 @@ function ispisiRestorane(restorani){
 		let tdNaziv = $('<td> <div class="popup" onclick="iskociPopUP(\'' + restoran.naziv +  '\')"><p style=\"color: #765FAB; font-size: 40px;\" ><b>' + restoran.naziv
 				+ '</b></p> <span class="popuptext" id="' + restoran.naziv 
 				+'"><b>Naziv:</b> '+ restoran.naziv +' </br><b>Adresa:</b> '+ restoran.adresa +' </br><b>Kategorija:</b> '+ restoran.kategorija +'</span>'+
-				' </div><div><i id="srceOmiljeniRestoran" class="heart fa fa-heart-o kupacNijeUlogovan"></i></div>' +
+				' </div><div><a id="srceOmiljeniRestoran" class="heart fa fa-heart-o ovoJeZaKupca"></a></div>' +
 				
 				'</br> <button class="button" id="dugmePretragaArtikalaPoRestoranu"><a href="rest/artikli/izlistajArtikle/' +restoran.naziv + '"><p style="color: white">Pogledaj artikle!</p></a></button></td> ');
 		
@@ -116,9 +116,12 @@ $(document).ready(function() {
 			for (let artikal of artikli) {
 				addTop10ArtikalTr(artikal);
 			}
-			$("#dugmeKojeBriseListuRestorana").hide();
-			$("#dugmePonistavanjaFilteraArtikala").hide();
+			$("#dugmeKojeBriseListuRestorana").hide(); //pojavljuje se u posebnim slucajevima
+			$("#dugmePonistavanjaFilteraArtikala").hide(); //pojavljuje se u posebnim slucajevima
+			
 			addSviArtikli(artikli);
+			$("[class*='ovoJeZaKupca']").addClass("kupacNijeUlogovan"); //pojavljuju se u slucaju logovanja korisnika
+
 			
 		}
 		});
@@ -213,6 +216,11 @@ $(document).ready(function() {
 
 
 				ispisiRestorane(restorani);
+				if($("#navigacijaPreciceNeregistrovaniKorisnik").hasClass("kupacNijeUlogovan")){
+					 $("[class*='kupacNijeUlogovan']").removeClass('kupacNijeUlogovan');
+				}else{
+				  
+				}
 			}
 		})
 	});
@@ -242,11 +250,17 @@ $(document).ready(function() {
 		})
 	});
 	
+	/*
+	 * Regauje na uloguj se link i iskace nam prozor za login
+	 * */
 	$(document).on("click","#popUpLoginForm",function(e){
 		e.preventDefault();
 		$("#modal-wrapper").show();
 	});
 	
+	/*
+	 * Reaguje na registruj se link i iskace nam prozor za registrovanje
+	 * */
 	$(document).on("click","#popUpRegisterForm",function(e){
 		e.preventDefault();
 		$("#modal-wrapper2").show();
@@ -291,6 +305,54 @@ $(document).ready(function() {
 	});
 	
 	
+	/*
+	 * Pokrece se nakon sto korisnik potvrdi svoje logovanej
+	 * */
+	$('#formaPrijavljivanjeKorisnika').submit(function(event){
+		event.preventDefault();
+		var username=$('#korisnickoImeInputLogovanje').val();
+		var password=$('#passwordInputLogovanje').val();
+		
+		$.ajax({
+			url: 'rest/korisnik', //url
+			type: "POST" ,
+			data: JSON.stringify({korisnickoIme:username,lozinka:password,ime:'',prezime:'',uloga:'',kontaktTelefon:'',emailAdresa:''}),
+			contentType: 'application/json',
+			success : function(korisnik) {
+				if(korisnik.kontaktTelefon.includes("LozinkaNeValja")){
+					$('#errorLozinkaLogovanje').text('Lozinka neispravna!');
+					$('#errorLozinkaLogovanje').show().delay(9000).fadeOut();
+				}
+				if(korisnik.kontaktTelefon.includes("NePostojiKorisnik")){
+					$('#errorKorisnickoImeLogovanje').text('Ne postoji nalog sa ovim korisnickim imenom!');
+					$('#errorKorisnickoImeLogovanje').show().delay(9000).fadeOut();				
+				}
+				
+				if(korisnik.uloga=="kupac"){
+					/*
+					 * Ako se ulogovao kupac znaci da cemo morati da izpremestamo izgled 
+					 * pocetnog prozora od pocetne stranice na onu koja dolikuje ulogovanom
+					 * kupcu
+					 * */
+					//prvo sakrivamo precice za registrovanje i logovanje
+					$('#navigacijaPreciceNeregistrovaniKorisnik').hide();
+					//otkrivamo precice odjave,naloga i korpe
+					//$('#navigacijaPreciceNeregistrovaniKorisnik').removeClass('kupacNijeUlogovan');
+					//otkrivamo svu dugmad "Kupi" tako sto skidamo klasu..
+					//otkrivamo funkcionalnost dodavanja restorana kao omiljenog
+					$("[class*='kupacNijeUlogovan']").removeClass('kupacNijeUlogovan');
+					
+					//zatvaramo prozor logovanja i brisemo njegova polja
+					$('#modal-wrapper').hide();
+					$('#korisnickoImeInputLogovanje').val("");
+					$('#passwordInputLogovanje').val("");
+					
+				}
+				
+			}
+		});
+		
+	});
 		
 });
 

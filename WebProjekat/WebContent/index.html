@@ -37,32 +37,11 @@
         <link rel="stylesheet" href="mojCss.css"/>      
         <script src="pocetnaStranica.js"></script>
         <script src="ulogovanKupac.js"></script>
-        
-        
-        
       
-        
-        
-        
-        
-        
-        
-       
-        
-        
-        
-        
-        
-        
-        
-        
-        
     </head>
     <body data-spy="scroll" data-target=".navbar-collapse">
-        <!--[if lt IE 8]>
-            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
-
+       
+       <!-- OVO JE PANEL KOJI SE NALAZI SKROZ GORE KAO MENU HEADER -->
         <header id="main_menu" class="header navbar-fixed-top">            
             <div class="main_menu_bg">
                 <div class="container">
@@ -70,7 +49,7 @@
                         <div class="nave_menu">
                             <nav class="navbar navbar-default" id="navmenu">
                                 <div class="container-fluid">
-                                    <!-- Brand and toggle get grouped for better mobile display -->
+                                    <!-- Prikazuje ikonicu SALE's shop -->
                                     <div class="navbar-header">
                                         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                                             <span class="sr-only">Toggle navigation</span>
@@ -83,13 +62,11 @@
                                         </a>
                                     </div>
 
-                                    <!-- Collect the nav links, forms, and other content for toggling -->
-
-
-
+                                  
+									<!-- PRECICE KOJE SE NALAZE U GORNJEM DESNOM UGLU -->
                                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                                       <!-- Za neregistvoranog koristnika imacemo samo 2 precice Uloguj se i Registruj se -->
-                                    	<div id="navigacijaPreciceNeregistrovaniKorisnik">
+                                    	<div id="navigacijaPreciceNeregistrovaniKorisnik" >
 	                                        <ul class="nav navbar-nav navbar-right">
 	                                            <li>
 	                                            <a id="popUpLoginForm" href="#">Uloguj se</a>
@@ -102,7 +79,7 @@
                                         <div id="navigacijaPreciceNeregistrovaniKorisnik" class="kupacNijeUlogovan">
 	                                        <ul class="nav navbar-nav navbar-right">
 	                                            <li><a  href="#">Korpa</a></li>
-	                                            <li><a  href="#">Nalog</a></li>
+	                                            <li><a id="OtvoriNalogKorisnika"  href="#">Nalog</a></li>
 	                                            <li><a  href="#">Odjavi se</a></li>
 	                                        </ul>  
                                         </div> 
@@ -118,10 +95,7 @@
             </div>
         </header> <!--End of header -->
 
-
-
-
-
+       <!-- OVO JE PANEL KOJI NAM OMOGUCUJE PRIKAZ 10 NAJPOPULARNIJIH JELA I 10 NAJPOPULARNIJIH PICA -->
         <section id="home" class="home">
             <div class="overlay">
                 <div class="container">
@@ -161,7 +135,7 @@
             </div>
         </section>
 
-
+		<!-- PRIKAZ LISTE KATEGORIJA RESTORANA -->
         <div class="row">
             <div class="leftcolumn">
                 <div class="card">
@@ -275,29 +249,29 @@
             </div>
         </div>
 
-
-        <!-- START SCROLL TO TOP  -->
-
+        <!-- ELEMENT KOJI NAM SKROLUJE DO GORE KADA KLIKNEMO-->
         <div class="scrollup">
             <a href="#"><i class="fa fa-chevron-up"></i></a>
         </div>
-
-       
-       
+      
        <!-- POP UP WINDOW ZA LOGIN -->
        <div id="modal-wrapper" class="modal">
   
-		  <form class="modal-content animate" >
+		  <form class="modal-content animate" id="formaPrijavljivanjeKorisnika" >
 		        
 		    <div class="imgcontainer">
-		      <span onclick="document.getElementById('modal-wrapper').style.display='none'" class="closePopUpLogin" title="Close PopUp">&times;</span>
+		      <span onclick="document.getElementById('modal-wrapper').style.display='none'" class="closePopUpLogin" title="Zatvori prozor">&times;</span>
 		      <h2 style="text-align:center; color: #8C7797">Ulogujte se</h2>
 		    </div>
 		
 		    <div class="container" >
 		      
-		      <input class="inputLoginPOPUP"  type="text" placeholder="Unesi korisnicko ime" name="uname">
-		      <input class="inputLoginPOPUP"  type="password" placeholder="Unesi lozinku"  name="psw">  
+		      <input class="inputLoginPOPUP" id="korisnickoImeInputLogovanje"  type="text" placeholder="Unesi korisnicko ime" name="uname">
+		      </br><p id="errorKorisnickoImeLogovanje" style="margin-left: 2%;color : #E84E6D;font-weight: bold;font-size: 17"></p>
+		      
+		      <input class="inputLoginPOPUP" id="passwordInputLogovanje"  type="password" placeholder="Unesi lozinku"  name="psw">  
+		      </br><p id="errorLozinkaLogovanje" style="margin-left: 2%;color : #E84E6D;font-weight: bold;font-size: 17"></p>
+		     
 		      </br>      
 		      <input class="button" style="margin-left: 28%; margin-right: 42%" style="background-color: #5F8DAB" type="submit" value="Loguj se">
 		    </div>
@@ -312,7 +286,7 @@
 		  <form class="modal-content animate" id="formaRegistvoranjaKorisnika">
 		        
 		    <div class="imgcontainer" >
-		      <span onclick="document.getElementById('modal-wrapper2').style.display='none'" class="closePopUpLogin" title="Close PopUp">&times;</span>
+		      <span onclick="document.getElementById('modal-wrapper2').style.display='none'" class="closePopUpLogin" title="Zatvori prozor">&times;</span>
 		      <h2 style="text-align:center; color: #8C7797">Registrujte se</h2>
 		    </div>
 		
@@ -341,6 +315,49 @@
 		  </form>
   
 	   </div>
+	   
+	   
+	   <!-- POP UP WINDOW ZA PRIKAZ NALOGA KORISNIKA -->
+       <div id="nalogKorisnika" class="modal">
+  
+		  <div class="modal-content animate" id="nalogKorisnika2" >
+		        
+		    <div class="imgcontainer">
+		      <span onclick="document.getElementById('nalogKorisnika').style.display='none'" class="closePopUpLogin" title="Zatvori prozor">&times;</span>
+		      <h2 id="ImeIPrezime" style="text-align:center; color: #8C7797"></h2>
+		    </div>
+				
+		    <div class="container" >
+		    	<table id="podaciOKorisniku" class="tableNalogKorisnika" style="margin-left: 13%;">
+					<thead>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+				</br>
+				<h3 style="margin-left: 23%;color: #8C7797">Istorija porudzbina</h3>
+				</br>
+				<table id="TabelaZadnjePoruzbineKorisnika">
+					<thead>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+				</br>
+				<h3 style="margin-left: 23%;color: #8C7797">Omiljeni restorani</h3>
+				</br>
+				<table id="TabelaomiljeniRestoraniKorisnika">
+					<thead>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+		    </div>
+		    
+		  </div>
+	   </div>
+	   
+	   
 
     </body>
 </html>
