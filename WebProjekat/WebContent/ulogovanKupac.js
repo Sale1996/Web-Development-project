@@ -7,7 +7,9 @@ $(document).ready(function() {
 		  $("#srceOmiljeniRestoran").toggleClass("fa-heart fa-heart-o");
 	});
 	
-	
+	/* * *
+	 * Funkcija koja se pokrece prilikom potvrde registrovanja novog korisnika
+	 * */
 	$('#formaRegistvoranjaKorisnika').submit(function(event){
 		event.preventDefault();
 		let greska=0;
@@ -91,6 +93,9 @@ $(document).ready(function() {
 		
 	});
 	
+	/* *
+	 * Funkcija koja se pokrece kada kliknemo na link 'nalog' u gornjem desnom uglu
+	 * */
 	$(document).on("click","#OtvoriNalogKorisnika",function(e){
 		e.preventDefault();
 		$.ajax({
@@ -115,6 +120,103 @@ $(document).ready(function() {
 		
 	});
 	
+	/* * 
+	 * Funkcija koja se poziva kada korisnik klikne na link 'izmeni profil'
+	 * */
+	$(document).on("click","#izmeniKorisnikaLink",function(e){
+		e.preventDefault();
+		$.ajax({
+			url: 'rest/korisnik',
+			type:"GET",
+			success: function(korisnik) {
+				$("#izmenaProfilaKorisnika").show();
+				$('#imeIzmena').val(korisnik.ime);
+				$('#prezimeIzmena').val(korisnik.prezime);
+				$('#telefonIzmena').val(korisnik.kontaktTelefon);
+				$('#emailIzmena').val(korisnik.emailAdresa);
+				
+			}
+		});
+	});
+	
+	/* *
+	 * Poziva se prilikom gasenja prozora naloga korisnika
+	 * */
+	$(document).on("click","#izlazIzNalogaKupca",function(e){
+		$("#nalogKorisnika").hide();
+		$("#podaciOKorisniku tbody tr").remove(); //brisemo sve redove tabele
+		//jer pri svakom otvaranju prozora mi to punimo, pa da nemamo kopije jednih ispod drugih
+		
+	});
+	
+	/* * 
+	 * Funkcija koja se aktivira prilikom potvrde izmene korisnikovog 
+	 * naloga
+	 * */
+	$('#formaIzmeneProfilaKorisnika').submit(function(event){
+		event.preventDefault();
+		let greska=0; //u slucaju da ima greske ovo polje dobija vrednost 1
+		let lozinka = $('#lozinkaIzmena').val();
+		let lozinka2 = $('#lozinka2Izmena').val();
+		let ime = $('#imeIzmena').val();
+		let prezime = $('#prezimeIzmena').val();
+		let telefon = $('#telefonIzmena').val();
+		let email = $('#emailIzmena').val();
+		
+		
+		if(lozinka!=lozinka2){
+			$('#errorLozinkaIzmena').text('Polja lozinki se ne poklapaju!');
+			$('#errorLozinkaIzmena').show().delay(9000).fadeOut();
+			greska=1;
+		}
+		if(ime==""){
+			$('#errorImeIzmena').text('Polje ime ne sme biti prazno prilikom izmene!');
+			$('#errorImeIzmena').show().delay(9000).fadeOut();
+			greska=1;
+		}
+		if(prezime==""){
+			$('#errorPrezimeIzmena').text('Polje prezime ne sme biti prazno prilikom izmene!');
+			$('#errorPrezimeIzmena').show().delay(9000).fadeOut();
+			greska=1;
+		}
+		
+		if(telefon==""){
+			$('#errorTelefonIzmena').text('Polje telefon ne sme biti prazno prilikom izmene!');
+			$('#errorTelefonIzmena').show().delay(9000).fadeOut();
+			greska=1;
+		}
+		if(email==""){
+			$('#errorEmailIzmena').text('Polje email ne sme biti prazno prilikom izmene!');
+			$('#errorEmailIzmena').show().delay(9000).fadeOut();
+			greska=1;
+		}
+		
+		if(greska==1)
+			return;
+		
+		$.ajax({
+			url: 'rest/korisnik', //url
+			type: "PUT" ,
+			data: JSON.stringify({korisnickoIme:'',lozinka:lozinka,ime:ime,prezime:prezime,uloga:"",kontaktTelefon:telefon,emailAdresa:email }),
+			contentType: 'application/json',
+			success : function(string) {
+				if(string==""){
+					$('#izmenaProfilaKorisnika').hide();
+					$('#nalogKorisnika').hide();
+					$('#lozinkaIzmena').val("");
+					$('#lozinka2Izmena').val("");
+					alert("Izmena uspesno izvrsena!");
+					
+				}
+				//ukoliko vec ima email u povratnom stringu ce se naglasiti
+				if(string.includes("Email")){
+					$('#errorEmail').text('Nalog sa datim Emailom vec postoji!');
+					$('#errorEmail').show().delay(9000).fadeOut();
+				}
+			}
+		});
+		
+	});
 	
 	
 	

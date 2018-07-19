@@ -3,20 +3,17 @@ package dao;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import beans.Korisnik;
 import beans.Kupac;
 
 
@@ -101,6 +98,8 @@ public class KupacDAO {
 		
 		return vrati;
 	}
+	
+	
 
 	public HashMap<String, Kupac> getKupci() {
 		return kupci;

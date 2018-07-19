@@ -323,7 +323,7 @@
 		  <div class="modal-content animate" id="nalogKorisnika2" >
 		        
 		    <div class="imgcontainer">
-		      <span onclick="document.getElementById('nalogKorisnika').style.display='none'" class="closePopUpLogin" title="Zatvori prozor">&times;</span>
+		      <span id="izlazIzNalogaKupca"  class="closePopUpLogin" title="Zatvori prozor">&times;</span>
 		      <h2 id="ImeIPrezime" style="text-align:center; color: #8C7797"></h2>
 		    </div>
 				
@@ -334,6 +334,11 @@
 					<tbody>
 					</tbody>
 				</table>
+				</br>
+				<a id="izmeniKorisnikaLink" style="margin-left: 16.5%;color: #4E73E8; font-size: 18" href="#"><b>Izmeni profil</b></a>
+				</br>
+				</br>
+				</br>
 				</br>
 				<h3 style="margin-left: 23%;color: #8C7797">Istorija porudzbina</h3>
 				</br>
@@ -358,6 +363,50 @@
 	   </div>
 	   
 	   
+	   
+	   <!--  POP UP WINDOW ZA IZMENU PROFILA KORISNIKA -->
+	   <div id="izmenaProfilaKorisnika" class="modal">
+  
+		  <form class="modal-content animate" id="formaIzmeneProfilaKorisnika">
+		        
+		    <div class="imgcontainer" >
+		      <span onclick="document.getElementById('izmenaProfilaKorisnika').style.display='none'" class="closePopUpLogin" title="Zatvori prozor">&times;</span>
+		      <h2 style="text-align:center; color: #8C7797">Izmena profila</h2>
+		    </div>
+		
+		    <div class="container" >
+		      
+		      <p style="margin-left: 2%;color: #8C7797;font-size: 20"><b>Promena lozinke:</b></p>
+		      <input id="lozinkaIzmena" class="inputLoginPOPUP"  type="password" placeholder="Unesi lozinku"  name="psw">  
+		      </br><p id="errorLozinkaIzmena" style="margin-left: 2%;color : #E84E6D;font-weight: bold;font-size: 17"></p>		      
+		      <input id="lozinka2Izmena" class="inputLoginPOPUP"  type="password" placeholder="Ponovo unesite lozinku"  name="psw2">  
+		      </br>
+		      </br>
+		      <p style="margin-left: 2%;color: #8C7797;font-size: 20"><b>Promena imena:</b></p>
+		      <input id="imeIzmena" class="inputLoginPOPUP"  type="text" placeholder="Unesi ime" name="imeime">
+		      </br><p id="errorImeIzmena" style="margin-left: 2%;color : #E84E6D;font-weight: bold;font-size: 17"></p>
+		      </br>
+		      <p style="margin-left: 2%;color: #8C7797;font-size: 20"><b>Promena prezimena:</b></p>
+		      <input id="prezimeIzmena" class="inputLoginPOPUP"  type="text" placeholder="Unesi prezime" name="imeprezime">
+		      </br><p id="errorPrezimeIzmena" style="margin-left: 2%;color : #E84E6D;font-weight: bold;font-size: 17"></p>
+		      </br>
+		      <p style="margin-left: 2%;color: #8C7797;font-size: 20"><b>Promena telefona:</b></p>
+		      <input id="telefonIzmena" class="inputLoginPOPUP"  type="text" placeholder="Unesi kontakt telefon" name="telefon">
+		      </br><p id="errorTelefonIzmena" style="margin-left: 2%;color : #E84E6D;font-weight: bold;font-size: 17"></p>
+		      </br>
+		      <p style="margin-left: 2%;color: #8C7797;font-size: 20"><b>Promena emaila:</b></p>
+		      <input id="emailIzmena" class="inputLoginPOPUP"  type="email" name="email" placeholder="Email">
+		      </br><p id="errorEmailIzmena" style="margin-left: 2%; color : #E84E6D;font-weight: bold;font-size: 17"></p>
+		      
+		      
+		      </br>      
+		      <input class="button" style="margin-left: 28%; margin-right: 42%" style="background-color: #5F8DAB" type="submit" value="Izmeni">
+		     
+		    </div>
+		    
+		  </form>
+  
+	   </div>
 
     </body>
 </html>

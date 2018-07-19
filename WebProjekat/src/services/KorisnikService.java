@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
@@ -52,6 +53,8 @@ public class KorisnikService {
 		return ulogovanKorisnik;
 	}
 	
+	
+	
 	@GET
 	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -59,5 +62,18 @@ public class KorisnikService {
 		HttpSession session = request.getSession();
 		Korisnik korisnik =(Korisnik) session.getAttribute("korisnik");
 		return korisnik;
+	}
+	
+	/*
+	 * Koristi se za izmenu korisnika 
+	 * */
+	@PUT
+	@Path("/")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String izmeniKorisnika(@Context HttpServletRequest request, Korisnik korisnik)throws IOException{
+		KorisnikDAO dao = (KorisnikDAO) ctx.getAttribute("korisnikDAO");
+		
+		return dao.izmeniKorisnika(korisnik,request);
+		
 	}
 }
