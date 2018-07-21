@@ -75,12 +75,23 @@ function ispisiRestorane(restorani){
 	let broj=0; 
 	
 	for (let restoran of restorani){
+		/*
+		 * Prvo cemo da proverimo da li je taj restoran u listi omiljenih restorana ulogovanog korisnika
+		 * ako jeste onda cemo mu namestiti klasu koja odgovara obojenom srcu
+		 * ako nije onda cemo ostaviti prazno srce
+		 * */
+		var omiljeni='class="heart fa fa-heart-o ovoJeZaKupca omiljeniRestoranSrce"';
+		if(restoran.daLiJeOmiljeni==true){
+			omiljeni='class="heart fa fa-heart  ovoJeZaKupca omiljeniRestoranSrce"';
+		}
+	
+		
 		tr=$('<tr></tr>');
 		
 		let tdNaziv = $('<td> <div class="popup" onclick="iskociPopUP(\'' + restoran.naziv +  '\')"><p style=\"color: #765FAB; font-size: 40px;\" ><b>' + restoran.naziv
 				+ '</b></p> <span class="popuptext" id="' + restoran.naziv 
 				+'"><b>Naziv:</b> '+ restoran.naziv +' </br><b>Adresa:</b> '+ restoran.adresa +' </br><b>Kategorija:</b> '+ restoran.kategorija +'</span>'+
-				' </div><div><a id="srceOmiljeniRestoran" class="heart fa fa-heart-o ovoJeZaKupca"></a></div>' +
+				' </div><div><a href="rest/kupac/dodajRestoran/'+ restoran.naziv+'" '+omiljeni+'></a></div>' +
 				
 				'</br> <button class="button" id="dugmePretragaArtikalaPoRestoranu"><a href="rest/artikli/izlistajArtikle/' +restoran.naziv + '"><p style="color: white">Pogledaj artikle!</p></a></button></td> ');
 		
@@ -99,6 +110,7 @@ function ispisiRestorane(restorani){
 			$('#tabelaSviRestorani3 tbody').append(tr);
 			broj=0;
 		}
+		
 		
 	}	
 }

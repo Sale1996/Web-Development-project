@@ -6,6 +6,7 @@ public class Restoran {
    private String naziv;
    private String adresa;
    private String kategorija;
+   private Boolean daLiJeOmiljeni;
    
    //private ArrayList<Artikal> jela;
   // private ArrayList<Artikal> pica;
@@ -49,6 +50,14 @@ public class Restoran {
 
 	public void setKategorija(String kategorija) {
 		this.kategorija = kategorija;
+	}
+
+	public Boolean getDaLiJeOmiljeni() {
+		return daLiJeOmiljeni;
+	}
+
+	public void setDaLiJeOmiljeni(Boolean daLiJeOmiljeni) {
+		this.daLiJeOmiljeni = daLiJeOmiljeni;
 	}
 
 /*

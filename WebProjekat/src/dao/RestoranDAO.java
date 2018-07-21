@@ -43,45 +43,6 @@ public class RestoranDAO {
 	}
 	
 	
-	
-	
-	
-	/*
-	private void loadRestorani(String contextPath) {
-		BufferedReader in = null;
-		try {
-			File file = new File(contextPath + "/restorani.txt");
-			System.out.println(file.getCanonicalPath());
-			in = new BufferedReader(new FileReader(file));
-			String line, id = "", naziv = "", adresa = "", kategorija="";
-			StringTokenizer st;
-			while ((line = in.readLine()) != null) {
-				line = line.trim();
-				if (line.equals("") || line.indexOf('#') == 0)
-					continue;
-				st = new StringTokenizer(line, ";");
-				while (st.hasMoreTokens()) {
-					id = st.nextToken().trim();
-					naziv = st.nextToken().trim();
-					adresa = st.nextToken().trim();
-					kategorija = st.nextToken().trim();
-				}
-				restorani.put(id, new Restoran(naziv,adresa,kategorija));
-				saveRestoran();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if ( in != null ) {
-				try {
-					in.close();
-				}
-				catch (Exception e) { }
-			}
-		}
-		
-	}*/
-	
 	/***
 	 * Ucitava restorane iz tekstualne datoteke restorani.txt kao JSON objekat i onda njega pretvara u listu kupaca!
 	 * */
@@ -127,6 +88,14 @@ public class RestoranDAO {
 			}
 	    }
 	
+	}
+
+	public HashMap<String, Restoran> getRestorani() {
+		return restorani;
+	}
+
+	public void setRestorani(HashMap<String, Restoran> restorani) {
+		this.restorani = restorani;
 	}
 	
 	

@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import beans.Korisnik;
 import beans.Kupac;
+import beans.Restoran;
 
 
 public class KupacDAO {
@@ -99,6 +100,27 @@ public class KupacDAO {
 		return vrati;
 	}
 	
+	/* *
+	 * Funkcija koja dodaje dati restoran u listu omiljenih restorana
+	 * ulogovanog kupca ili u slucaju ako je vec omiljen, onda ga brise 
+	 * */
+	public String omiljeniRestoran(String restoran,RestoranDAO restoranDao, HttpServletRequest request){
+		HashMap<String, Restoran> restorani = restoranDao.getRestorani();
+		Restoran noviOmiljeniRestoran= null;
+		for(Restoran item : restorani.values()){
+			if(item.getNaziv().equals(restoran)){
+				noviOmiljeniRestoran = item;
+				break;
+			}
+		}
+		
+		HttpSession session = request.getSession();
+		Kupac ulogovanKorisnik= (Kupac) session.getAttribute("korisnik");
+		ulogovanKorisnik.dodajIliObrisiOmiljeniRestoran(noviOmiljeniRestoran);
+		
+		return "OK";
+		
+	}
 	
 
 	public HashMap<String, Kupac> getKupci() {

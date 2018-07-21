@@ -2,9 +2,22 @@ $(document).ready(function() {
 	
 	/*
 	 * Sluzi kada kliknemo na srce za omiljeni restoran da se ono pocrveni full
+	 * I nakon toga da ga dodamo korisniku u omiljene restorane
+	 * i u polje omiljeni u restoranu stavicemo true
 	 * */
-	$(document).on("click","#srceOmiljeniRestoran",function(e) {
-		  $("#srceOmiljeniRestoran").toggleClass("fa-heart fa-heart-o");
+	$(document).on("click",".omiljeniRestoranSrce",function(e) {
+		  e.preventDefault();
+		  var kliknutiElement= e.target; //ovo nam vraca element koji je kliknut		  
+		  let url= $(kliknutiElement).attr('href');
+		  $.ajax({
+				url : url,
+				type: 'GET',
+				success: function(vratio){
+					 $(kliknutiElement).toggleClass("fa-heart fa-heart-o");
+
+				}
+		  });
+		  
 	});
 	
 	/* * *
@@ -114,6 +127,14 @@ $(document).ready(function() {
 				let trDatumRegistracije=$('<tr><td><b>Datum registracije:</b></td><td>'+ kupac.datum +' </td></tr>');
 				$("#podaciOKorisniku tbody").append(trIme).append(trPrezime).append(trUloga).append(trTelefon).append(trEmail).append(trDatumRegistracije);
 				
+				//sada ide ispis omiljenih restorana u prozor naloga
+				for(let restoran of kupac.omiljeniRestorani){
+					let tr= $('<tr></tr>');
+					let tdNaziv = $('<td><b>' + restoran.naziv+'</b> </td>');
+					let tdAdresa = $('<td style="font-size:17">'+ restoran.adresa+ '</td>');
+					tr.append(tdNaziv).append(tdAdresa);
+					$('#TabelaomiljeniRestoraniKorisnika tbody').append(tr);
+				}
 			}
 			
 		});
@@ -146,7 +167,7 @@ $(document).ready(function() {
 		$("#nalogKorisnika").hide();
 		$("#podaciOKorisniku tbody tr").remove(); //brisemo sve redove tabele
 		//jer pri svakom otvaranju prozora mi to punimo, pa da nemamo kopije jednih ispod drugih
-		
+		$("#TabelaomiljeniRestoraniKorisnika tbody tr").remove();
 	});
 	
 	/* * 
