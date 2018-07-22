@@ -19,7 +19,7 @@ import beans.Artikal;
 import beans.Restoran;
 
 public class ArtikalDAO {
-	private HashMap<String, Artikal> artikli = new HashMap<String,Artikal>();;
+	private HashMap<String, Artikal> artikli = new HashMap<String,Artikal>();
 	private String contextPath;
 	
 	public ArtikalDAO(String contextPath) {
@@ -27,45 +27,7 @@ public class ArtikalDAO {
 		loadArtikle(contextPath);
 		
 	}
-	/*
-	private void loadArtikli(String contextPath) {
-		BufferedReader in = null;
-		try {
-			File file = new File(contextPath + "/artikli.txt");
-			System.out.println(file.getCanonicalPath());
-			in = new BufferedReader(new FileReader(file));
-			String line, id = "", naziv = "", jedinicnaCena = "", opis="", kolicina="", tip="",restoran="";
-			StringTokenizer st;
-			while ((line = in.readLine()) != null) {
-				line = line.trim();
-				if (line.equals("") || line.indexOf('#') == 0)
-					continue;
-				st = new StringTokenizer(line, ";");
-				
-				id = st.nextToken().trim();
-				naziv = st.nextToken().trim();
-				jedinicnaCena = st.nextToken().trim();
-				opis = st.nextToken().trim();
-				kolicina = st.nextToken().trim();
-				tip = st.nextToken().trim();
-				restoran = st.nextToken().trim();
-				
-				
-				artikli.put(id, new Artikal(naziv,Integer.parseInt(jedinicnaCena),opis, Integer.parseInt(kolicina),tip,restoran));
-			}
-			saveArtikle();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if ( in != null ) {
-				try {
-					in.close();
-				}
-				catch (Exception e) { }
-			}
-		}
-		
-	}*/
+
 	
 	/***
 	 * Ucitava artikle iz tekstualne datoteke artikli.txt kao JSON objekat i onda njega pretvara u listu kupaca!
@@ -159,5 +121,15 @@ public class ArtikalDAO {
 			artikli1.add(item);
 		}
 		return artikli1;
+	}
+
+
+	public HashMap<String, Artikal> getArtikli() {
+		return artikli;
+	}
+
+
+	public void setArtikli(HashMap<String, Artikal> artikli) {
+		this.artikli = artikli;
 	}
 }

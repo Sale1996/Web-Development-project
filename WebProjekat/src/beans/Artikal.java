@@ -8,6 +8,7 @@ public class Artikal {
    private int kolicina;
    private String tip;
    private String restoran;
+   private int brojArtikala; //koristice se samo prilikom porudzbine
    
    
    
@@ -132,6 +133,14 @@ public class Artikal {
 
 	public void setTip(String tip) {
 		this.tip = tip;
+	}
+
+	public int getBrojArtikala() {
+		return brojArtikala;
+	}
+
+	public void setBrojArtikala(int brojArtikala) {
+		this.brojArtikala = brojArtikala;
 	}
 	
 	

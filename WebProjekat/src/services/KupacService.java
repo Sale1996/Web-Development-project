@@ -1,23 +1,21 @@
 package services;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import beans.Korisnik;
 import beans.Kupac;
-import beans.Restoran;
+import beans.Porudzbina;
+import dao.ArtikalDAO;
 import dao.KupacDAO;
 import dao.RestoranDAO;
 
@@ -59,10 +57,33 @@ public class KupacService {
 	@GET
 	@Path("/dodajRestoran/{restoran}")
 	@Produces(MediaType.TEXT_PLAIN)
-	public String omiljeniRestoran(@PathParam("restoran") String restoran, @Context HttpServletRequest request){
+	public String omiljeniRestoran(@PathParam("restoran") String restoran, @Context HttpServletRequest request) throws IOException{
 		KupacDAO dao = (KupacDAO) ctx.getAttribute("kupacDAO");
 		RestoranDAO restoranDao = (RestoranDAO) ctx.getAttribute("restoranDAO");
 		return dao.omiljeniRestoran(restoran,restoranDao, request);
+	}
+	
+	/* *
+	 * Funckija koja reaguje na dugme kupi pored artikla i kao rezultat artikal dodaje u listu artikala u poruzbdini
+	 * koja se nalazi u sesisji
+	 * */
+	@GET
+	@Path("/naruciArtikal/{artikal}")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String poruciArtikal(@PathParam("artikal") String artikal, @Context HttpServletRequest request){
+		KupacDAO dao = (KupacDAO) ctx.getAttribute("kupacDAO");
+		ArtikalDAO artikalDao= (ArtikalDAO) ctx.getAttribute("artikalDAO");
+		
+		return dao.poruciArtikal(artikal,request,artikalDao);
+	}
+	
+	@GET
+	@Path("/otvoriKorpu/")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Porudzbina vratitrenutnuPorudzbinu(@Context HttpServletRequest request){
+		KupacDAO dao = (KupacDAO) ctx.getAttribute("kupacDAO");
+		
+		return dao.vratiTrenutnuPorudzbinu(request);
 	}
 	
 }

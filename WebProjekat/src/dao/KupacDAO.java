@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,8 +14,9 @@ import javax.servlet.http.HttpSession;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import beans.Korisnik;
+import beans.Artikal;
 import beans.Kupac;
+import beans.Porudzbina;
 import beans.Restoran;
 
 
@@ -104,7 +106,7 @@ public class KupacDAO {
 	 * Funkcija koja dodaje dati restoran u listu omiljenih restorana
 	 * ulogovanog kupca ili u slucaju ako je vec omiljen, onda ga brise 
 	 * */
-	public String omiljeniRestoran(String restoran,RestoranDAO restoranDao, HttpServletRequest request){
+	public String omiljeniRestoran(String restoran,RestoranDAO restoranDao, HttpServletRequest request)throws IOException{
 		HashMap<String, Restoran> restorani = restoranDao.getRestorani();
 		Restoran noviOmiljeniRestoran= null;
 		for(Restoran item : restorani.values()){
@@ -117,6 +119,7 @@ public class KupacDAO {
 		HttpSession session = request.getSession();
 		Kupac ulogovanKorisnik= (Kupac) session.getAttribute("korisnik");
 		ulogovanKorisnik.dodajIliObrisiOmiljeniRestoran(noviOmiljeniRestoran);
+		saveKupac();
 		
 		return "OK";
 		
@@ -129,6 +132,66 @@ public class KupacDAO {
 
 	public void setKupci(HashMap<String, Kupac> kupci) {
 		this.kupci = kupci;
+	}
+
+	/* *
+	 * Metoda koja ce uzeti poruzbinu iz sesije i dodati joj artikal za porudzbinu..
+	 * */
+	public String poruciArtikal(String artikal, HttpServletRequest request,ArtikalDAO artikalDao) {
+		HttpSession session = request.getSession();
+		/*
+		 * Preuzimamo porudzbinu iz sessije, ako je nema onda uzimamo i pravimo novu..
+		 * Ubacujemo kupca koji pravi porudzbinu
+		 * */
+		Porudzbina porudzbina = (Porudzbina) session.getAttribute("porudzbina");
+		Kupac kupac = (Kupac) session.getAttribute("korisnik");
+		if(porudzbina==null){
+			porudzbina=new Porudzbina("poruceno",kupac);
+			session.setAttribute("porudzbina", porudzbina);
+		}
+		//sada uzimamo svu listu artikala i gledamo koji artikal odgovara prosledjenom
+		HashMap<String, Artikal> artikli = artikalDao.getArtikli();
+		Artikal artikalZaPoruciti=null;
+		
+		//posto je string artikal iz unikatne kombinacije imena artikal i imena restorana
+		//mi proveravamo ako on sadrzi oba od jednog artikla znaci da smo ga nasli
+		for(Artikal item : artikli.values()){
+			if(artikal.contains(item.getNaziv())){
+				if(artikal.contains(item.getRestoran())){
+					artikalZaPoruciti=item;
+					break;
+				}
+			}
+		}
+		
+		porudzbina.addArtikal(artikalZaPoruciti);
+		
+		
+		return "Prolo dodavanje";
+	}
+
+	/* *
+	 * Metod koji vraca trenutnu porudzbinu iz sesije sa izracunatiom 
+	 * ukupnom cenom
+	 * */
+	public Porudzbina vratiTrenutnuPorudzbinu(HttpServletRequest request) {
+		HttpSession sesija = request.getSession();
+		Porudzbina porudzbina = (Porudzbina) sesija.getAttribute("porudzbina");
+		if(porudzbina!=null){
+			//sada idemo kroz listu svih artikala porudzbine i sabiramo cene
+			ArrayList<Artikal> artikli = porudzbina.getArtikli();
+			int ukupnaCenaPorudzbine =0 ;
+			for(Artikal item : artikli){
+				int brojKopija = porudzbina.getMapaARTIKALbrojPorudzbina().get(item.getNaziv()+item.getRestoran());
+				item.setBrojArtikala(brojKopija); //ubacili smo u artikal koliko puta se on ponavlja cisto da bi smo lakse odradili tamo prilikom priakza porudzbine
+				ukupnaCenaPorudzbine+= brojKopija * item.getJedinicnaCena();
+			}
+			
+			porudzbina.setUkupnaCena(ukupnaCenaPorudzbine);
+		}
+		
+		
+		return porudzbina;
 	}
 	
 	 

@@ -20,6 +20,74 @@ $(document).ready(function() {
 		  
 	});
 	
+	/* *
+	 * Funkcija koja vrsi kupovinu jednog artikla tj dodaje artikal
+	 * u objekat u sesisji pod nazivom Porudzbina
+	 * i kao rezultat boji precucu korpa cisto da damo do znanja da nesto
+	 * ima u njoj
+	 * */
+	$(document).on("click",".kupiArtikal",function(e){
+		e.preventDefault();
+		var kliknutiElement= e.target; //ovo nam vraca element koji je kliknut		  
+		let url= $(kliknutiElement).attr('href');
+
+		$.ajax({
+			url : url,
+			type: 'GET',
+			success: function(vratio){
+				
+				$("#kupcevaKorpa").text("*Korpa");
+				$("#kupcevaKorpa").css("color","yellow");
+			}
+		});
+
+	});
+	
+	
+	/* *
+	 * Funkcija koja se pokrece nakon klika na korisnicku korpu, otvara je 
+	 * prikazuje sve trenutno ubacene artikle u njoj.. 
+	 * */
+	$(document).on("click","#kupcevaKorpa",function(e){
+		e.preventDefault();
+		$.ajax({
+			url : 'rest/kupac/otvoriKorpu',
+			type: 'GET',
+			success: function(porudzbina){
+				for(let artikal of porudzbina.artikli){
+					let tr = $('<tr></tr>');
+					let tdObrisi = $('<td>X</td>');
+					let tdNaziv= $('<td>'+artikal.naziv+'</td>');
+					let tdKolicina = $('<td>'+ artikal.brojArtikala+'</td>');
+					let tdCena = $('<td>'+artikal.jedinicnaCena+'</td>');
+					tr.append(tdObrisi).append(tdNaziv).append(tdKolicina).append(tdCena);
+					$("#podaciOUnutrasnjostiKorpe tbody").append(tr);
+				}
+				
+				let tr1=$('<tr></tr>');
+				let tdKraj=$('<td><b>Ukupna cena:</b></td><td></td><td></td><td><b>'+porudzbina.ukupnaCena+'</b></td>')
+				tr1.append(tdKraj);
+				$("#podaciOUnutrasnjostiKorpe tbody").append(tr1);
+				
+				$("#korisnickaKorpa").show();
+				
+			}
+		});
+		
+	});
+	
+	
+	/* *
+	 * Funkcija koja se poziva nakon klika na izlaz iz prozora prikaza korpe
+	 * korisnika
+	 * */
+	$(document).on("click","#izlazIzKorisnickeKorpe",function(e){
+		$("#korisnickaKorpa").hide();
+		$("#podaciOUnutrasnjostiKorpe tbody tr").remove();
+
+	
+	});
+	
 	/* * *
 	 * Funkcija koja se pokrece prilikom potvrde registrovanja novog korisnika
 	 * */
@@ -105,6 +173,8 @@ $(document).ready(function() {
 		
 		
 	});
+	
+	
 	
 	/* *
 	 * Funkcija koja se pokrece kada kliknemo na link 'nalog' u gornjem desnom uglu

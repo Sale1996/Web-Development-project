@@ -78,7 +78,7 @@
                                         <!-- Za kupca kao precice imacemo korpu, nalog (sa njegovim informacijama) i precicu za odjavljivanje -->
                                         <div id="navigacijaPreciceNeregistrovaniKorisnik" class="kupacNijeUlogovan">
 	                                        <ul class="nav navbar-nav navbar-right">
-	                                            <li><a  href="#">Korpa</a></li>
+	                                            <li><a id="kupcevaKorpa" href="">Korpa</a></li>
 	                                            <li><a id="OtvoriNalogKorisnika"  href="#">Nalog</a></li>
 	                                            <li><a  href="#">Odjavi se</a></li>
 	                                        </ul>  
@@ -406,6 +406,43 @@
 		    
 		  </form>
   
+	   </div>
+	   
+	   
+	   <!-- POP UP PROZOR ZA PRIKAZ KORPE KORISNIKA -->
+	    <div id="korisnickaKorpa" class="modal">
+  
+		  <div class="modal-content animate" id="korisnickaKorpa2" >
+		        
+		    <div class="imgcontainer">
+		      <span id="izlazIzKorisnickeKorpe"  class="closePopUpLogin" title="Zatvori prozor">&times;</span>
+		      <h2  style="text-align:center; color: #8C7797">Korpa</h2>
+		    </div>
+				
+		    <div class="container" >
+		    	<table id="podaciOUnutrasnjostiKorpe" class="tableNalogKorisnika" style="margin-left: 13%;">
+					<thead>
+						<tr>
+							<td></td>
+							<td><b>Naziv</b></td>
+							<td><b>Kolicina</b></td>
+							<td><b>Cena</b></td>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+				
+			    <p style="font-size:20;margin-left: 16.5%;color: purple">Napomena:</p>
+				
+				<form id="formaPoruciPorudzbinu">
+  					<textarea style="resize:none;margin-left: 16.5%" name="message" rows="6" cols="50"></textarea>
+  					</br>
+  					<input style="margin-left: 29%;font-size:20" type="submit" class="button" value="Naruci!">
+			    </form>
+		    </div>
+		    
+		  </div>
 	   </div>
 
     </body>
