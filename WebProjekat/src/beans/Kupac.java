@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public class Kupac extends Korisnik {
    private ArrayList<Restoran> omiljeniRestorani = new ArrayList<Restoran>();
-   private ArrayList<Porudzbina> porudzbine =  new ArrayList<Porudzbina>();
    
    public Kupac(){   
    }
@@ -40,11 +39,5 @@ public void setOmiljeniRestorani(ArrayList<Restoran> omiljeniRestorani) {
 	this.omiljeniRestorani = omiljeniRestorani;
 }
 
-public ArrayList<Porudzbina> getPorudzbine() {
-	return porudzbine;
-}
 
-public void setPorudzbine(ArrayList<Porudzbina> porudzbine) {
-	this.porudzbine = porudzbine;
-}
 }

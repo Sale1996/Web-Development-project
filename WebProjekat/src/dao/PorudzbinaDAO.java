@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,7 +15,7 @@ import beans.Artikal;
 import beans.Porudzbina;
 
 public class PorudzbinaDAO {
-	private HashMap<String, Porudzbina> porudzbine = new HashMap<String,Porudzbina>();
+	private ArrayList<Porudzbina> porudzbine = new ArrayList<>();
 	private String contextPath;
 	
 	public PorudzbinaDAO(String contextPath){
@@ -28,11 +29,11 @@ public class PorudzbinaDAO {
 	private void loadPorudzbine(String contextPath){
 		ObjectMapper mapper = new ObjectMapper();
 		 try {
-			 porudzbine = mapper.readValue(new File(contextPath + "/database/porudzbine.txt"), new TypeReference<Map<String, Porudzbina>>() {});
+			 porudzbine = mapper.readValue(new File(contextPath + "/database/porudzbine.txt"), new TypeReference<ArrayList<Porudzbina>>() {});
 			} catch (IOException e) {
-				porudzbine = new HashMap<String,Porudzbina>();
+				porudzbine = new ArrayList<Porudzbina>();
 			}
-		System.out.println("broj artikala je " + porudzbine.size()+".");
+		System.out.println("broj porudzbina je " + porudzbine.size()+".");
 
 	}
 	
@@ -67,5 +68,17 @@ public class PorudzbinaDAO {
 			}
 	    }
 	
+	}
+	
+	public void dodajPorudzbinu(Porudzbina porudzbina){
+		porudzbine.add(porudzbina);
+	}
+
+	public ArrayList<Porudzbina> getPorudzbine() {
+		return porudzbine;
+	}
+
+	public void setPorudzbine(ArrayList<Porudzbina> porudzbine) {
+		this.porudzbine = porudzbine;
 	}
 }

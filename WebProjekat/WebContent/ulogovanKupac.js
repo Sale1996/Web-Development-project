@@ -87,6 +87,28 @@ $(document).ready(function() {
 
 	
 	});
+	/* *
+	 * Funkcija koja se aktivira prilikom finalnog PORUCIVANJA artikala iz korpe 
+	 * */
+	$('#formaPoruciPorudzbinu').submit(function(event){
+		event.preventDefault();
+		let napomena= $('#inputNapomenaPorudzbine').val();
+		
+		$.ajax({
+	        url: 'rest/kupac/naruci',
+	        contentType: "application/json; charset=utf-8",
+	        data: {'napomena': napomena},
+	        type: 'POST',
+	        success: function (result) {
+	        	$("#korisnickaKorpa").hide();
+	    		$("#podaciOUnutrasnjostiKorpe tbody tr").remove();
+	    		$("#inputNapomenaPorudzbine").val("");
+	    		$("#kupcevaKorpa").text("Korpa");
+				$("#kupcevaKorpa").css("color","white");
+	    		
+	        }
+	    });
+	});
 	
 	/* * *
 	 * Funkcija koja se pokrece prilikom potvrde registrovanja novog korisnika
@@ -205,6 +227,28 @@ $(document).ready(function() {
 					tr.append(tdNaziv).append(tdAdresa);
 					$('#TabelaomiljeniRestoraniKorisnika tbody').append(tr);
 				}
+				
+				$.ajax({
+					url: 'rest/porudzbina',
+					type: "GET",
+					success: function(porudzbine){
+						let broj=1;
+						for(let porudzbina of porudzbine){
+							let tr=$('<tr></tr>');
+							let tdPorudzbina='<td>Porudzbina '+ broj +'</br>Artikli:</br>';
+							for(let artikal of porudzbina.artikli){
+								tdPorudzbina = tdPorudzbina + artikal.naziv + " (" + artikal.restoran + " ) </br>";
+							}
+							//ovde fali jos vreme porudzbine ne znmo kako sta 
+							tdPorudzbina=tdPorudzbina + "</td>";
+							tdTd=$(tdPorudzbina);
+							tr.append(tdTd);
+							$("#TabelaZadnjePoruzbineKorisnika").append(tr);
+							broj=broj+1;
+						}
+					}
+				});
+				
 			}
 			
 		});
@@ -238,6 +282,7 @@ $(document).ready(function() {
 		$("#podaciOKorisniku tbody tr").remove(); //brisemo sve redove tabele
 		//jer pri svakom otvaranju prozora mi to punimo, pa da nemamo kopije jednih ispod drugih
 		$("#TabelaomiljeniRestoraniKorisnika tbody tr").remove();
+		$("#TabelaZadnjePoruzbineKorisnika tbody tr").remove();
 	});
 	
 	/* * 

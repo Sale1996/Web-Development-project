@@ -17,6 +17,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import beans.Artikal;
 import dao.ArtikalDAO;
+import dao.PorudzbinaDAO;
 
 @Path("/artikli")
 public class ArtikalService {
@@ -36,6 +37,10 @@ public class ArtikalService {
 		if(ctx.getAttribute("artikalDAO")==null){
 			String contextPath = ctx.getRealPath("");
 			ctx.setAttribute("artikalDAO", new ArtikalDAO(contextPath));
+		}
+		if(ctx.getAttribute("porudzbinaDAO")==null){
+			String contextPath=ctx.getRealPath("");
+			ctx.setAttribute("porudzbinaDAO", new PorudzbinaDAO(contextPath));
 		}
 	}
 	

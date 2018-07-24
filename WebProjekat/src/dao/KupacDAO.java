@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -192,6 +193,24 @@ public class KupacDAO {
 		
 		
 		return porudzbina;
+	}
+
+	/* *
+	 * Metoda koja uzima trenutnu porudzbinu i u nju stavlja dodatnu napomenu, dodaje je u listu svih porudzbina
+	 * i u listu porudzbian korisnika te zatim cuvamo podatke u txt fajl.
+	 * Napon toga praznimo iz sessije tu porudzbinu..
+	 * */
+	public String poruciSveArtikle(HttpServletRequest request, PorudzbinaDAO daoPorudzbina, String napomena) throws IOException {
+		HttpSession sesija = request.getSession();
+		Porudzbina trenutnaPorudzbina = (Porudzbina) sesija.getAttribute("porudzbina");
+		trenutnaPorudzbina.setNapomena(napomena); //dodali smo napomenu u porudzbinu ako je bilo
+		trenutnaPorudzbina.setDatumIVremePorudzbine(LocalDateTime.now());
+		daoPorudzbina.dodajPorudzbinu(trenutnaPorudzbina);
+		daoPorudzbina.savePorudzbine();
+		sesija.setAttribute("porudzbina", null);
+		
+				
+		return "Uspesno poruceno";
 	}
 	
 	 

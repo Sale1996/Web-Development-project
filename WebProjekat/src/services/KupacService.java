@@ -17,6 +17,7 @@ import beans.Kupac;
 import beans.Porudzbina;
 import dao.ArtikalDAO;
 import dao.KupacDAO;
+import dao.PorudzbinaDAO;
 import dao.RestoranDAO;
 
 @Path("/kupac")
@@ -37,6 +38,7 @@ public class KupacService {
 	}
 	
 	/*
+	 * 
 	 * Poziva se prilikom registracije korisnika (kupca) i kao povratnu vrednost vraca string koji sluzi da nas obavesti ako ima 
 	 * vec registrovanog korisnika sa datim korisnickim imenom ili emailom.
 	 * */
@@ -77,6 +79,10 @@ public class KupacService {
 		return dao.poruciArtikal(artikal,request,artikalDao);
 	}
 	
+	/* *
+	 * Funkcija koja vraca nazad trenutnu porudzbinu u toku koja ce se
+	 * ispisati na prozoru korpe
+	 * */
 	@GET
 	@Path("/otvoriKorpu/")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -85,5 +91,20 @@ public class KupacService {
 		
 		return dao.vratiTrenutnuPorudzbinu(request);
 	}
+	
+	/* *
+	 * Funkcija koja reaguje na klik dugmeda poruci u proozru korpe
+	 * */
+	@POST
+	@Path("/naruci/")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String finalnoPoruciArtikle(@Context HttpServletRequest request, String napomena) throws IOException{
+		KupacDAO dao = (KupacDAO) ctx.getAttribute("kupacDAO");
+		PorudzbinaDAO daoPorudzbina = (PorudzbinaDAO) ctx.getAttribute("porudzbinaDAO");
+		
+		return dao.poruciSveArtikle(request,daoPorudzbina,napomena);
+	}
+	
+	
 	
 }

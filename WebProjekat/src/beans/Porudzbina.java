@@ -1,12 +1,13 @@
 package beans;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import sun.util.calendar.LocalGregorianCalendar.Date;
 
 public class Porudzbina {
-   private Date datumIVremePorudzbine;
+   private LocalDateTime datumIVremePorudzbine;
    private String statusPorudzbine;
    private String napomena;
    
@@ -44,11 +45,11 @@ public class Porudzbina {
 	
 	//GETERI I SETERI
 
-	public Date getDatumIVremePorudzbine() {
+	public LocalDateTime getDatumIVremePorudzbine() {
 		return datumIVremePorudzbine;
 	}
 
-	public void setDatumIVremePorudzbine(Date datumIVremePorudzbine) {
+	public void setDatumIVremePorudzbine(LocalDateTime datumIVremePorudzbine) {
 		this.datumIVremePorudzbine = datumIVremePorudzbine;
 	}
 
