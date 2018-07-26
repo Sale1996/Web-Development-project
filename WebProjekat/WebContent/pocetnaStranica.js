@@ -3,7 +3,7 @@ function addTop10ArtikalTr(artikal) {
 	let tr = $('<tr></tr>');
 	let tdNaziv = $('<td class="tableTOP10naziv">' + artikal.naziv + '</td>');
 	let tdCena = $('<td>' + artikal.jedinicnaCena + ' din' + '</td>');
-	let tdDugme = $('<td><button class="button ovoJeZaKupca kupiArtikal" ><a style="color:white;font-size:20" href="rest/kupac/naruciArtikal/'+ artikal.naziv + artikal.restoran+'">Kupi</a></button> </td>')
+	let tdDugme = $('<td><button class="button ovoJeZaKupca kupiArtikal kupacUlogovan" ><a style="color:white;font-size:20" href="rest/kupac/naruciArtikal/'+ artikal.naziv + artikal.restoran+'">Kupi</a></button> </td>')
 	
 	tr.append(tdNaziv).append(tdCena).append(tdDugme); // ovde samo dodajemo u kolone tabele vidis naziv pa cena pa link
 	if(artikal.tip == "jelo"){
@@ -51,7 +51,7 @@ function addSviArtikli(artikli){
 				artikal.kolicina + ' ' + kolicinskaMera +' </br><b>Restoran:</b> '+ artikal.restoran +'</span> </div></td>');
 		
 		let tdCena = $('<td>' + artikal.jedinicnaCena + ' din' + '</td>');
-		let tdDugme = $('<td><button class="button ovoJeZaKupca kupiArtikal" ><a style="color:white;font-size:20" href="rest/kupac/naruciArtikal/'+ artikal.naziv + artikal.restoran+'">Kupi</a></button> </td>');
+		let tdDugme = $('<td><button class="button ovoJeZaKupca kupiArtikal kupacUlogovan" ><a style="color:white;font-size:20" href="rest/kupac/naruciArtikal/'+ artikal.naziv + artikal.restoran+'">Kupi</a></button> </td>');
 		tr.append(tdNaziv).append(tdCena).append(tdDugme); // ovde samo dodajemo u kolone tabele vidis naziv pa cena pa link
 		broj++;
 
@@ -80,9 +80,9 @@ function ispisiRestorane(restorani){
 		 * ako jeste onda cemo mu namestiti klasu koja odgovara obojenom srcu
 		 * ako nije onda cemo ostaviti prazno srce
 		 * */
-		var omiljeni='class="heart fa fa-heart-o ovoJeZaKupca omiljeniRestoranSrce"';
+		var omiljeni='class="heart fa fa-heart-o ovoJeZaKupca kupacUlogovan omiljeniRestoranSrce"';
 		if(restoran.daLiJeOmiljeni==true){
-			omiljeni='class="heart fa fa-heart  ovoJeZaKupca omiljeniRestoranSrce"';
+			omiljeni='class="heart fa fa-heart kupacUlogovan omiljeniRestoranSrce"';
 		}
 	
 		

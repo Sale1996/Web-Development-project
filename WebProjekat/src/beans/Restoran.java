@@ -17,11 +17,15 @@ public class Restoran {
 		this.naziv = naziv;
 		this.adresa = adresa;
 		this.kategorija = kategorija;
+		this.daLiJeOmiljeni=false;
 		//this.jela = new ArrayList<Artikal>();
 		//this.pica = new ArrayList<Artikal>();
 	}
 
-	public Restoran(){}
+	public Restoran(){
+		this.daLiJeOmiljeni=false;
+
+	}
 
 	public String getNaziv() {
 		return naziv;

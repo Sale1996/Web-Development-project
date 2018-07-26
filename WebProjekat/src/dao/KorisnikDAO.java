@@ -12,6 +12,7 @@ import beans.Administrator;
 import beans.Dostavljac;
 import beans.Korisnik;
 import beans.Kupac;
+import beans.Restoran;
 
 public class KorisnikDAO {
 	@Context
@@ -38,7 +39,7 @@ public class KorisnikDAO {
 	
 	
 	
-	public Korisnik prijaviKorisnika(Korisnik korisnik){
+	public Korisnik prijaviKorisnika(Korisnik korisnik,RestoranDAO restoranDAO){
 		loadKorisnike();
 		Korisnik korisnikVrati=null;
 		if(kupci.size()>0){
@@ -59,6 +60,20 @@ public class KorisnikDAO {
 	
 
 		}
+		//u slucaju da je kupac moramo postaviti i omiljene restorane
+		if(!korisnikVrati.getKontaktTelefon().equals("LozinkaNeValja") && !korisnikVrati.getKontaktTelefon().equals("NePostojiKorisnik")){
+			//znaci ako postoji korisnik onda cemo tek da idemo kroz restorane
+			Kupac kupacAcc = (Kupac) korisnikVrati;
+			for(Restoran item : restoranDAO.getRestorani().values()){
+				if(kupacAcc.getOmiljeniRestorani().contains(item)){
+					item.setDaLiJeOmiljeni(true);
+				}
+			}
+		
+		}
+		
+		
+		
 		/* *
 		 * Za administratora i dostavljaca radimo isto samo sto pitamo da li je 
 		 * korisnikVrati ima nesto u polju telefona pa ako jeste onda moze dalje

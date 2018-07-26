@@ -105,6 +105,33 @@ public class KupacService {
 		return dao.poruciSveArtikle(request,daoPorudzbina,napomena);
 	}
 	
+	/* *
+	 * Funkciaj koja se aktivira prilikom klika "x" na neki artikal u korpi,
+	 * odnosno ukoliko hocemo da ga izbacimo iz korpe.
+	 * */
+	@GET
+	@Path("/ukloniArtikalPorudzbina/{artikal}")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String ukloniArtikalIzKorpe(@PathParam("artikal") String artikal, @Context HttpServletRequest request){
+	    KupacDAO dao = (KupacDAO) ctx.getAttribute("kupacDAO");
+	    
+	    return dao.ukloniArtikalIzKorpe(artikal,request);
+	}
 	
-	
+	/* *
+	 * Funkcija koja se poziva prilikom izlogovanja korisnika sa svog naloga
+	 * i gasi sessiju i iz svih restorana brise da su omiljeni
+	 * */
+	@GET
+	@Path("/izloguj/")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String izlogujKorisnika(@Context HttpServletRequest request){
+		if(ctx.getAttribute("restoranDAO")==null){
+			String contextPath=ctx.getRealPath("");
+			ctx.setAttribute("restoranDAO", new RestoranDAO(contextPath));
+		}
+		RestoranDAO dao = (RestoranDAO) ctx.getAttribute("restoranDAO");
+
+		return dao.izlogujKupca(request);
+	}
 }

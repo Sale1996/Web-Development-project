@@ -76,11 +76,11 @@
 	                                        </ul>  
                                         </div>  
                                         <!-- Za kupca kao precice imacemo korpu, nalog (sa njegovim informacijama) i precicu za odjavljivanje -->
-                                        <div id="navigacijaPreciceNeregistrovaniKorisnik" class="kupacNijeUlogovan">
+                                        <div id="navigacijaPreciceNeregistrovaniKorisnik" class="kupacNijeUlogovan kupacUlogovan">
 	                                        <ul class="nav navbar-nav navbar-right">
 	                                            <li><a id="kupcevaKorpa" href="">Korpa</a></li>
 	                                            <li><a id="OtvoriNalogKorisnika"  href="#">Nalog</a></li>
-	                                            <li><a  href="#">Odjavi se</a></li>
+	                                            <li><a id="izlogujKupca" href="#">Odjavi se</a></li>
 	                                        </ul>  
                                         </div> 
                                     </div>
@@ -342,7 +342,7 @@
 				</br>
 				<h3 style="margin-left: 23%;color: #8C7797">Istorija porudzbina</h3>
 				</br>
-				<table id="TabelaZadnjePoruzbineKorisnika">
+				<table id="TabelaZadnjePoruzbineKorisnika" style="margin-left: 13%;" class="tableNalogKorisnika" >
 					<thead>
 					</thead>
 					<tbody>
@@ -438,7 +438,7 @@
 				<form id="formaPoruciPorudzbinu">
   					<textarea  id="inputNapomenaPorudzbine" style="resize:none;margin-left: 16.5%" name="message" rows="6" cols="50"></textarea>
   					</br>
-  					<input style="margin-left: 29%;font-size:20" type="submit" class="button" value="Naruci!">
+  					<input id="dugmePoruciArtikle" style="margin-left: 29%;font-size:20" type="submit" class="button" value="Naruci!">
 			    </form>
 		    </div>
 		    

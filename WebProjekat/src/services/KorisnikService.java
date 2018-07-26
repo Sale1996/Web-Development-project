@@ -17,6 +17,7 @@ import javax.ws.rs.core.MediaType;
 import beans.Korisnik;
 import dao.KorisnikDAO;
 import dao.KupacDAO;
+import dao.RestoranDAO;
 
 @Path("/korisnik")
 public class KorisnikService {
@@ -43,8 +44,15 @@ public class KorisnikService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Korisnik prijaviKorisnika(@Context HttpServletRequest request, Korisnik korisnik) throws IOException{
 		KorisnikDAO dao = (KorisnikDAO) ctx.getAttribute("korisnikDAO");
-		Korisnik ulogovanKorisnik= dao.prijaviKorisnika(korisnik);
+		if(ctx.getAttribute("restoranDAO")==null){
+			String contextPath=ctx.getRealPath("");
+			ctx.setAttribute("restoranDAO", new RestoranDAO(contextPath));
+		}
+		RestoranDAO restoranDao = (RestoranDAO) ctx.getAttribute("restoranDAO");
+
 		
+		Korisnik ulogovanKorisnik= dao.prijaviKorisnika(korisnik,restoranDao);
+	
 		if(!ulogovanKorisnik.getKorisnickoIme().equals("")){
 			HttpSession session = request.getSession();
 			session.setAttribute("korisnik", ulogovanKorisnik);

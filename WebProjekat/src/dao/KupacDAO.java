@@ -212,6 +212,31 @@ public class KupacDAO {
 				
 		return "Uspesno poruceno";
 	}
+	/* *
+	 * Funkciaj koja se aktivira prilikom klika "x" na neki artikal u korpi,
+	 * odnosno ukoliko hocemo da ga izbacimo iz korpe.
+	 * */
+	public String ukloniArtikalIzKorpe(String artikal, HttpServletRequest request) {
+		HttpSession sesija = request.getSession();
+		Porudzbina trenutnaPorudzbina = (Porudzbina) sesija.getAttribute("porudzbina");
+		Integer novaCena=0;
+		for(Artikal item : trenutnaPorudzbina.getArtikli()){
+			if(artikal.contains(item.getNaziv())){
+				if(artikal.contains(item.getRestoran())){
+					trenutnaPorudzbina.getArtikli().remove(item);
+					//moramo da promenimo u ukupnucenu nase porudzbine!
+					int staraUkupnaCena= trenutnaPorudzbina.getUkupnaCena();
+					novaCena=staraUkupnaCena - item.getJedinicnaCena()*trenutnaPorudzbina.getMapaARTIKALbrojPorudzbina().get(artikal);
+					trenutnaPorudzbina.setUkupnaCena(novaCena);
+					break;
+				}
+			}
+		}
+		trenutnaPorudzbina.getMapaARTIKALbrojPorudzbina().remove(artikal);
+		
+		
+		return String.valueOf(novaCena);
+	}
 	
 	 
 	

@@ -56,16 +56,18 @@ $(document).ready(function() {
 			success: function(porudzbina){
 				for(let artikal of porudzbina.artikli){
 					let tr = $('<tr></tr>');
-					let tdObrisi = $('<td>X</td>');
+					let tdObrisi = $('<td><a class="obrisiArtikalPorudzbina" href="/WebProjekat/rest/kupac/ukloniArtikalPorudzbina/'+artikal.naziv+ artikal.restoran+'">x</a></td>');
 					let tdNaziv= $('<td>'+artikal.naziv+'</td>');
 					let tdKolicina = $('<td>'+ artikal.brojArtikala+'</td>');
 					let tdCena = $('<td>'+artikal.jedinicnaCena+'</td>');
 					tr.append(tdObrisi).append(tdNaziv).append(tdKolicina).append(tdCena);
 					$("#podaciOUnutrasnjostiKorpe tbody").append(tr);
+					
+					$("#dugmePoruciArtikle").removeAttr('disabled'); //ako ima artikala onda ce ukloniti disable sa dugmeta
 				}
 				
 				let tr1=$('<tr></tr>');
-				let tdKraj=$('<td><b>Ukupna cena:</b></td><td></td><td></td><td><b>'+porudzbina.ukupnaCena+'</b></td>')
+				let tdKraj=$('<td><b>Ukupna cena:</b></td><td></td><td></td><td><b id="ukupnaCenaKorpa">'+porudzbina.ukupnaCena+'</b></td>')
 				tr1.append(tdKraj);
 				$("#podaciOUnutrasnjostiKorpe tbody").append(tr1);
 				
@@ -74,6 +76,25 @@ $(document).ready(function() {
 			}
 		});
 		
+	});
+	
+	$(document).on("click",".obrisiArtikalPorudzbina", function(e){
+		  e.preventDefault();
+		  var kliknutiElement= e.target; //ovo nam vraca element koji je kliknut		  
+		  let url= $(kliknutiElement).attr('href');
+		  $.ajax({
+				url : url,
+				type: 'GET',
+				success: function(novaCena){
+					$(kliknutiElement).parent().parent().remove(); //brise dati artikal iz korpe , tj taj red
+					$('#ukupnaCenaKorpa').text(novaCena); //postavljamo novu ukupnuCenu
+					if(novaCena=="0"){
+						$("#dugmePoruciArtikle").prop("disabled", true); //nadam se da radi da iskljuci dugme kada je bez artikala korpa
+						$("#kupcevaKorpa").text("Korpa");
+						$("#kupcevaKorpa").css("color","white");
+					}
+				}
+			});
 	});
 	
 	
@@ -234,17 +255,19 @@ $(document).ready(function() {
 					success: function(porudzbine){
 						let broj=1;
 						for(let porudzbina of porudzbine){
-							let tr=$('<tr></tr>');
-							let tdPorudzbina='<td>Porudzbina '+ broj +'</br>Artikli:</br>';
-							for(let artikal of porudzbina.artikli){
-								tdPorudzbina = tdPorudzbina + artikal.naziv + " (" + artikal.restoran + " ) </br>";
+							if(porudzbina.kupacKojiNarucuje.korisnickoIme == kupac.korisnickoIme){
+								let tr=$('<tr></tr>');
+								let tdPorudzbina='<td><b style="font-size:16">Porudzbina '+ broj +'</b></br>Artikli:</br>';
+								for(let artikal of porudzbina.artikli){
+									tdPorudzbina = tdPorudzbina + artikal.naziv + " (" + artikal.restoran + " ) </br>";
+								}
+								//ovde fali jos vreme porudzbine ne znmo kako sta 
+								tdPorudzbina=tdPorudzbina + "</td>";
+								tdTd=$(tdPorudzbina);
+								tr.append(tdTd);
+								$("#TabelaZadnjePoruzbineKorisnika").append(tr);
+								broj=broj+1;
 							}
-							//ovde fali jos vreme porudzbine ne znmo kako sta 
-							tdPorudzbina=tdPorudzbina + "</td>";
-							tdTd=$(tdPorudzbina);
-							tr.append(tdTd);
-							$("#TabelaZadnjePoruzbineKorisnika").append(tr);
-							broj=broj+1;
 						}
 					}
 				});
@@ -341,6 +364,13 @@ $(document).ready(function() {
 					$('#nalogKorisnika').hide();
 					$('#lozinkaIzmena').val("");
 					$('#lozinka2Izmena').val("");
+					/*
+					 * Posto gasimo i ovaj prozor onda moramo da ovo obrisemo*/
+					$("#nalogKorisnika").hide();
+					$("#podaciOKorisniku tbody tr").remove(); //brisemo sve redove tabele
+					//jer pri svakom otvaranju prozora mi to punimo, pa da nemamo kopije jednih ispod drugih
+					$("#TabelaomiljeniRestoraniKorisnika tbody tr").remove();
+					$("#TabelaZadnjePoruzbineKorisnika tbody tr").remove();
 					alert("Izmena uspesno izvrsena!");
 					
 				}
@@ -352,6 +382,28 @@ $(document).ready(function() {
 			}
 		});
 		
+	});
+	
+	
+	/* *
+	 * Funkcija koja se poziva prilikom izlogovanja korisnika sa svog naloga
+	 * vraca html kod u defaultnu vrednost i gasi sessiju
+	 * */
+	
+	$(document).on("click","#izlogujKupca",function(e){
+		e.preventDefault();
+		$.ajax({
+			url: 'rest/kupac/izloguj',
+			type:"GET",
+			success: function(status) {
+				if(status=="ok"){
+					$("[class*='kupacUlogovan']").addClass("kupacNijeUlogovan"); //vracamo elementima ovu klasu koja ih skriva zapravo
+					$('#navigacijaPreciceNeregistrovaniKorisnik').show();
+
+				}
+			}
+		});
+			
 	});
 	
 	

@@ -1,20 +1,19 @@
 package dao;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.StringTokenizer;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import beans.Kupac;
 import beans.Restoran;
 
 public class RestoranDAO {
@@ -96,6 +95,21 @@ public class RestoranDAO {
 
 	public void setRestorani(HashMap<String, Restoran> restorani) {
 		this.restorani = restorani;
+	}
+
+	/* *
+	 * prvo stavljamo svim restoranima boolean vrednsot
+	 * "omiljeni" na false , te brisemo sesiju
+	 * */
+	public String izlogujKupca(HttpServletRequest request) {
+		for(Restoran item : restorani.values()){
+			if(item.getDaLiJeOmiljeni())
+				item.setDaLiJeOmiljeni(false);
+		}
+		//brisemo sesiju
+		HttpSession sesija = request.getSession();
+		sesija.invalidate();
+		return "ok";
 	}
 	
 	
