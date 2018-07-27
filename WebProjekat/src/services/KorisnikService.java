@@ -15,6 +15,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import beans.Korisnik;
+import dao.AdministratorDAO;
 import dao.KorisnikDAO;
 import dao.KupacDAO;
 import dao.RestoranDAO;
@@ -28,11 +29,19 @@ public class KorisnikService {
 	public KorisnikService(){}
 
 	@PostConstruct
-	public void init(){
+	public void init() throws IOException{
+		if(ctx.getAttribute("kupacDAO")==null){
+			String contextPath=ctx.getRealPath("");
+			ctx.setAttribute("kupacDAO", new KupacDAO(contextPath));
+		}
+		if(ctx.getAttribute("administratorDAO")==null){
+			String contextPath=ctx.getRealPath("");
+			ctx.setAttribute("administratorDAO", new AdministratorDAO(contextPath));
+		}	
 		
 		if(ctx.getAttribute("korisnikDAO")==null){
 			String contextPath=ctx.getRealPath("");
-			ctx.setAttribute("korisnikDAO", new KorisnikDAO(contextPath,(KupacDAO) ctx.getAttribute("kupacDAO")));
+			ctx.setAttribute("korisnikDAO", new KorisnikDAO(contextPath,(KupacDAO) ctx.getAttribute("kupacDAO"),(AdministratorDAO) ctx.getAttribute("administratorDAO")));
 		}
 		
 	}

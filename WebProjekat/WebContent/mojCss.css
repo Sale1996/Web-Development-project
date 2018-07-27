@@ -273,3 +273,33 @@
     
     .obrisiArtikalPorudzbina{
     }
+    
+    
+    
+    /* ADMINISTRATOR CSS SADA IDE CSS SADA IDE*/
+        /* ADMINISTRATOR CSS SADA IDE CSS SADA IDE*/
+            /* ADMINISTRATOR CSS SADA IDE CSS SADA IDE*/
+                /* ADMINISTRATOR CSS SADA IDE CSS SADA IDE*/
+                    /* ADMINISTRATOR CSS SADA IDE CSS SADA IDE*/
+   .administratorNijeUlogovan{
+  	visibility: hidden;
+   }
+   .sakriOdAdministratora{
+   }                 
+                    
+                    
+   .menuAdministrator{
+    border:1px solid #ccc;
+    border-width:1px 0;
+    list-style:none;
+    margin:0;
+    padding:0;
+    text-align:center;
+    }
+	.menuAdministrator li{
+    display:inline;
+	}
+	.menuAdministrator a{
+    display:inline-block;
+    padding:10px;
+	}

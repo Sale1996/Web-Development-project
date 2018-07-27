@@ -26,7 +26,6 @@ function addSviArtikli(artikli){
 	for(let artikal of artikli){
 		
 		
-		tr=$('<tr></tr>');
 		
 		/*
 		 * prvo cemo vrsiti proveru da li je artikal pice ili hrana, kako bi mogli da namestimo adekvatnu kolicinsku meru
@@ -359,6 +358,24 @@ $(document).ready(function() {
 					$('#korisnickoImeInputLogovanje').val("");
 					$('#passwordInputLogovanje').val("");
 					
+				}else if(korisnik.uloga=="admin"){
+					/* *
+					 * Sakrivamo navigacioneprecice neregistrovanog korisnika
+					 * Sakrivamo spisak svih artikala, i funkcionalnost sortiranja artikala prema restoranu
+					 * Prikazujemo menu bar sa naslovima spiskova koji iskacu administratoru
+					 * */
+					//prvo sakrivamo precice za registrovanje i logovanje
+					$('#navigacijaPreciceNeregistrovaniKorisnik').hide();
+					//otkrivamo sve sto je vezano za administratora!
+					$("[class*='administratorNijeUlogovan']").removeClass('administratorNijeUlogovan');
+					//sve div-ove koje smo obelezili sa ovom klasom sakrivamo ga
+					$("[class*='sakriOdAdministratora']").hide();
+					
+					//zatvaramo prozor logovanja i brisemo njegova polja
+					$('#modal-wrapper').hide();
+					$('#korisnickoImeInputLogovanje').val("");
+					$('#passwordInputLogovanje').val("");
+
 				}
 				
 			}

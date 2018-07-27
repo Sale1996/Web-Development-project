@@ -22,17 +22,19 @@ public class KorisnikDAO {
 	private HashMap<String,Dostavljac> dostavljaci = new HashMap<String,Dostavljac>();	//dostavljaci
 	private String contextPath;
 	private KupacDAO kupacDao;
-
-	public KorisnikDAO(String contextPath, KupacDAO kupacDao) {
+    private AdministratorDAO administratorDao;
+	
+	public KorisnikDAO(String contextPath, KupacDAO kupacDao,AdministratorDAO administratorDao) {
 		this.contextPath=contextPath;
 		this.kupacDao = kupacDao;
+		this.administratorDao = administratorDao;
 		loadKorisnike();
 	}
 	
 	public void loadKorisnike(){
 		
 		kupci = kupacDao.getKupci();
-		//isto za admine
+		administratori = administratorDao.getAdministratori();
 		//isto za dostavljace
 		
 	}
@@ -59,19 +61,46 @@ public class KorisnikDAO {
 				korisnikVrati=new Korisnik("","","","","","NePostojiKorisnik","");		
 	
 
+			//u slucaju da je kupac moramo postaviti i omiljene restorane
+			if(!korisnikVrati.getKontaktTelefon().equals("LozinkaNeValja") && !korisnikVrati.getKontaktTelefon().equals("NePostojiKorisnik")){
+				//znaci ako postoji korisnik onda cemo tek da idemo kroz restorane
+				Kupac kupacAcc = (Kupac) korisnikVrati;
+				for(Restoran item : restoranDAO.getRestorani().values()){
+					if(kupacAcc.getOmiljeniRestorani().contains(item)){
+						item.setDaLiJeOmiljeni(true);
+					}
+				}
+			
+			}
 		}
-		//u slucaju da je kupac moramo postaviti i omiljene restorane
-		if(!korisnikVrati.getKontaktTelefon().equals("LozinkaNeValja") && !korisnikVrati.getKontaktTelefon().equals("NePostojiKorisnik")){
-			//znaci ako postoji korisnik onda cemo tek da idemo kroz restorane
-			Kupac kupacAcc = (Kupac) korisnikVrati;
-			for(Restoran item : restoranDAO.getRestorani().values()){
-				if(kupacAcc.getOmiljeniRestorani().contains(item)){
-					item.setDaLiJeOmiljeni(true);
+		
+		/* *
+		 * ako nije nasao korisnika medju kupcima, onda trazimo medju administratorima..
+		 * */
+		//posto ima 2 situacije kada cemo ispitivati listu admina i to moramo da proverimo prvo da li je nll
+		//pa da li ne postoji korisnik ako ga nema u kupcima... i ovo je za sada najbolji nacin uraditi tako nesto
+		Boolean proveriAdmina=false;
+		if(korisnikVrati==null){
+			proveriAdmina=true;			
+		}else if(korisnikVrati.getKontaktTelefon().equals("NePostojiKorisnik")){
+			proveriAdmina=true;
+		}
+		
+		if(proveriAdmina){
+			if(administratori.size()>0){
+				for(Administrator item : administratori.values()){
+					if(item.getKorisnickoIme().equals(korisnik.getKorisnickoIme())){
+						if(item.getLozinka().equals(korisnik.getLozinka())){
+							korisnikVrati=item;
+							break;
+						}else{
+							korisnikVrati=new Korisnik("","","","","","LozinkaNeValja","");		
+							break;
+						}
+					}
 				}
 			}
-		
 		}
-		
 		
 		
 		/* *
