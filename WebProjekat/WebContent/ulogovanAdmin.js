@@ -53,6 +53,14 @@ $(document).ready(function() {
 			 type: "GET",
 			 success: function(artikli){
 				 let tr=$('<tr></tr>');
+				 
+				 //ovde ubacujemo link za dodavanje novog artikla na vrh tabele
+				 let trHead = $('<tr></tr>');
+				 let tdHead= $('<td><a id="dodajNoviArtikalLink" style="color: #50AE94" href="/WebProjekat/rest/artikli/dodajNovi/">Dodaj novi Artikal</a></td>');
+				 trHead.append(tdHead);
+				 $("#adminTabela thead").append(trHead);
+				 
+				 
 				 for(let artikal of artikli){
 					    tr=$('<tr></tr>');
 
@@ -110,7 +118,7 @@ $(document).ready(function() {
 	 });
 	 
 	 
-	 /* * 
+	    /* * 
 		 * Funkcija koja se aktivira prilikom potvrde izmene artikla 
 		 * 
 		 * */
@@ -169,12 +177,14 @@ $(document).ready(function() {
 						//brisemo sve iz tabele i deselektujemo kolonu, kako bi korisnik opet morao
 						//da klikne kako bi se izmene refreshovale
 						$("#adminTabela tbody tr").remove();
+						$("#adminTabela thead tr").remove();
+
 						 //ukoliko je neki red menija bio selektovan, moramo da obrisemo tu selekciju
 						 $("[class*='selektovanaTabelaAdmin']").removeClass('selektovanaTabelaAdmin');
 
 						
 					}
-					//ukoliko vec ima email u povratnom stringu ce se naglasiti
+					//ukoliko vec ima naziv u povratnom stringu ce se naglasiti
 					if(string.includes("Naziv")){
 						$('#errorNazivArtiklaIzmena').text('Artikal sa datim imenom u istom restoranu vec postoji!');
 						$('#errorNazivArtiklaIzmena').show().delay(9000).fadeOut();
@@ -183,6 +193,111 @@ $(document).ready(function() {
 			});
 			
 		});
+		
+	/* *
+	 * Klikom na dodaj novi artikal otvaramo prozor za dodavanje artikla
+	 * */
+	 $(document).on("click","#dodajNoviArtikalLink",function(e){
+		 e.preventDefault();
+		 $.ajax({
+			 url: '/WebProjekat/rest/restorani',
+			 type: "GET",
+			 success: function(restorani){
+				 for(let restoran of restorani){
+					 let optionRestoran = $('<option value="'+restoran.naziv+'">'+restoran.naziv+'</option>');
+					 $("#restoranArtiklaKreiranje").append(optionRestoran);
+				 }
+				 $("#noviArtikal").show();
+
+			 }
+			 
+		 });
+		 
+	 });
+
+	 
+	    /* * 
+		 * Funkcija koja se aktivira prilikom potvrde kreiranja artikla 
+		 * 
+		 * */
+		$('#formaDodavanjaArtikla').submit(function(event){
+			event.preventDefault();
+			let greska=0; //u slucaju da ima greske ovo polje dobija vrednost 1
+			let naziv = $('#nazivArtiklaKreiranje').val();
+			let restoran = $("#restoranArtiklaKreiranje").val();
+			let opis = $('#opisArtiklaKreiranje').val();
+			let cena = $('#cenaArtiklaKreiranje').val();
+			let kolicina = $('#kolicinaArtiklaKreiranje').val();
+			let tip = $('#tipArtikalKreiranje').val();
+			
+			
+			
+			if(naziv==""){
+				$('#errorNazivArtiklaKreiranje').text('Polje naziv ne sme biti prazno!');
+				$('#errorNazivArtiklaKreiranje').show().delay(9000).fadeOut();
+				greska=1;
+			}
+			if(opis==""){
+				$('#errorOpisArtiklaKreiranje').text('Polje opis ne sme biti prazno!');
+				$('#errorOpisArtiklaKreiranje').show().delay(9000).fadeOut();
+				greska=1;
+			}
+			
+			if(cena<0){
+				$('#errorCenaArtiklaKreiranje').text('Polje cena ne sme biti manje od nule!');
+				$('#errorCenaArtiklaKreiranje').show().delay(9000).fadeOut();
+				greska=1;
+			}
+			if(kolicina<0){
+				$('#errorKolicinaArtiklaKreiranje').text('Polje kolicina ne sme biti manje od nule!');
+				$('#errorKolicinaArtiklaKreiranje').show().delay(9000).fadeOut();
+				greska=1;
+			}
+			if(tip==""){
+				$('#errorTipArtiklaKreiranje').text('Polje tip ne sme biti prazno!');
+				$('#errorTipArtiklaKreiranje').show().delay(9000).fadeOut();
+				greska=1;
+			}
+			
+			if(greska==1)
+				return;
+			
+			$.ajax({
+				url: 'rest/artikli/kreirajNovi', //url
+				type: "POST" ,
+				data: JSON.stringify({naziv:naziv,jedinicnaCena:cena,opis:opis,kolicina:kolicina,tip:tip,restoran:restoran,brojArtikala:"",stariNaziv:"" }),
+				contentType: 'application/json',
+				success : function(string) {
+					if(string==""){
+						//OSTALO JE OVDE DA URADIS
+						$("#noviArtikal").hide();
+						//sada brisemo sve iz forme sto smo pre uneli
+						$('#nazivArtiklaKreiranje').val("");
+						$('#opisArtiklaKreiranje').val("");
+						$('#cenaArtiklaKreiranje').val("");
+						$('#kolicinaArtiklaKreiranje').val("");
+						$('#tipArtikalKreiranje').val("");
+						
+						//brisemo sve iz tabele i deselektujemo kolonu, kako bi korisnik opet morao
+						//da klikne kako bi se izmene refreshovale
+						$("#adminTabela tbody tr").remove();
+						$("#adminTabela thead tr").remove();
+
+						//ukoliko je neki red menija bio selektovan, moramo da obrisemo tu selekciju
+						$("[class*='selektovanaTabelaAdmin']").removeClass('selektovanaTabelaAdmin');
+
+						
+					}
+					//ukoliko vec ima naziv u povratnom stringu ce se naglasiti
+					if(string.includes("Naziv")){
+						$('#errorNazivArtiklaKreiranje').text('Artikal sa datim imenom u istom restoranu vec postoji!');
+						$('#errorNazivArtiklaKreiranje').show().delay(9000).fadeOut();
+					}
+				}
+			});
+			
+		});
+		
 	
 	 function iskociPopUP(ime) {
 			var popup = document.getElementById(ime);

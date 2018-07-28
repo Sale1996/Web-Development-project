@@ -533,28 +533,92 @@
 		      
 		      </br><p id="errorNazivArtiklaIzmena" style="margin-left: 2%;color : #E84E6D;font-weight: bold;font-size: 17"></p>
 		      </br>
+		      
 		      <p style="margin-left: 2%;color: #8C7797;font-size: 20"><b>Promena opisa artikla:</b></p>
 		      <input id="opisArtiklaIzmena" class="inputLoginPOPUP"  type="text" placeholder="Unesi opis artikla" name="opisArtikla">
 		      </br><p id="errorOpisArtiklaIzmena" style="margin-left: 2%;color : #E84E6D;font-weight: bold;font-size: 17"></p>
 		      </br>
+		      
 		      <p style="margin-left: 2%;color: #8C7797;font-size: 20"><b>Promena cene artikla:</b></p>
 		      <input id="cenaArtiklaIzmena" class="inputLoginPOPUP"  type="number" placeholder="Unesi cenu artikla" name="cenaArtikla">
 		      </br><p id="errorCenaArtiklaIzmena" style="margin-left: 2%;color : #E84E6D;font-weight: bold;font-size: 17"></p>
 		      </br>
+		      
 		      <p style="margin-left: 2%;color: #8C7797;font-size: 20"><b>Promena kolicine artikla:</b></p>
 		      <input id="kolicinaArtiklaIzmena" class="inputLoginPOPUP"  type="number" name="kolicinaArtikla" placeholder="Unesi kolicinu artikla">
-		      </br><p id="errorKolicinaArtikla" style="margin-left: 2%; color : #E84E6D;font-weight: bold;font-size: 17"></p>
+		      </br>
+		      <p id="errorKolicinaArtikla" style="margin-left: 2%; color : #E84E6D;font-weight: bold;font-size: 17"></p>
+		      
 		      <p style="margin-left: 2%;color: #8C7797;font-size: 20"><b>Promena tipa artikla:</b></p>
 			  <select id="tipArtikalIzmena" style="margin-left: 2%" name="tipArtikal">
 		        <option value=""></option>
 	 			<option value="jelo">jelo</option>
 				<option value="pice">pice</option>
 			  </select>
-        	  </br><p id="errorTipArtikla" style="margin-left: 2%;color : #E84E6D;font-weight: bold;font-size: 17"></p>
+        	  </br>
+        	  <p id="errorTipArtikla" style="margin-left: 2%;color : #E84E6D;font-weight: bold;font-size: 17"></p>
 		      </br>
 		      
 		      </br>      
 		      <input class="button" style="margin-left: 28%; margin-right: 42%" style="background-color: #5F8DAB" type="submit" value="Izmeni">
+		     
+		    </div>
+		    
+		  </form>
+  
+	   </div>
+	   
+	   
+	   <!-- NOVI ARTIKAL ADMIN -->
+	   <!-- NOVI ARTIKAL ADMIN -->
+	   <!-- NOVI ARTIKAL ADMIN -->
+	   <div id="noviArtikal" class="modal">
+  
+		  <form class="modal-content animate" id="formaDodavanjaArtikla">
+		        
+		    <div class="imgcontainer" >
+		      <span onclick="document.getElementById('noviArtikal').style.display='none'" class="closePopUpLogin" title="Zatvori prozor">&times;</span>
+		      <h2 style="text-align:center; color: #8C7797">Novi artikal</h2>
+		    </div>
+		
+		    <div class="container" >
+		      
+		      
+		      <input id="nazivArtiklaKreiranje" class="inputLoginPOPUP"  type="text" placeholder="Unesi naziv artikla" name="nazivnaziv">		      
+		      </br><p id="errorNazivArtiklaKreiranje" style="margin-left: 2%;color : #E84E6D;font-weight: bold;font-size: 17"></p>
+		      </br>
+		      
+		      <input id="opisArtiklaKreiranje" class="inputLoginPOPUP"  type="text" placeholder="Unesi opis artikla" name="opisArtikla">
+		      </br><p id="errorOpisArtiklaKreiranje" style="margin-left: 2%;color : #E84E6D;font-weight: bold;font-size: 17"></p>
+		      </br>
+		      
+		      <input id="cenaArtiklaKreiranje" class="inputLoginPOPUP"  type="number" placeholder="Unesi cenu artikla" name="cenaArtikla">
+		      </br><p id="errorCenaArtiklaKreiranje style="margin-left: 2%;color : #E84E6D;font-weight: bold;font-size: 17"></p>
+		      </br>
+		      
+		      <input id="kolicinaArtiklaKreiranje" class="inputLoginPOPUP"  type="number" name="kolicinaArtikla" placeholder="Unesi kolicinu artikla">
+		      </br>
+		      <p id="errorKolicinaArtiklaKreiranje" style="margin-left: 2%; color : #E84E6D;font-weight: bold;font-size: 17"></p>
+		      
+		      
+		      <p style="margin-left: 2%;color: #8C7797;font-size: 20"><b>Izaberi tip artikla:</b></p>
+			  <select id="tipArtikalKreiranje" style="margin-left: 2%" name="tipArtikal">
+		        <option value=""></option>
+	 			<option value="jelo">jelo</option>
+				<option value="pice">pice</option>
+			  </select>
+        	  </br>
+        	  <p id="errorTipArtiklaKreiranje" style="margin-left: 2%;color : #E84E6D;font-weight: bold;font-size: 17"></p>
+		      </br>
+		      
+		      <p style="margin-left: 2%;color: #8C7797;font-size: 20"><b>Izaberi restoran artikla:</b></p>
+		      <select id="restoranArtiklaKreiranje" style="margin-left: 2%" name="restoranArtikal">
+		      </select>
+		      
+		      
+		      
+		      </br>      
+		      <input class="button" style="margin-left: 28%; margin-right: 42%" style="background-color: #5F8DAB" type="submit" value="Kreiraj">
 		     
 		    </div>
 		    

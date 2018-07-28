@@ -189,4 +189,25 @@ public class ArtikalDAO {
 		
 		return vrati;
 	}
+
+
+	public String dodajArtikal(Artikal artikal) throws IOException {
+		String vrati="";
+		//prvo cemo da procerimo da li ima artikal
+		for(Artikal item : artikli.values()){
+			if(artikal.getRestoran().equals(item.getRestoran())){
+				if(artikal.getNaziv().equals(item.getNaziv())){
+					vrati="ImaNaziv";
+					return vrati;
+				}
+			}
+		}
+		//ukoliko nema samo ga ubacimo u mapu!
+		if(vrati==""){
+			artikli.put(artikal.getNaziv()+artikal.getRestoran(), artikal);
+			saveArtikle();
+		}
+		
+		return "";
+	}
 }

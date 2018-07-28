@@ -98,4 +98,15 @@ public class ArtikalService {
 		ArtikalDAO dao = (ArtikalDAO) ctx.getAttribute("artikalDAO");
 		return dao.izmeniArtikal(artikal);
 	}
+	
+	/* *
+	 * dodaje novi artikal medju artikle 
+	 * */
+	@POST
+	@Path("/kreirajNovi/")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String dodajArtikal(Artikal artikal) throws IOException{
+		ArtikalDAO dao = (ArtikalDAO) ctx.getAttribute("artikalDAO");
+		return dao.dodajArtikal(artikal);
+	}
 }

@@ -1,6 +1,7 @@
 package services;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
@@ -11,6 +12,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import beans.Artikal;
 import beans.Restoran;
 import dao.RestoranDAO;
 
@@ -44,5 +46,17 @@ public class RestoranService {
 		RestoranDAO dao = (RestoranDAO) ctx.getAttribute("restoranDAO");
 		
 		return dao.pronadjiRestorane(tip);
+	}
+	
+	/* *
+	 * vraca sve restorane
+	 * */
+	
+	@GET
+	@Path("/")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<Restoran> vratiSveRestorane(){
+		RestoranDAO dao =(RestoranDAO) ctx.getAttribute("restoranDAO");
+		return  dao.getRestorani().values();
 	}
 }
