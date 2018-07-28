@@ -78,6 +78,10 @@ $(document).ready(function() {
 		
 	});
 	
+	
+	/* *
+	 * funkcija koja se aktivira prilikom izbacivanja artikla iz poruzbine
+	 * */
 	$(document).on("click",".obrisiArtikalPorudzbina", function(e){
 		  e.preventDefault();
 		  var kliknutiElement= e.target; //ovo nam vraca element koji je kliknut		  

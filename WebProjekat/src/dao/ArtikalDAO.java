@@ -132,4 +132,61 @@ public class ArtikalDAO {
 	public void setArtikli(HashMap<String, Artikal> artikli) {
 		this.artikli = artikli;
 	}
+
+  /* *
+   * Funkcija koja nam vraca artikal koji odgovara ovom prosledejnom stringu
+   * */
+	public Artikal pronadjiArtikal(String artikal) {
+		for(Artikal item : artikli.values()){
+			if(artikal.contains(item.getNaziv())){
+				if(artikal.contains(item.getRestoran())){
+					return item;
+				}
+			}
+		}
+		return null;
+	}
+
+
+	public String izmeniArtikal(Artikal artikal) throws IOException {
+		String vrati="";
+		/* *
+		 * 
+		 * */
+		//ako smo promenili naziv artikla moramo da prodjemo kroz artikle
+		//jednog restorana i proveriti da li ima nekog vec sa tim imenom
+		if(!artikal.getNaziv().equals(artikal.getStariNaziv())){
+			for(Artikal item : artikli.values()){
+				if(artikal.getRestoran().equals(item.getRestoran())){
+					if(artikal.getNaziv().equals(item.getNaziv())){
+						vrati = "ImaNaziv";
+						return vrati;
+					}
+				}
+			}
+		}
+		//ako nema greske, idemo da nadjemo taj artikal...
+		Artikal artikalZaIzmenu = null;
+		for(Artikal item : artikli.values()){
+			if(item.getRestoran().equals(artikal.getRestoran())){
+				if(item.getNaziv().equals(artikal.getStariNaziv())){
+					artikalZaIzmenu=item;
+				}
+			}
+		}
+		
+		//sada kada smo nasli artikal sada ga menjamo
+		artikalZaIzmenu.setJedinicnaCena(artikal.getJedinicnaCena());
+		artikalZaIzmenu.setKolicina(artikal.getKolicina());
+		artikalZaIzmenu.setNaziv(artikal.getNaziv());
+		artikalZaIzmenu.setOpis(artikal.getOpis());
+		artikalZaIzmenu.setTip(artikal.getTip());
+		
+		if(vrati.equals("")){
+			//sada cuvamo artikle
+			saveArtikle();
+		}
+		
+		return vrati;
+	}
 }

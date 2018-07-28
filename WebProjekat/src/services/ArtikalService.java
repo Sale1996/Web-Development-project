@@ -1,6 +1,7 @@
 package services;
 
 import java.io.Console;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -65,6 +66,15 @@ public class ArtikalService {
 		return dao.pronadjiPoRestoranu(restoran);
 	}
 	
+	@GET
+	@Path("/dajArtikal/{artikal}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Artikal pronadjiArtikal(@PathParam("artikal") String artikal){
+		ArtikalDAO dao = (ArtikalDAO) ctx.getAttribute("artikalDAO");
+		
+		return dao.pronadjiArtikal(artikal);
+	}
+	
 	/*
 	 * Vraca listu artikala koji odgovaraju pretrazi
 	 * */
@@ -77,4 +87,15 @@ public class ArtikalService {
 		return dao.pretraga(artikal);
 	}
 	
+	/* *
+	 * Vrsi izmenu prosledjenog artikla i vraca string koji je potvrda toga
+	 * ili govori gresku, ukoliko je ima
+	 * */
+	@PUT
+	@Path("/")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String izmeniArtikal(Artikal artikal) throws IOException{
+		ArtikalDAO dao = (ArtikalDAO) ctx.getAttribute("artikalDAO");
+		return dao.izmeniArtikal(artikal);
+	}
 }

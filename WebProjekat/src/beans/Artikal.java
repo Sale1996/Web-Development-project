@@ -9,7 +9,7 @@ public class Artikal {
    private String tip;
    private String restoran;
    private int brojArtikala; //koristice se samo prilikom porudzbine
-   
+   private String stariNaziv;  
    
    
    
@@ -141,6 +141,14 @@ public class Artikal {
 
 	public void setBrojArtikala(int brojArtikala) {
 		this.brojArtikala = brojArtikala;
+	}
+
+	public String getStariNaziv() {
+		return stariNaziv;
+	}
+
+	public void setStariNaziv(String stariNaziv) {
+		this.stariNaziv = stariNaziv;
 	}
 	
 	

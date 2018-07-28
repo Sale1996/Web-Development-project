@@ -285,7 +285,16 @@
   	visibility: hidden;
    }
    .sakriOdAdministratora{
-   }                 
+   }         
+   
+   /*klasa koja se koristi kao pomoc kod selekcije elemenata
+   koji ce dobiti lisener*/
+   .izmeniArtikal{
+   }        
+   
+   .selektovanaTabelaAdmin{
+   	font-weight: bold;
+   }
                     
                     
    .menuAdministrator{
