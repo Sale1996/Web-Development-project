@@ -109,4 +109,17 @@ public class ArtikalService {
 		ArtikalDAO dao = (ArtikalDAO) ctx.getAttribute("artikalDAO");
 		return dao.dodajArtikal(artikal);
 	}
+	
+	/* *
+	 * Logicki brise artikal
+	 * */
+	@DELETE
+	@Path("/{artikal}")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String obrisiArtikal(@PathParam("artikal") String artikal) throws IOException{
+		ArtikalDAO dao = (ArtikalDAO) ctx.getAttribute("artikalDAO");
+		
+		return dao.obrisiArtikal(artikal);
+		
+	}
 }

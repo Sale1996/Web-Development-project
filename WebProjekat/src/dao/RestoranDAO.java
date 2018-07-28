@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import beans.Artikal;
 import beans.Restoran;
 
 public class RestoranDAO {
@@ -109,6 +110,85 @@ public class RestoranDAO {
 		//brisemo sesiju
 		HttpSession sesija = request.getSession();
 		sesija.invalidate();
+		return "ok";
+	}
+
+	public Restoran getRestoran(String restoran) {
+		for(Restoran item : restorani.values()){
+			if(item.getNaziv().equals(restoran))
+				return item;
+		}
+		return null;
+	}
+
+	public String izmeniRestoran(Restoran restoran) throws IOException {
+		String vrati ="";
+		//ukoliko smo menjali naziv, moramo da proverimo da li 
+		//restoran vec postoji tu 
+		if(!restoran.getNaziv().equals(restoran.getStariNaziv())){
+			for(Restoran item : restorani.values()){
+				if(item.getNaziv().equals(restoran.getNaziv())){
+					vrati="imaNaziv";
+					return vrati;
+				}
+			}
+		}
+		//nalazimo restoran koji ce se menjati
+		Restoran restoranZaIzmenu = null;
+		for(Restoran item : restorani.values()){
+			if(item.getNaziv().equals(restoran.getStariNaziv())){
+				restoranZaIzmenu = item;
+				break;
+			}
+		}
+		
+		//sada vrsimo izmenu podataka
+		
+		restoranZaIzmenu.setNaziv(restoran.getNaziv());
+		restoranZaIzmenu.setAdresa(restoran.getAdresa());
+		restoranZaIzmenu.setKategorija(restoran.getKategorija());
+		
+		if(vrati.equals("")){
+			saveRestoran();
+		}
+		
+		return vrati;
+	}
+
+	/*
+	 * Funkcija koja dodaje novi restoran!
+	 * */
+	public String dodajRestoran(Restoran restoran) {
+		String vrati="";
+		for(Restoran item : restorani.values()){
+			if(item.getNaziv().equals(restoran.getNaziv())){
+				vrati="imaNaziv";
+				return vrati;
+			}
+		}
+		if(vrati==""){
+			restorani.put(restoran.getNaziv(), restoran);
+		}
+		
+		return vrati;
+	}
+
+	public String izbrisiRestoran(String restoran, ArtikalDAO artikalDAO) throws IOException {
+		//prvo brisemo restoran
+		for(Restoran item : restorani.values()){
+			if(item.getNaziv().equals(restoran)){
+				item.setObrisan(true);
+				saveRestoran();
+			}
+		}
+		
+		//sada brisemo svaki artikal iz tog restorana
+		for(Artikal item : artikalDAO.getArtikli().values()){
+			if(item.getRestoran().equals(restoran)){
+				item.setObrisan(true);
+			}
+		}
+		artikalDAO.saveArtikle();
 		return "ok";
 	}
 	

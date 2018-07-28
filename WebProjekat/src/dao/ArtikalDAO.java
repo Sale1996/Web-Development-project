@@ -171,6 +171,7 @@ public class ArtikalDAO {
 			if(item.getRestoran().equals(artikal.getRestoran())){
 				if(item.getNaziv().equals(artikal.getStariNaziv())){
 					artikalZaIzmenu=item;
+					break;
 				}
 			}
 		}
@@ -209,5 +210,18 @@ public class ArtikalDAO {
 		}
 		
 		return "";
+	}
+
+
+	public String obrisiArtikal(String artikal) throws IOException {
+		for(Artikal item : artikli.values()){
+			if(artikal.contains(item.getRestoran())){
+				if(artikal.contains(item.getNaziv())){
+					item.setObrisan(true);
+					saveArtikle();
+				}
+			}
+		}
+		return "ok";
 	}
 }

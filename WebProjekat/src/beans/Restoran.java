@@ -7,7 +7,8 @@ public class Restoran {
    private String adresa;
    private String kategorija;
    private Boolean daLiJeOmiljeni;
-   
+   private String stariNaziv;
+   private Boolean obrisan;
    //private ArrayList<Artikal> jela;
   // private ArrayList<Artikal> pica;
    
@@ -18,12 +19,14 @@ public class Restoran {
 		this.adresa = adresa;
 		this.kategorija = kategorija;
 		this.daLiJeOmiljeni=false;
+		this.obrisan=false;
 		//this.jela = new ArrayList<Artikal>();
 		//this.pica = new ArrayList<Artikal>();
 	}
 
 	public Restoran(){
 		this.daLiJeOmiljeni=false;
+		this.obrisan=false;
 
 	}
 
@@ -62,6 +65,22 @@ public class Restoran {
 
 	public void setDaLiJeOmiljeni(Boolean daLiJeOmiljeni) {
 		this.daLiJeOmiljeni = daLiJeOmiljeni;
+	}
+
+	public String getStariNaziv() {
+		return stariNaziv;
+	}
+
+	public void setStariNaziv(String stariNaziv) {
+		this.stariNaziv = stariNaziv;
+	}
+
+	public Boolean getObrisan() {
+		return obrisan;
+	}
+
+	public void setObrisan(Boolean obrisan) {
+		this.obrisan = obrisan;
 	}
 
 /*

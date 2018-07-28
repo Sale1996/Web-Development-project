@@ -10,6 +10,7 @@ public class Artikal {
    private String restoran;
    private int brojArtikala; //koristice se samo prilikom porudzbine
    private String stariNaziv;  
+   private Boolean obrisan;
    
    
    
@@ -23,10 +24,11 @@ public class Artikal {
 		this.kolicina = kolicina;
 		this.tip = tip;
 		this.restoran= restoran;
+		this.obrisan=false;
 	}
 
     public Artikal(){
-    	
+    	this.obrisan=false;
     }
 
 
@@ -149,6 +151,14 @@ public class Artikal {
 
 	public void setStariNaziv(String stariNaziv) {
 		this.stariNaziv = stariNaziv;
+	}
+
+	public Boolean getObrisan() {
+		return obrisan;
+	}
+
+	public void setObrisan(Boolean obrisan) {
+		this.obrisan = obrisan;
 	}
 	
 	

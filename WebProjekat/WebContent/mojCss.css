@@ -79,12 +79,12 @@
       border: 1;
       color: #FFFFFF;
       text-align: center;
-      font-size: 20px;
-      border-radius: 15px;
+      font-size: 14px;
+      border-radius: 6px;
        
 	  border: 1px solid #905FAB;
-	  padding: 20px; 
-	  border-spacing: 16px;
+	  padding: 10px; 
+	  border-spacing: 10px;
 	  border-collapse: separate;  
     }
     /* korisceno za tabele za sve artikle*/
@@ -294,6 +294,10 @@
    
    .selektovanaTabelaAdmin{
    	font-weight: bold;
+   }
+   
+   /*koristi se kao pomoc pri selekciji artikala koje hocemo da obrisemo*/
+   .izbrisiArtikal{
    }
                     
                     

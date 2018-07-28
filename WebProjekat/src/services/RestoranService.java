@@ -1,19 +1,23 @@
 package services;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import beans.Artikal;
 import beans.Restoran;
+import dao.ArtikalDAO;
 import dao.RestoranDAO;
 
 @Path("/restorani")
@@ -59,4 +63,51 @@ public class RestoranService {
 		RestoranDAO dao =(RestoranDAO) ctx.getAttribute("restoranDAO");
 		return  dao.getRestorani().values();
 	}
+	
+	/*
+	 * Vraca trazeni restoran
+	 * */
+	@GET
+	@Path("/jedanRestoran/{restoran}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Restoran vratiRestoran(@PathParam("restoran") String restoran){
+		RestoranDAO dao = (RestoranDAO) ctx.getAttribute("restoranDAO");
+		return dao.getRestoran(restoran);
+	}
+	
+	/*
+	 * Vrsi izmenu restorana
+	 * */
+	@PUT
+	@Path("/")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String izmeniRestoran(Restoran restoran) throws IOException{
+		RestoranDAO dao = (RestoranDAO) ctx.getAttribute("restoranDAO");
+		return dao.izmeniRestoran(restoran);
+	}
+	
+	/*
+	 * Unos novog restorana
+	 * */
+	@POST
+	@Path("/")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String dodajRestoran(Restoran restoran) throws IOException{
+		RestoranDAO dao = (RestoranDAO) ctx.getAttribute("restoranDAO");
+		return dao.dodajRestoran(restoran);
+		
+	}
+	
+	/*
+	 * Brisanje restorana i njegovih artikala
+	 * */
+	@DELETE
+	@Path("/{restoran}")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String izbrisiRestoran(@PathParam("restoran") String restoran) throws IOException{
+		RestoranDAO dao = (RestoranDAO) ctx.getAttribute("restoranDAO");
+		ArtikalDAO artikalDAO = (ArtikalDAO) ctx.getAttribute("artikalDAO");
+		return dao.izbrisiRestoran(restoran,artikalDAO);
+	}
+	
 }
