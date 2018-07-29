@@ -466,7 +466,7 @@
    			<ul>
 			  <li><a id="izlistajArtikleAdmin" href="#">Artikli</a></li>
 			  <li><a id="izlistajRestoraneAdmin" href="#">Restorani</a></li>
-			  <li><a href="#">Vozila</a></li>
+			  <li><a id="izlistajVozilaAdmin" href="#">Vozila</a></li>
 			  <li><a href="#">Kupci</a></li>
 			  <li><a href="#">Dostavljaci</a></li>
 			  <li><a href="#">Administratori</a></li>
@@ -593,7 +593,7 @@
 		      </br>
 		      
 		      <input id="cenaArtiklaKreiranje" class="inputLoginPOPUP"  type="number" placeholder="Unesi cenu artikla" name="cenaArtikla">
-		      </br><p id="errorCenaArtiklaKreiranje style="margin-left: 2%;color : #E84E6D;font-weight: bold;font-size: 17"></p>
+		      </br><p id="errorCenaArtiklaKreiranje" style="margin-left: 2%;color : #E84E6D;font-weight: bold;font-size: 17"></p>
 		      </br>
 		      
 		      <input id="kolicinaArtiklaKreiranje" class="inputLoginPOPUP"  type="number" name="kolicinaArtikla" placeholder="Unesi kolicinu artikla">
@@ -739,6 +739,128 @@
 		      
 		      </br>      
 		      <input class="button" style="margin-left: 28%; margin-right: 42%" style="background-color: #5F8DAB" type="submit" value="Kreiraj">
+		     </div>
+		    
+		  </form>
+  
+	   </div>
+	   
+	   
+	   <!-- VOZILO VOZILO VOZILO -->
+	    <!-- VOZILO VOZILO VOZILO -->
+	     <!-- VOZILO VOZILO VOZILO -->
+	      <!-- VOZILO VOZILO VOZILO -->
+	       <!-- VOZILO VOZILO VOZILO -->
+	        <!-- VOZILO VOZILO VOZILO -->
+	        
+	   
+	    <!-- KREIRANJE NOVOG VOZILA POP UP PROZOR -->
+	   
+	   
+	   <div id="novoVozilo" class="modal">
+  
+		  <form class="modal-content animate" id="formaDodavanjaVozila">
+		        
+		    <div class="imgcontainer" >
+		      <span onclick="document.getElementById('novoVozilo').style.display='none'" class="closePopUpLogin" title="Zatvori prozor">&times;</span>
+		      <h2 style="text-align:center; color: #8C7797">Novo vozilo</h2>
+		    </div>
+		
+		    <div class="container" >
+		      
+		      <!-- marka vozila -->
+		      <input id="markaVozilaKreiranje" class="inputLoginPOPUP"  type="text" placeholder="Unesi marku vozila" name="nazivnaziv">
+		       </br><p id="errormarkaVozilaKreiranje" style="margin-left: 2%;color : #E84E6D;font-weight: bold;font-size: 17"></p>
+		      </br>
+		      <!-- model vozila -->
+		      <input id="modelVozilaKreiranje" class="inputLoginPOPUP"  type="text" placeholder="Unesi model vozila" name="nazivnaziv">
+		       </br><p id="errormodelVozilaKreiranje" style="margin-left: 2%;color : #E84E6D;font-weight: bold;font-size: 17"></p>
+		      </br>
+		      <!-- tip vozila -->
+		       <p style="margin-left: 2%;color: #8C7797;font-size: 20"><b>Izaberi tip vozila:</b></p>
+			  <select id="tipVozilaKreiranje" style="margin-left: 2%" name="tipVozilaKreiranje">
+		        <option value=""></option>
+	 			<option value="Bicikl">Bicikl</option>
+				<option value="Skuter">Skuter</option>
+				<option value="Automobil">Automobil</option>	
+			  </select>
+			  </br>
+        	  <p id="errortipVozilaKreiranje" style="margin-left: 2%;color : #E84E6D;font-weight: bold;font-size: 17"></p>
+		      </br>
+			  <!-- Registarska oznaka -->
+		      <input id="registarskaOznakaVozilaKreiranje" class="inputLoginPOPUP"  type="text" placeholder="Unesi registarsku oznaku vozila" name="nazivnaziv">
+		       </br><p id="errorRegistarskaOznakaVozilaKreiranje" style="margin-left: 2%;color : #E84E6D;font-weight: bold;font-size: 17"></p>
+		      </br>
+		      <!-- godina proizvodnje -->
+		      <input id="godinaProizvodnjeVoziloKreiranje" class="inputLoginPOPUP"  type="number" placeholder="Unesi godinu proizvodnje vozila" name="cenaArtikla">
+		      </br><p id="errorgodinaProizvodnjeVoziloKreiranje" style="margin-left: 2%;color : #E84E6D;font-weight: bold;font-size: 17"></p>
+		      </br>
+		      <!-- Napomena -->
+		      <input id="napomenaVozilaKreiranje" class="inputLoginPOPUP"  type="text" placeholder="Unesi napomenu" name="nazivnaziv">
+		       </br><p id="errornapomenaVozilaKreiranje" style="margin-left: 2%;color : #E84E6D;font-weight: bold;font-size: 17"></p>
+		      
+		      </br>      
+		      <input class="button" style="margin-left: 28%; margin-right: 42%" style="background-color: #5F8DAB" type="submit" value="Kreiraj">
+		     </div>
+		    
+		  </form>
+  
+	   </div>
+	   
+	   
+	   <!-- IZMENA VOZILA -->
+	   <!-- IZMENA VOZILA -->
+	   <!-- IZMENA VOZILA -->
+	   <!-- IZMENA VOZILA -->
+	   
+	   <div id="izmenaVozila" class="modal">
+  
+		  <form class="modal-content animate" id="formaIzmenaVozila">
+		        
+		    <div class="imgcontainer" >
+		      <span onclick="document.getElementById('izmenaVozila').style.display='none'" class="closePopUpLogin" title="Zatvori prozor">&times;</span>
+		      <h2 style="text-align:center; color: #8C7797">Izmeni vozilo</h2>
+		    </div>
+		
+		    <div class="container" >
+		      
+		      <!-- marka vozila -->
+		      <input id="markaVozilaIzmena" class="inputLoginPOPUP"  type="text" placeholder="Unesi marku vozila" name="nazivnaziv">
+		       </br><p id="errormarkaVozilaIzmena" style="margin-left: 2%;color : #E84E6D;font-weight: bold;font-size: 17"></p>
+		      </br>
+		      <!-- model vozila -->
+		      <input id="modelVozilaIzmena" class="inputLoginPOPUP"  type="text" placeholder="Unesi model vozila" name="nazivnaziv">
+		       </br><p id="errormodelVozilaIzmena" style="margin-left: 2%;color : #E84E6D;font-weight: bold;font-size: 17"></p>
+		      </br>
+		      <!-- tip vozila -->
+		       <p style="margin-left: 2%;color: #8C7797;font-size: 20"><b>Izaberi tip vozila:</b></p>
+			  <select id="tipVozilaIzmena" style="margin-left: 2%" name="tipVozilaIzmena">
+		        <option value=""></option>
+	 			<option value="Bicikl">Bicikl</option>
+				<option value="Skuter">Skuter</option>
+				<option value="Automobil">Automobil</option>	
+			  </select>
+			  </br>
+        	  <p id="errortipVozilaIzmena" style="margin-left: 2%;color : #E84E6D;font-weight: bold;font-size: 17"></p>
+		      </br>
+			  <!-- Registarska oznaka -->
+		      <input id="registarskaOznakaVozilaIzmena" class="inputLoginPOPUP"  type="text" placeholder="Unesi registarsku oznaku vozila" name="nazivnaziv">
+		       </br><p id="errorRegistarskaOznakaIzmena" style="margin-left: 2%;color : #E84E6D;font-weight: bold;font-size: 17"></p>
+		      </br>
+		      <!-- CUVANJE STARE VREDNOSTI REGISTARSKE OZNAKE KAKO BI PRONASLI ELEMENT -->
+		      <input id="registarskaOznakaVozilaStara" style="visibility:hidden" class="inputLoginPOPUP"  type="text" placeholder="Unesi registarsku oznaku vozila" name="nazivnaziv">
+		      </br>
+		      
+		      <!-- godina proizvodnje -->
+		      <input id="godinaProizvodnjeVoziloIzmena" class="inputLoginPOPUP"  type="number" placeholder="Unesi godinu proizvodnje vozila" name="cenaArtikla">
+		      </br><p id="errorgodinaProizvodnjeVoziloIzmena" style="margin-left: 2%;color : #E84E6D;font-weight: bold;font-size: 17"></p>
+		      </br>
+		      <!-- Napomena -->
+		      <input id="napomenaVozilaIzmena" class="inputLoginPOPUP"  type="text" placeholder="Unesi napomenu" name="nazivnaziv">
+		       </br><p id="errornapomenaVozilaIzmena" style="margin-left: 2%;color : #E84E6D;font-weight: bold;font-size: 17"></p>
+		      
+		      </br>      
+		      <input class="button" style="margin-left: 28%; margin-right: 42%" style="background-color: #5F8DAB" type="submit" value="Izmeni">
 		     </div>
 		    
 		  </form>

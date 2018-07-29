@@ -158,7 +158,7 @@ public class RestoranDAO {
 	/*
 	 * Funkcija koja dodaje novi restoran!
 	 * */
-	public String dodajRestoran(Restoran restoran) {
+	public String dodajRestoran(Restoran restoran) throws IOException {
 		String vrati="";
 		for(Restoran item : restorani.values()){
 			if(item.getNaziv().equals(restoran.getNaziv())){
@@ -168,6 +168,7 @@ public class RestoranDAO {
 		}
 		if(vrati==""){
 			restorani.put(restoran.getNaziv(), restoran);
+			saveRestoran();
 		}
 		
 		return vrati;

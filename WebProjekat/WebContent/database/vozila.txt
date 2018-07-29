@@ -1,0 +1,1 @@
+{"NS-2CDA422":{"marka":"Audi","model":"A4","tip":"Automobil","registarskaOznaka":"NS-2CDA422","godinaProizvodnje":2015,"daLiJeUUpotrebi":false,"napomena":"Crne boje","obrisan":false}}
