@@ -23,11 +23,13 @@ public class KorisnikDAO {
 	private String contextPath;
 	private KupacDAO kupacDao;
     private AdministratorDAO administratorDao;
+    private DostavljacDAO dostavljacDao;
 	
-	public KorisnikDAO(String contextPath, KupacDAO kupacDao,AdministratorDAO administratorDao) {
+	public KorisnikDAO(String contextPath, KupacDAO kupacDao,AdministratorDAO administratorDao,DostavljacDAO dostavljacDao) {
 		this.contextPath=contextPath;
 		this.kupacDao = kupacDao;
 		this.administratorDao = administratorDao;
+		this.dostavljacDao=dostavljacDao;
 		loadKorisnike();
 	}
 	
@@ -35,7 +37,7 @@ public class KorisnikDAO {
 		
 		kupci = kupacDao.getKupci();
 		administratori = administratorDao.getAdministratori();
-		//isto za dostavljace
+		dostavljaci= dostavljacDao.getDostavljaci();
 		
 	}
 	
@@ -139,5 +141,104 @@ public class KorisnikDAO {
 		
 		return vrati;
 		
+	}
+
+	//vraca korisnika po korisnickom imenu
+	public Korisnik pronadjiMiKorisnika(String korisnickoIme) {
+		loadKorisnike();
+		Korisnik korisnik=null;
+		if(kupci.containsKey(korisnickoIme))
+			korisnik = kupci.get(korisnickoIme);
+		else if(administratori.containsKey(korisnickoIme))
+			korisnik = administratori.get(korisnickoIme);
+		
+		return korisnik;
+	}
+
+	/*
+	 * Menja ulogu korisnika
+	 * */
+	public String promeniUlogu(Korisnik korisnik) throws IOException {
+		Korisnik korisnikZaMenjanjeUloge=null;
+		
+		//prvo trazimo korisnika
+		if(kupci.containsKey(korisnik.getKorisnickoIme())){
+			korisnikZaMenjanjeUloge = kupci.get(korisnik.getKorisnickoIme());
+		}
+		if(administratori.containsKey(korisnik.getKorisnickoIme())){
+			korisnikZaMenjanjeUloge = administratori.get(korisnik.getKorisnickoIme());
+		}
+		if(dostavljaci.containsKey(korisnik.getKorisnickoIme())){
+			korisnikZaMenjanjeUloge = dostavljaci.get(korisnik.getKorisnickoIme());
+		}
+		
+		//ukoliko nismo promenili ulogu samo izlazimo iz funkcije
+		if(korisnikZaMenjanjeUloge.getUloga().equals(korisnik.getUloga()))
+			return "ok";
+		else{
+			//ukoliko jesmo onda moramo da menjamo ulogu
+			//ukoliko je uloga kupac
+			if(korisnik.getUloga().equals("kupac")){
+				Kupac noviKupac = new Kupac();
+				noviKupac.setDatumRegistracije(korisnikZaMenjanjeUloge.getDatumRegistracije());
+				noviKupac.setEmailAdresa(korisnikZaMenjanjeUloge.getEmailAdresa());
+				noviKupac.setIme(korisnikZaMenjanjeUloge.getIme());
+				noviKupac.setKontaktTelefon(korisnikZaMenjanjeUloge.getKontaktTelefon());
+				noviKupac.setKorisnickoIme(korisnikZaMenjanjeUloge.getKorisnickoIme());
+				noviKupac.setLozinka(korisnikZaMenjanjeUloge.getLozinka());
+				noviKupac.setPrezime(korisnikZaMenjanjeUloge.getPrezime());
+				noviKupac.setUloga(korisnik.getUloga());
+				kupacDao.getKupci().put(noviKupac.getKorisnickoIme(), noviKupac);
+				if(korisnikZaMenjanjeUloge instanceof Dostavljac){
+					dostavljacDao.getDostavljaci().remove(korisnikZaMenjanjeUloge.getKorisnickoIme());
+				}
+				else{
+					administratorDao.getAdministratori().remove(korisnikZaMenjanjeUloge.getKorisnickoIme());
+				}
+				
+			}
+			else if(korisnik.getUloga().equals("dostavljac")){
+				Dostavljac noviDostavljac = new Dostavljac();
+				noviDostavljac.setDatumRegistracije(korisnikZaMenjanjeUloge.getDatumRegistracije());
+				noviDostavljac.setEmailAdresa(korisnikZaMenjanjeUloge.getEmailAdresa());
+				noviDostavljac.setIme(korisnikZaMenjanjeUloge.getIme());
+				noviDostavljac.setKontaktTelefon(korisnikZaMenjanjeUloge.getKontaktTelefon());
+				noviDostavljac.setKorisnickoIme(korisnikZaMenjanjeUloge.getKorisnickoIme());
+				noviDostavljac.setLozinka(korisnikZaMenjanjeUloge.getLozinka());
+				noviDostavljac.setPrezime(korisnikZaMenjanjeUloge.getPrezime());
+				noviDostavljac.setUloga(korisnik.getUloga());
+				dostavljacDao.getDostavljaci().put(noviDostavljac.getKorisnickoIme(), noviDostavljac);
+				if(korisnikZaMenjanjeUloge instanceof Kupac){
+					kupacDao.getKupci().remove(korisnikZaMenjanjeUloge.getKorisnickoIme());
+				}
+				else{
+					administratorDao.getAdministratori().remove(korisnikZaMenjanjeUloge.getKorisnickoIme());
+				}
+				
+			}else{
+				Administrator noviAdministrator = new Administrator();
+				noviAdministrator.setDatumRegistracije(korisnikZaMenjanjeUloge.getDatumRegistracije());
+				noviAdministrator.setEmailAdresa(korisnikZaMenjanjeUloge.getEmailAdresa());
+				noviAdministrator.setIme(korisnikZaMenjanjeUloge.getIme());
+				noviAdministrator.setKontaktTelefon(korisnikZaMenjanjeUloge.getKontaktTelefon());
+				noviAdministrator.setKorisnickoIme(korisnikZaMenjanjeUloge.getKorisnickoIme());
+				noviAdministrator.setLozinka(korisnikZaMenjanjeUloge.getLozinka());
+				noviAdministrator.setPrezime(korisnikZaMenjanjeUloge.getPrezime());
+				noviAdministrator.setUloga(korisnik.getUloga());
+				administratorDao.getAdministratori().put(noviAdministrator.getKorisnickoIme(), noviAdministrator);
+				if(korisnikZaMenjanjeUloge instanceof Kupac){
+					kupacDao.getKupci().remove(korisnikZaMenjanjeUloge.getKorisnickoIme());
+				}
+				else{
+					dostavljacDao.getDostavljaci().remove(korisnikZaMenjanjeUloge.getKorisnickoIme());
+				}
+			}
+		}
+		
+		kupacDao.saveKupac();
+		administratorDao.saveAdmin();
+		dostavljacDao.saveDostavljac();
+		
+		return "ok";
 	}
 }

@@ -467,9 +467,9 @@
 			  <li><a id="izlistajArtikleAdmin" href="#">Artikli</a></li>
 			  <li><a id="izlistajRestoraneAdmin" href="#">Restorani</a></li>
 			  <li><a id="izlistajVozilaAdmin" href="#">Vozila</a></li>
-			  <li><a href="#">Kupci</a></li>
-			  <li><a href="#">Dostavljaci</a></li>
-			  <li><a href="#">Administratori</a></li>
+			  <li><a id="izlistajKupceAdmin" href="#">Kupci</a></li>
+			  <li><a id="izlistajDostavljaceAdmin" href="#">Dostavljaci</a></li>
+			  <li><a id="izlistajAdmineAdmin" href="#">Administratori</a></li>
 			  
 			</ul>
    		</div>
@@ -866,6 +866,47 @@
 		  </form>
   
 	   </div>
+	   
+	   <!-- MANIPULACIJA KORISNIKA ADMIN -->
+	   	   <!-- MANIPULACIJA KORISNIKA ADMIN -->
+	   
+	   	   <!-- MANIPULACIJA KORISNIKA ADMIN -->
+	   
+	   	   <!-- MANIPULACIJA KORISNIKA ADMIN -->
+	   
+	   	   <!-- MANIPULACIJA KORISNIKA ADMIN -->
+	   <div id="izmenaUlogeKorisnika" class="modal">
+  
+		  <form class="modal-content animate" id="formaIzmenaUlogeKorisnika">
+		        
+		    <div class="imgcontainer" >
+		      <span onclick="document.getElementById('izmenaUlogeKorisnika').style.display='none'" class="closePopUpLogin" title="Zatvori prozor">&times;</span>
+		      <h2 style="text-align:center; color: #8C7797">Izmeni ulogu korisnika</h2>
+		    </div>
+		
+		    <div class="container" >
+		      <!-- CUVANJE KORISNICKOG IMENA -->
+		      <input id="korisnickoImeKorisnikaZaUlogu" style="visibility:hidden" class="inputLoginPOPUP"  type="text">
+		      
+		      <!-- uloga korisnika -->
+		       <p style="margin-left: 2%;color: #8C7797;font-size: 20"><b>Izaberi ulogu korisnika:</b></p>
+			  <select id="ulogaKorisnika" style="margin-left: 2%" name="ulogaKorisnika">
+		        <option value=""></option>
+	 			<option value="kupac">kupac</option>
+				<option value="dostavljac">dostavljac</option>
+				<option value="admin">admin</option>	
+			  </select>
+			  </br>
+        	  <p id="errorIzmenaUlogeKorisnika" style="margin-left: 2%;color : #E84E6D;font-weight: bold;font-size: 17"></p>
+		      </br>
+			     
+		      <input class="button" style="margin-left: 28%; margin-right: 42%" style="background-color: #5F8DAB" type="submit" value="Izmeni">
+		     </div>
+		    
+		  </form>
+  
+	   </div>
+	   
 	   
     </body>
 </html>

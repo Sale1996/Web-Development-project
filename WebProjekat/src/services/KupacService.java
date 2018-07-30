@@ -1,6 +1,7 @@
 package services;
 
 import java.io.IOException;
+import java.util.Collection;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
@@ -15,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 
 import beans.Kupac;
 import beans.Porudzbina;
+import beans.Vozilo;
 import dao.ArtikalDAO;
 import dao.KupacDAO;
 import dao.PorudzbinaDAO;
@@ -133,5 +135,13 @@ public class KupacService {
 		RestoranDAO dao = (RestoranDAO) ctx.getAttribute("restoranDAO");
 
 		return dao.izlogujKupca(request);
+	}
+	
+	@GET
+	@Path("/")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<Kupac> vratiKupce(){
+		KupacDAO dao = (KupacDAO) ctx.getAttribute("kupacDAO");
+		return dao.getKupci().values();
 	}
 }

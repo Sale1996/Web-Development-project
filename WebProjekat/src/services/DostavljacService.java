@@ -11,33 +11,30 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import beans.Administrator;
-import dao.AdministratorDAO;
+import beans.Dostavljac;
+import dao.DostavljacDAO;
 
-@Path("/administrator")
-public class AdministratorService {
+@Path("/dostavljaci")
+public class DostavljacService {
 	@Context
 	ServletContext ctx;
 	
-	public AdministratorService(){
-		
-	}
-	
-	
+	public DostavljacService(){}
 	
 	@PostConstruct
 	public void init() throws IOException{
-		if(ctx.getAttribute("administratorDAO")==null){
+		if(ctx.getAttribute("dostavljacDAO")==null){
 			String contextPath = ctx.getRealPath("");
-			ctx.setAttribute("administratorDAO", new AdministratorDAO(contextPath));
+			ctx.setAttribute("dostavljacDAO", new DostavljacDAO(contextPath));
 		}
 	}
 	
 	@GET
 	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<Administrator> vratiAdministratore(){
-		AdministratorDAO dao = (AdministratorDAO) ctx.getAttribute("administratorDAO");
-		return dao.getAdministratori().values();
+	public Collection<Dostavljac> vratiDostavljace(){
+		DostavljacDAO dao = (DostavljacDAO) ctx.getAttribute("dostavljacDAO");
+		return dao.getDostavljaci().values();
 	}
+	
 }

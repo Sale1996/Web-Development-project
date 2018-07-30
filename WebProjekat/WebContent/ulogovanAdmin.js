@@ -864,7 +864,206 @@ $('#formaIzmenaVozila').submit(function(event){
 		  });
   
 });	
+	/* VEZANO ZA KUPCA */
+ /* VEZANO ZA KUPCA */
+ /* VEZANO ZA KUPCA */
+ /* VEZANO ZA KUPCA */
+ /* VEZANO ZA KUPCA */
+ /* VEZANO ZA KUPCA */
+ /* VEZANO ZA KUPCA */
+ /* VEZANO ZA KUPCA */
+ /*
+  * Fucnkija koja lista sve restorane nakon klika iz menija
+  * restorani i njega podebljava
+  * */
+ $(document).on("click","#izlistajKupceAdmin",function(e){
+	 e.preventDefault();
+	 //ukoliko je neki red menija bio selektovan, moramo da obrisemo tu selekciju
+	 $("[class*='selektovanaTabelaAdmin']").removeClass('selektovanaTabelaAdmin');
+	 //i stavljamo je na nas trenutni red
+	 $("#izlistajKupceAdmin").addClass('selektovanaTabelaAdmin');
+	 //brisemo sve stavke koje su se pre nalazile u toj tabli
+	 $('#adminTabela thead tr').remove();
+	 $('#adminTabela tbody tr').remove();
+	 
+	 $.ajax({
+		 url:'rest/kupac',
+		 type: "GET",
+		 success: function(kupci){
+			 let tr=$('<tr></tr>');
+			 
+			 let trHead = $('<tr></tr>');
+			 $("#adminTabela thead").append(trHead);
+			 
+			
+			 for(let kupac of kupci){
+				    tr=$('<tr></tr>');
+				    let tdNaziv = $('<td> <div class="popup" onclick="iskociPopUP(\'' + kupac.korisnickoIme+  '\')"><p style=\"color: #765FAB; font-size: 20px;\" ><b>' +kupac.korisnickoIme
+							+ '</b></p> <span class="popuptext" id="' + kupac.korisnickoIme
+							+'"><b>Ime:</b> '+ kupac.ime +' </br><b>Prezime:</b> '+ kupac.prezime +' </br><b>Uloga:</b> '+ kupac.uloga + ' </br><b>Kontakt telefon:</b> '+ kupac.kontaktTelefon +
+							' </br><b>email adresa:</b> '+ kupac.emailAdresa + '</br><b>Datum registracije:</b></span>'+
+							' </div>');		
+					let tdIzmeni = $('<td><a class="izmeniUloguKorisnika" href="/WebProjekat/rest/korisnik/dajMiKorisnika/'+kupac.korisnickoIme+'">Izmeni ulogu</a></td>');
+					tr.append(tdNaziv).append(tdIzmeni);
+					$('#adminTabela tbody').append(tr);
+			 }
+			
+		 }
+	 });
+ });
+ 
+ $(document).on("click",".izmeniUloguKorisnika",function(e){
+	 e.preventDefault();
+	 var kliknutiElement= e.target; //ovo nam vraca element koji je kliknut		  
+	  let url= $(kliknutiElement).attr('href');
+	  $.ajax({
+		  url : url,
+		  type: 'GET',
+		  success: function(korisnik){
+			  $("#izmenaUlogeKorisnika").show();
+			  $("#ulogaKorisnika").val(korisnik.uloga);
+			  $("#korisnickoImeKorisnikaZaUlogu").val(korisnik.korisnickoIme);
+			 
+		  }
+	  });
+	 
+ });
+ 
+ 
+ $('#formaIzmenaUlogeKorisnika').submit(function(event){
+		event.preventDefault();
+		let greska=0; //u slucaju da ima greske ovo polje dobija vrednost 1
+		let korisnickoIme = $('#korisnickoImeKorisnikaZaUlogu').val();
+		let uloga = $('#ulogaKorisnika').val();
 	
+		if(uloga==""){
+			$('#errorIzmenaUlogeKorisnika').text('Polje uloga ne sme biti prazno!');
+			$('#errorIzmenaUlogeKorisnika').show().delay(9000).fadeOut();
+			greska=1;
+		}
+		
+		if(greska==1)
+			return;
+		
+		
+		$.ajax({
+			url: 'rest/korisnik/promeniUlogu', //url
+			type: "PUT" ,
+			data: JSON.stringify({korisnickoIme:korisnickoIme,uloga:uloga}),
+			contentType: 'application/json',
+			success : function(povratnaVrednost) {
+					$("#izmenaUlogeKorisnika").hide();
+					//brisemo sve iz tabele i deselektujemo kolonu, kako bi korisnik opet morao
+					//da klikne kako bi se izmene refreshovale
+					$("#adminTabela tbody tr").remove();
+					$("#adminTabela thead tr").remove();
+
+					 //ukoliko je neki red menija bio selektovan, moramo da obrisemo tu selekciju
+					$("[class*='selektovanaTabelaAdmin']").removeClass('selektovanaTabelaAdmin');
+
+					
+				
+				
+			}
+		});
+		
+	});
+ 
+ /*
+  * PRIKAZ SPISKA ADMINISTRATORA I DOSTAVLAJCA
+  * 
+  * */
+ /*
+  * PRIKAZ SPISKA ADMINISTRATORA I DOSTAVLAJCA
+  * 
+  * */
+ /*
+  * PRIKAZ SPISKA ADMINISTRATORA I DOSTAVLAJCA
+  * 
+  * */
+ /*
+  * PRIKAZ SPISKA ADMINISTRATORA I DOSTAVLAJCA
+  * 
+  * */
+ 
+ /*
+  * IZLISTAJ DOSTAVLAJCE
+  * */
+ $(document).on("click","#izlistajDostavljaceAdmin",function(e){
+	 e.preventDefault();
+	 //ukoliko je neki red menija bio selektovan, moramo da obrisemo tu selekciju
+	 $("[class*='selektovanaTabelaAdmin']").removeClass('selektovanaTabelaAdmin');
+	 //i stavljamo je na nas trenutni red
+	 $("#izlistajDostavljaceAdmin").addClass('selektovanaTabelaAdmin');
+	 //brisemo sve stavke koje su se pre nalazile u toj tabli
+	 $('#adminTabela thead tr').remove();
+	 $('#adminTabela tbody tr').remove();
+	 
+	 $.ajax({
+		 url:'rest/dostavljaci',
+		 type: "GET",
+		 success: function(dostavljaci){
+			 let tr=$('<tr></tr>');
+			 
+			 let trHead = $('<tr></tr>');
+			 $("#adminTabela thead").append(trHead);
+			 
+			
+			 for(let dostavljac of dostavljaci){
+				    tr=$('<tr></tr>');
+				    let tdNaziv = $('<td> <div class="popup" onclick="iskociPopUP(\'' + dostavljac.korisnickoIme+  '\')"><p style=\"color: #765FAB; font-size: 20px;\" ><b>' +dostavljac.korisnickoIme
+							+ '</b></p> <span class="popuptext" id="' + dostavljac.korisnickoIme
+							+'"><b>Ime:</b> '+ dostavljac.ime +' </br><b>Prezime:</b> '+ dostavljac.prezime +' </br><b>Uloga:</b> '+ dostavljac.uloga + ' </br><b>Kontakt telefon:</b> '+ dostavljac.kontaktTelefon +
+							' </br><b>email adresa:</b> '+ dostavljac.emailAdresa + '</br><b>Datum registracije:</b></span>'+
+							' </div>');		
+					let tdIzmeni = $('<td><a class="izmeniUloguKorisnika" href="/WebProjekat/rest/korisnik/dajMiKorisnika/'+dostavljac.korisnickoIme+'">Izmeni ulogu</a></td>');
+					tr.append(tdNaziv).append(tdIzmeni);
+					$('#adminTabela tbody').append(tr);
+			 }
+			
+		 }
+	 });
+ });
+ 
+ /*
+  * IZLISTAJ ADMINISTRATORE
+  * */
+ $(document).on("click","#izlistajAdmineAdmin",function(e){
+	 e.preventDefault();
+	 //ukoliko je neki red menija bio selektovan, moramo da obrisemo tu selekciju
+	 $("[class*='selektovanaTabelaAdmin']").removeClass('selektovanaTabelaAdmin');
+	 //i stavljamo je na nas trenutni red
+	 $("#izlistajAdmineAdmin").addClass('selektovanaTabelaAdmin');
+	 //brisemo sve stavke koje su se pre nalazile u toj tabli
+	 $('#adminTabela thead tr').remove();
+	 $('#adminTabela tbody tr').remove();
+	 
+	 $.ajax({
+		 url:'rest/administrator',
+		 type: "GET",
+		 success: function(admini){
+			 let tr=$('<tr></tr>');
+			 
+			 let trHead = $('<tr></tr>');
+			 $("#adminTabela thead").append(trHead);
+			 
+			
+			 for(let admin of admini){
+				    tr=$('<tr></tr>');
+				    let tdNaziv = $('<td> <div class="popup" onclick="iskociPopUP(\'' + admin.korisnickoIme+  '\')"><p style=\"color: #765FAB; font-size: 20px;\" ><b>' +admin.korisnickoIme
+							+ '</b></p> <span class="popuptext" id="' + admin.korisnickoIme
+							+'"><b>Ime:</b> '+ admin.ime +' </br><b>Prezime:</b> '+ admin.prezime +' </br><b>Uloga:</b> '+ admin.uloga + ' </br><b>Kontakt telefon:</b> '+ admin.kontaktTelefon +
+							' </br><b>email adresa:</b> '+ admin.emailAdresa + '</br><b>Datum registracije:</b></span>'+
+							' </div>');		
+					let tdIzmeni = $('<td><a class="izmeniUloguKorisnika" href="/WebProjekat/rest/korisnik/dajMiKorisnika/'+admin.korisnickoIme+'">Izmeni ulogu</a></td>');
+					tr.append(tdNaziv).append(tdIzmeni);
+					$('#adminTabela tbody').append(tr);
+			 }
+			
+		 }
+	 });
+ });
+ 
  function iskociPopUP(ime) {
 		var popup = document.getElementById(ime);
 	    popup.classList.toggle("show");

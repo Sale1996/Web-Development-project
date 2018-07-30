@@ -10,12 +10,14 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import beans.Korisnik;
 import dao.AdministratorDAO;
+import dao.DostavljacDAO;
 import dao.KorisnikDAO;
 import dao.KupacDAO;
 import dao.RestoranDAO;
@@ -38,10 +40,14 @@ public class KorisnikService {
 			String contextPath=ctx.getRealPath("");
 			ctx.setAttribute("administratorDAO", new AdministratorDAO(contextPath));
 		}	
+		if(ctx.getAttribute("dostavljacDAO")==null){
+			String contextPath=ctx.getRealPath("");
+			ctx.setAttribute("dostavljacDAO", new DostavljacDAO(contextPath));
+		}	
 		
 		if(ctx.getAttribute("korisnikDAO")==null){
 			String contextPath=ctx.getRealPath("");
-			ctx.setAttribute("korisnikDAO", new KorisnikDAO(contextPath,(KupacDAO) ctx.getAttribute("kupacDAO"),(AdministratorDAO) ctx.getAttribute("administratorDAO")));
+			ctx.setAttribute("korisnikDAO", new KorisnikDAO(contextPath,(KupacDAO) ctx.getAttribute("kupacDAO"),(AdministratorDAO) ctx.getAttribute("administratorDAO"),(DostavljacDAO) ctx.getAttribute("dostavljacDAO")));
 		}
 		
 	}
@@ -91,6 +97,26 @@ public class KorisnikService {
 		KorisnikDAO dao = (KorisnikDAO) ctx.getAttribute("korisnikDAO");
 		
 		return dao.izmeniKorisnika(korisnik,request);
+		
+	}
+	
+	@GET
+	@Path("/dajMiKorisnika/{korisnickoIme}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Korisnik pronadjiMiKorisnika(@PathParam("korisnickoIme") String korisnik){
+		KorisnikDAO dao = (KorisnikDAO) ctx.getAttribute("korisnikDAO");
+		
+		return dao.pronadjiMiKorisnika(korisnik);
+		
+	}
+	
+	@PUT
+	@Path("/promeniUlogu/")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String promeniUloguKorisnika(Korisnik korisnik) throws IOException{
+		KorisnikDAO dao = (KorisnikDAO) ctx.getAttribute("korisnikDAO");
+		
+		return dao.promeniUlogu(korisnik);
 		
 	}
 }
