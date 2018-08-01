@@ -10,6 +10,7 @@ public class Porudzbina {
    private LocalDateTime datumIVremePorudzbine;
    private String statusPorudzbine;
    private String napomena;
+   private int id;
    
    private HashMap<String,Integer> mapaARTIKALbrojPorudzbina= new HashMap<String,Integer>();
    private ArrayList<Artikal> artikli = new ArrayList<Artikal>();
@@ -107,6 +108,14 @@ public class Porudzbina {
 
 	public void setUkupnaCena(int ukupnaCena) {
 		this.ukupnaCena = ukupnaCena;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 	
    

@@ -470,7 +470,7 @@
 			  <li><a id="izlistajKupceAdmin" href="#">Kupci</a></li>
 			  <li><a id="izlistajDostavljaceAdmin" href="#">Dostavljaci</a></li>
 			  <li><a id="izlistajAdmineAdmin" href="#">Administratori</a></li>
-			  
+			  <li><a id="izlistajPorudzbine" href="#">Porudzbine</a></li>
 			</ul>
    		</div>
    		<div>
@@ -906,7 +906,99 @@
 		  </form>
   
 	   </div>
+
+
+<!-- POP UP PROZOR ZA IZMENU PORUDZBINE KORISNIKA -->
+	   <div id="izmenaPorudzbineAdmin" class="modal">
+  
+		  <div class="modal-content animate" id="izmeniPorudzbineAdmin2" >
+		        
+		    <div class="imgcontainer">
+		      <span  id="izgasiIzmenuPorudzbine"  class="closePopUpLogin" title="Zatvori prozor">&times;</span>
+		      <h2  style="text-align:center; color: #8C7797">Izmena porudzbine</h2>
+		    </div>
+				
+		    <div class="container" >
+		    	<table id="podaciOPorudzbini" class="tableNalogKorisnika" style="margin-left: 0%;">
+					<thead>
+						<tr>
+							<td></td>
+							<td><b>Naziv</b></td>
+							<td></td>
+							<td><b>Kolicina</b></td>
+							<td></td>
+							<td><b>Cena</b></td>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>				
+				
+		    </div>
+		    
+		  </div>
+	   </div>	
 	   
 	   
+	   <!-- IZMENA KUPCA PORUDZBINE -->
+	  <div id="promeniKupcaPorudzbine" class="modal">
+  
+		  <form class="modal-content animate" id="promeniKupcaPorudzbine2" >
+		        
+		    <div class="imgcontainer">
+		      <span  onclick="document.getElementById('promeniKupcaPorudzbine').style.display='none'"  class="closePopUpLogin" title="Zatvori prozor">&times;</span>
+		      <h2  style="text-align:center; color: #8C7797">Izmena kupca porudzbine</h2>
+		    </div>
+		  
+		  <div class="container" >
+		      <!-- kupac porudzbine -->
+		       <p style="margin-left: 19.5%;color: #8C7797;font-size: 20"><b>Izaberi kupca:</b></p>
+			  <select id="kupacPorudzbineIzmena" style="margin-left: 19.5%" name="kupacPorudzbineIzmena">
+			  </select>
+			  </br>
+			  
+			  <!-- linkIzIzmenePorudzbine -->
+			  <input id="kupacPorudzbineLink" style="visibility:hidden" class="inputLoginPOPUP"  type="text">
+			  
+		     
+		      </br>      
+		      <input class="button" style="margin-left: 28%; margin-right: 42%" style="background-color: #5F8DAB" type="submit" value="Izmeni">
+		     </div>
+		    
+		  </form>
+ 
+	   </div> 
+
+
+	   <!-- IZMENA DOSTAVLJACA PORUDZBINE -->
+	  <div id="promeniDostavljacaPorudzbine" class="modal">
+  
+		  <form class="modal-content animate" id="promeniDostavljacaPorudzbine2" >
+		        
+		    <div class="imgcontainer">
+		      <span  onclick="document.getElementById('promeniDostavljacaPorudzbine').style.display='none'"  class="closePopUpLogin" title="Zatvori prozor">&times;</span>
+		      <h2  style="text-align:center; color: #8C7797">Izmena dostavljaca porudzbine</h2>
+		    </div>
+		  
+		  <div class="container" >
+		      <!-- dostavljac porudzbine -->
+		       <p style="margin-left: 19.5%;color: #8C7797;font-size: 20"><b>Izaberi dostavljaca:</b></p>
+			  <select id="dostavljacPorudzbineIzmena" style="margin-left: 19.5%" name="dostavljacPorudzbineIzmena">
+			  </select>
+			  </br>
+			  
+			  <!-- linkIzIzmenePorudzbine -->
+			  <input id="dostavljacPorudzbineLink" style="visibility:hidden" class="inputLoginPOPUP"  type="text">
+			  
+		     
+		      </br>      
+		      <input class="button" style="margin-left: 28%; margin-right: 42%" style="background-color: #5F8DAB" type="submit" value="Izmeni">
+		     </div>
+		    
+		  </form>
+ 
+	   </div> 
+	   
+	   	   
     </body>
 </html>
