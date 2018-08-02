@@ -18,6 +18,7 @@ public class Porudzbina {
    private Dostavljac dostavljac;
    private int ukupnaCena;
    
+   
    public Porudzbina(){
 	   this.ukupnaCena=0;
    }

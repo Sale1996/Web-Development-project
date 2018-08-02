@@ -1168,7 +1168,11 @@ $('#formaIzmenaVozila').submit(function(event){
 				
 				//izmena dostavljaca
 				let trDostavljac = $('<tr></tr>');
-				let tdDostavljac = $('<td><b>Dostavljac:</b></td><td> </td>');
+				let dostavljac="";
+				//ukoliko ima dostavljaca, ispisi ga
+				if(porudzbina.dostavljac!=null)
+					dostavljac=porudzbina.dostavljac.korisnickoIme;
+				let tdDostavljac = $('<td><b>Dostavljac:</b></td><td id="nalogDostavljacaPorudzbine'+porudzbina.id+'">'+dostavljac+' </td>');
 				let tdIzmeniDostavljac = $('<td></td><td></td><td><a class="izmeniDostavljacaPorudzbineAdmin" href="/WebProjekat/rest/porudzbina/izmeniDostavljacaPorudzbine/'+porudzbina.id+'">Izmeni dostavljaca</a></td>');
 				trDostavljac.append(tdDostavljac).append(tdIzmeniDostavljac);
 				
@@ -1200,7 +1204,9 @@ $('#formaIzmenaVozila').submit(function(event){
 	 var kliknutiElement= e.target; //ovo nam vraca element koji je kliknut		  
 	 let url= $(kliknutiElement).attr('href');
 	 let idPorudzbine = url.charAt(48);
-	 var link='#brojArtikalaPorudzbina'+ idPorudzbine;
+	 let idArtikla = url.substring(49,url.length);
+	 idArtikla = idArtikla.replace(' ','');
+	 var link='#brojArtikalaPorudzbina'+ idPorudzbine + idArtikla;
 	 var vrednostTrenutna = $(link).text();
 	 if(vrednostTrenutna==1){
 		 alert("Ne mozes vise smanjivati kolicinu!");
@@ -1311,9 +1317,11 @@ $('#formaIzmenaVozila').submit(function(event){
 			url: 'rest/kupac', //url
 			type: "GET" ,
 			success : function(kupci) {
-				for(let kupac of kupci){
-					let option = $('<option value="'+kupac.korisnickoIme+'">'+kupac.korisnickoIme+'</option>');
-					$('#kupacPorudzbineIzmena').append(option);
+				if(kupci.length>0){
+					for(let kupac of kupci){
+						let option = $('<option value="'+kupac.korisnickoIme+'">'+kupac.korisnickoIme+'</option>');
+						$('#kupacPorudzbineIzmena').append(option);
+					}
 				}
 				$('#kupacPorudzbineLink').val(url);
 				$('#promeniKupcaPorudzbine').show();
@@ -1376,6 +1384,206 @@ $('#formaIzmenaVozila').submit(function(event){
  });
  
  
+ /*
+  * Funkcija koja se aktivira prilikom promene DOSTAVLJACA neke porudzbine
+  * */
+ $('#promeniDostavljacaPorudzbine2').submit(function(event){
+	 event.preventDefault();
+	 var url = $('#dostavljacPorudzbineLink').val();
+	 var dostavljacKorisnickoIme = $('#dostavljacPorudzbineIzmena').val();
+	 //"/WebProjekat/rest/porudzbina/izmeniKupcaPorudzbine/'+porudzbina.id+'"
+	 $.ajax({
+		    url: url, //url
+			type: "PUT" ,
+			data: JSON.stringify({korisnickoIme : dostavljacKorisnickoIme,lozinka:'',ime:'',prezime:'',uloga:'',kontaktTelefon:'',emailAdresa:''}),
+			contentType: 'application/json',
+			success : function(porudzbina) {
+				//brisemo sve iz liste kupaca sa prozora forme gde je kliknuto
+				$('#dostavljacPorudzbineIzmena option').remove();
+				$('#promeniDostavljacaPorudzbine').hide();
+				//za dostavljaca
+				$('#nalogDostavljacaPorudzbine'+porudzbina.id).text(porudzbina.dostavljac.korisnickoIme);
+				
+				
+			}
+	 }); 
+	  
+ });
+ 
+ 
+ /*
+  * Funckija koja se aktivira na klik za dodavanje nove porudzbine i to 
+  * rezultuje otvaranjem prozora za novu porudzbinu
+  * */
+ $(document).on("click","#dodajNovuPorudzbinu",function(e){
+	 e.preventDefault();
+	 //listamo sve artikle koji mogu da se dodaju u porudzbinu
+	 $.ajax({
+			url: 'rest/artikli', //url
+			type: "GET" ,
+			success : function(artikli) {
+				if(artikli.length>0){
+					for(let artikal of artikli){
+						let option = $('<option value="'+artikal.naziv+artikal.restoran+'">'+artikal.naziv+'( '+ artikal.restoran+' )</option>');
+						$('#artikalPorudzbineNovaPorudzbina').append(option);
+					}
+				}
+			}
+	 });
+	 
+	 //trebaju nam kupci prvo da izlistamo u select formu
+	 $.ajax({
+			url: 'rest/kupac', //url
+			type: "GET" ,
+			success : function(kupci) {
+				if(kupci.length>0){
+					for(let kupac of kupci){
+						let option = $('<option value="'+kupac.korisnickoIme+'">'+kupac.korisnickoIme+'</option>');
+						$('#kupacPorudzbineNovaPorudzbina').append(option);
+					}
+				}
+			}
+	 }); 
+	 
+	 //trebaju nam dostavljaci da izlistamo u select formu
+	 $.ajax({
+			url: 'rest/dostavljaci', //url
+			type: "GET" ,
+			success : function(dostavljaci) {
+				if(dostavljaci.length>0){
+					for(let dostavljac of dostavljaci){
+						let option = $('<option value="'+dostavljac.korisnickoIme+'">'+dostavljac.korisnickoIme+'</option>');
+						$('#dostavljacPorudzbineNovaPorudzbina').append(option);
+					}
+				}
+				
+			}
+	 }); 
+	 
+	 
+	 $('#dodajNovuPorudzbinuAdmin').show();
+ });
+ 
+ 
+ /*
+  * Funkcija koja se aktivira prilikom klika na link dodaj Artikal 
+  * pored selection forme aritkala i ako nema artikala vraca nas nazad
+  * , dok ako ima dodaje je u tabelu asvih artikala porudzbine
+  * */
+$(document).on("click","#dodavanjeArtiklaPorudzbiniAdmin",function(e){
+	e.preventDefault();
+	var artikal = $("#artikalPorudzbineNovaPorudzbina").val();
+	if(artikal==""){
+		alert("Polje za artikal je prazno!");
+		return;
+	}
+	
+	$.ajax({
+		url: 'rest/porudzbina/dodajArtikalUPorudzbinuAdmin/'+artikal, //url
+		type: "GET" ,
+		success : function(artikal) {
+			//sada cemo ubaciti ovaj artikal u tabelu
+			let artikalID = artikal.naziv+artikal.restoran;
+			artikalID = artikalID.replace(' ','');
+			
+			let tr = $('<tr></tr>');
+			let tdObrisi = $('<td><a class="obrisiArtikalPorudzbinaKreiranjeAdmin" href="/WebProjekat/rest/porudzbina/ukloniArtikalPorudzbinaKreiranjeAdmin/'+artikal.naziv+ artikal.restoran+'">x</a></td>');
+			let tdNaziv= $('<td>'+artikal.naziv+'</td>');
+			let tdKolicina = $('<td ></td>');
+			let tdCena = $('<td>'+artikal.jedinicnaCena+'</td>');
+			tr.append(tdObrisi).append(tdNaziv).append(tdKolicina).append(tdCena);
+			$("#podaciOPorudzbiniNovaPorudzbina tbody").append(tr);
+		}
+ }); 
+	
+	
+});
+
+/*
+ * Brise artikal iz poruzbine koju trenutno kreira admin
+ * */
+$(document).on("click",".obrisiArtikalPorudzbinaKreiranjeAdmin",function(e){
+	 e.preventDefault();
+	 var kliknutiElement= e.target; //ovo nam vraca element koji je kliknut		  
+	 let url= $(kliknutiElement).attr('href'); 
+	
+	 $.ajax({
+			url: url, //url
+			type: "GET" ,
+			success : function(povratnaVrednost) {
+				$(kliknutiElement).parent().parent().remove();
+
+			}
+	 }); 
+	 
+
+	
+});
+ 
+
+/*
+ * Funkcija koja se aktivira prilikom narucivanja porudzbine koja je
+ * formirana od strane administratora
+ * 
+ * */
+$('#dodajNovuPorudzbinuAdmin2').submit(function(event){
+	event.preventDefault();
+	var napomena = $('#napomenaNovePorudzbineAdmin').val();
+	var kupacID = $('#kupacPorudzbineNovaPorudzbina').val();
+	var dostavljacID = $('#dostavljacPorudzbineNovaPorudzbina').val();
+	
+	if(kupacID==""){
+		alert("Moras postaviti kupca porudzbine!");
+		return;
+	}
+	
+	//saljemo podatke
+	 $.ajax({
+		    url: 'rest/porudzbina/napraviPorudzbinuAdmin', //url
+			type: "PUT" ,
+			data: JSON.stringify({korisnickoIme : kupacID,lozinka:dostavljacID,ime:napomena,prezime:'',uloga:'',kontaktTelefon:'',emailAdresa:''}),
+			contentType: 'application/json',
+			success : function(string) {
+				if(string=="nemaArtikle"){
+					alert("Nemas artikle!");
+					return;
+				}else{
+					$('#dodajNovuPorudzbinuAdmin').hide();
+					$('#podaciOPorudzbiniNovaPorudzbina tbody tr').remove();
+					$('#artikalPorudzbineNovaPorudzbina option').remove();
+					$('#kupacPorudzbineNovaPorudzbina option').remove();
+					$('#dostavljacPorudzbineNovaPorudzbina option').remove();
+				}
+			}
+	 }); 
+	
+});
+
+//kada ugasimo prozor nove porudzbine u admin rezimu samo da obrise liste korisnika i dostavljaca
+$(document).on("click","#izgasiProzorNovePorudzbineAdmin",function(e){
+	$('#dodajNovuPorudzbinuAdmin').hide();
+	$('#kupacPorudzbineNovaPorudzbina option').remove();
+	$('#artikalPorudzbineNovaPorudzbina option').remove();
+	$('#dostavljacPorudzbineNovaPorudzbina option').remove();
+
+});
+
+//brise porudzbinu od strane administratora
+$(document).on("click",".izbrisiPorudzbinu",function(e){
+	 e.preventDefault();
+	 var kliknutiElement= e.target; //ovo nam vraca element koji je kliknut		  
+	 let url= $(kliknutiElement).attr('href'); 
+	 $.ajax({
+			url: url, //url
+			type: "DELETE" ,
+			success : function(povratnaVrednost) {
+				alert("Porudzbina uspesno obrisana!");
+			}
+	 }); 
+	 
+	 
+});
+
  
  function iskociPopUP(ime) {
 		var popup = document.getElementById(ime);

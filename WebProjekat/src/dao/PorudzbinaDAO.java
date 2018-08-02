@@ -6,10 +6,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import javax.ws.rs.core.Context;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import beans.Artikal;
+import beans.Dostavljac;
 import beans.Korisnik;
 import beans.Kupac;
 import beans.Porudzbina;
@@ -185,5 +190,169 @@ public class PorudzbinaDAO {
 		savePorudzbine();
 		
 		return porudzbinaZaMenjati;
+	}
+
+	public Porudzbina promeniKupcaPorudzbine(String porudzbinaID, Korisnik dostavljacKorisnickoIme,
+			DostavljacDAO daoDostavljac) throws IOException {
+
+		//prvo nalazimo kupca
+		Dostavljac noviDostavljac=null;
+		for(Dostavljac item : daoDostavljac.getDostavljaci().values()){
+			if(item.getKorisnickoIme().equals(dostavljacKorisnickoIme.getKorisnickoIme()))
+				noviDostavljac=item;
+		}
+		Porudzbina porudzbinaZaMenjati=porudzbine.get(Integer.parseInt(porudzbinaID));
+		porudzbinaZaMenjati.setDostavljac(noviDostavljac);
+		savePorudzbine();
+		
+		return porudzbinaZaMenjati;
+	
+	}
+
+	//dodavanje artikala u porudzbinu iz sesije
+	public Artikal dodajArtikalUPorudzbinuAdmin(String artikalID, ArtikalDAO artikalDao,  HttpServletRequest request) throws IOException {
+		HttpSession session = request.getSession();
+		if(session==null){
+			//ako nema sesije, pravi je
+			session=request.getSession(true);
+		}
+		Porudzbina porudzbinaKreiranje = (Porudzbina) session.getAttribute("trenutnaPorudzbina");
+		if(porudzbinaKreiranje==null){
+			porudzbinaKreiranje = new Porudzbina();
+			session.setAttribute("trenutnaPorudzbina", porudzbinaKreiranje);
+		}
+		
+		//nakon sto smo uzeli porudzbinu 
+		//sada trazimo artikal koji dodajemo u tu porudzbinu
+		for(Artikal item : artikalDao.getArtikli().values()){
+			if(artikalID.contains(item.getNaziv())){
+				if(artikalID.contains(item.getRestoran())){
+					//sada ubacujemo u porudzbinu
+					/*
+					 * Ukoliko porudzbina sastoji artikal onda samo u mapi
+					 * povecavamo broj artikala za 1
+					 * ,inace dodajemo u listu i stavljamo u mapu sa brojem
+					 * artikala ==1
+					 * 
+					 * 
+					 * ++ povecavamo ukupnu cenu porudzbine za cenu artikla
+					 * */
+					if(porudzbinaKreiranje.getArtikli().contains(item)){
+						int brojArtikla = porudzbinaKreiranje.getMapaARTIKALbrojPorudzbina().get(artikalID);
+						porudzbinaKreiranje.getMapaARTIKALbrojPorudzbina().put(artikalID, ++brojArtikla);
+						porudzbinaKreiranje.setUkupnaCena(porudzbinaKreiranje.getUkupnaCena()+item.getJedinicnaCena());
+						savePorudzbine();
+						return item;
+
+					}else{
+						porudzbinaKreiranje.getArtikli().add(item);
+						porudzbinaKreiranje.getMapaARTIKALbrojPorudzbina().put(artikalID, 1);
+						porudzbinaKreiranje.setUkupnaCena(porudzbinaKreiranje.getUkupnaCena()+item.getJedinicnaCena());
+
+						savePorudzbine();
+						return item;
+
+
+					}
+					
+				}
+			}
+		}
+		
+		return null;
+		
+	}
+
+	public String izbrisiArtikalIzPorudzbineAdmin(String artikalID, HttpServletRequest request) {
+		HttpSession sesija = request.getSession();
+		Porudzbina porudzbina = (Porudzbina) sesija.getAttribute("trenutnaPorudzbina");
+		//prvo cemo videti da li imamo vise od jednog artikla u toj porudzbini
+		//i smanjujemo ukupn cenu porudzbine
+
+		int brojArtikla = porudzbina.getMapaARTIKALbrojPorudzbina().get(artikalID);
+		if(brojArtikla>1){
+			porudzbina.getMapaARTIKALbrojPorudzbina().put(artikalID, --brojArtikla);	
+			for(Artikal item : porudzbina.getArtikli()){
+				if(artikalID.contains(item.getNaziv())){
+					if(artikalID.contains(item.getRestoran())){
+						porudzbina.setUkupnaCena(porudzbina.getUkupnaCena()-item.getJedinicnaCena());
+						break;
+					}
+				}
+			}
+		
+		}else{
+			//ako je jedan jedini onda ga trebamo izbaciti iz liste
+			//artikala i mape
+			porudzbina.getMapaARTIKALbrojPorudzbina().remove(artikalID);
+			for(Artikal item : porudzbina.getArtikli()){
+				if(artikalID.contains(item.getNaziv())){
+					if(artikalID.contains(item.getRestoran())){
+						porudzbina.getArtikli().remove(item);
+						porudzbina.setUkupnaCena(porudzbina.getUkupnaCena()-item.getJedinicnaCena());
+						break;
+					}
+				}
+			}
+		}
+		
+		
+		return "ok";
+	}
+
+	/*
+	 * Porucuje narudzbinu koju je napravio licno admin
+	 * Korisnik nam sluzi samo kao pomoc pri prenosu podataka o porudzbini, 
+	 * da ne moramo praviti poseban objekat samo za to
+	 * */
+	public String finalnaPorudzbinaAdmin(HttpServletRequest request, Korisnik informacije, KupacDAO kupacDao, DostavljacDAO dostavljacDao) throws IOException {
+		String kupacID = informacije.getKorisnickoIme();
+		String dostavljacID = informacije.getLozinka();
+		String napomena = informacije.getIme();
+		//sada trazimo konketnog kupca i konkretnog dostavljaca
+		Kupac kupacKojiNarucuje = null;
+		Dostavljac dostavljacKojiNarucuje = null;
+		for(Kupac item : kupacDao.getKupci().values()){
+			if(item.getKorisnickoIme().equals(kupacID)){
+				kupacKojiNarucuje=item;
+				break;
+			}
+		}
+		
+		for(Dostavljac item: dostavljacDao.getDostavljaci().values()){
+			if(item.getKorisnickoIme().equals(dostavljacID)){
+				dostavljacKojiNarucuje=item;
+				break;
+			}
+		}
+		//nalazimo trenutnu porudzbinu i dodajemo joj finalne podatke
+		HttpSession session = request.getSession();
+		Porudzbina porudzbinaZaNaruciti= (Porudzbina) session.getAttribute("trenutnaPorudzbina");
+		//ukoliko nema artikla onda ovo vrati i napomeni korisnika
+		if(porudzbinaZaNaruciti.getArtikli().size()==0)
+			return "nemaArtikle";
+		porudzbinaZaNaruciti.setKupacKojiNarucuje(kupacKojiNarucuje);
+		porudzbinaZaNaruciti.setDostavljac(dostavljacKojiNarucuje);
+		porudzbinaZaNaruciti.setNapomena(napomena);
+		porudzbinaZaNaruciti.setStatusPorudzbine("poruceno");
+		//unistavamo sessiju
+		session.invalidate();
+		
+		porudzbine.add(porudzbinaZaNaruciti);
+		savePorudzbine();
+		
+		
+		
+		
+		
+		return "ok";
+	}
+
+	//brise porudzbinu po ID-u
+	public String obrisiPorudzbinuAdmin(String porudzbinaID) throws IOException {
+
+		porudzbine.remove(Integer.parseInt(porudzbinaID));
+		savePorudzbine();
+		return "ok";
 	}
 }

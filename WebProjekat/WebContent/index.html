@@ -998,7 +998,72 @@
 		  </form>
  
 	   </div> 
-	   
-	   	   
+	 
+	 
+	 <!-- POP UP WINDOW ZA PRAVLJENJE NOVE PORUDZBINE OD ADMINISTRATORA -->  
+	 <div id="dodajNovuPorudzbinuAdmin" class="modal">
+  
+		  <form class="modal-content animate" id="dodajNovuPorudzbinuAdmin2" >
+		        
+		    <div class="imgcontainer">
+		      <span  id="izgasiProzorNovePorudzbineAdmin"  class="closePopUpLogin" title="Zatvori prozor">&times;</span>
+		      <h2  style="text-align:center; color: #8C7797">Napravi novu porudzbinu</h2>
+		    </div>
+		  
+		  <div class="container" >
+		      <!-- link za novi artikal u porudzbini -->
+		      <p style="margin-left: 2%;color: #8C7797;font-size: 20"><b>Izaberi artikal:</b></p>
+			  <select id="artikalPorudzbineNovaPorudzbina" style="margin-left: 2%" name="artikalPorudzbineIzmena">
+			      <option value=""> </option>
+			  </select>
+			  <a id="dodavanjeArtiklaPorudzbiniAdmin" href="#">Dodaj artikal</a>
+			  </br>	
+		      </br>
+		      <!-- tabela za novu porudzbinu -->
+		      <table id="podaciOPorudzbiniNovaPorudzbina" class="tableNalogKorisnika" style="margin-left: 2%;">
+					<thead>
+						<tr>
+							<td></td>
+							<td><b>Naziv</b></td>
+							<td></td>
+							<td><b>Cena</b></td>
+							<td></td>
+							<td><b></b></td>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+			   </table>	
+		      
+		      </br>
+		      <!-- napomena nove porudzbine -->
+		      <p style="margin-left: 2%;color: #8C7797;font-size: 20"><b>Napomena:</b></p> 
+		      <input id="napomenaNovePorudzbineAdmin" class="inputLoginPOPUP"  type="text">
+		      
+		      
+		      <!-- kupac porudzbine -->
+		       <p style="margin-left: 2%;color: #8C7797;font-size: 20"><b>Izaberi kupca:</b></p>
+			  <select id="kupacPorudzbineNovaPorudzbina" style="margin-left: 2%" name="kupacPorudzbineIzmena">
+			      <option value=""> </option>
+			  </select>
+			  </br>
+		      
+		      <!-- dostavljac porudzbine -->		      
+		      <p style="margin-left: 2%;color: #8C7797;font-size: 20"><b>Izaberi dostavljaca:</b></p>
+			  <select id="dostavljacPorudzbineNovaPorudzbina" style="margin-left: 2%" name="dostavljacPorudzbineIzmena">
+			  	  <option value=""> </option>
+			  </select>
+			  </br>
+			  
+			  
+		     
+		      </br>      
+		      <input class="button" style="margin-left: 28%; margin-right: 42%" style="background-color: #5F8DAB" type="submit" value="Poruci">
+		     </div>
+		    
+		  </form>
+ 
+	   </div>
+	     	   
     </body>
 </html>
