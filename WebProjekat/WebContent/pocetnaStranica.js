@@ -258,7 +258,7 @@ $(document).ready(function() {
 
 				
 			}
-		})
+		});
 	});
 	
 	/*
@@ -367,7 +367,9 @@ $(document).ready(function() {
 					//prvo sakrivamo precice za registrovanje i logovanje
 					$('#navigacijaPreciceNeregistrovaniKorisnik').hide();
 					//otkrivamo sve sto je vezano za administratora!
+					$("[class*='administratorNijeUlogovan']").addClass('administratorUlogovan');
 					$("[class*='administratorNijeUlogovan']").removeClass('administratorNijeUlogovan');
+					
 					//sve div-ove koje smo obelezili sa ovom klasom sakrivamo ga
 					$("[class*='sakriOdAdministratora']").hide();
 					
@@ -376,6 +378,81 @@ $(document).ready(function() {
 					$('#korisnickoImeInputLogovanje').val("");
 					$('#passwordInputLogovanje').val("");
 
+				}else if(korisnik.uloga=="dostavljac"){
+					$('#navigacijaPreciceNeregistrovaniKorisnik').hide();
+					
+					$("[class*='dostavljacNijeUlogovan']").addClass('dostavljacUlogovan');
+					$("[class*='dostavljacNijeUlogovan']").removeClass('dostavljacNijeUlogovan');
+					
+					//sve div-ove koje smo obelezili sa ovom klasom sakrivamo ga
+					//administrator i dostavlajc iste stvari ne trebaju da vide
+					$("[class*='sakriOdAdministratora']").hide();
+					
+					//zatvaramo prozor logovanja i brisemo njegova polja
+					$('#modal-wrapper').hide();
+					$('#korisnickoImeInputLogovanje').val("");
+					$('#passwordInputLogovanje').val("");
+					
+					//sada popunjavamo vrednosti za dostavljaca
+					if(korisnik.vozilo!=null){
+						$("#voziloDostavlajca").text(korisnik.vozilo.registarskaOznaka+' ( '+korisnik.vozilo.marka +' '+korisnik.vozilo.model+')');
+
+					}
+					
+					$.ajax({
+						url : 'rest/porudzbina',
+						type: 'GET',
+						success: function(porudzbine){
+							 let tr=$('<tr></tr>');
+							 
+							 var brojac=0;//cisto da bi smo pisali "Porudzbina1"
+							 for(let porudzbina of porudzbine){
+								    tr=$('<tr></tr>');
+								    var dostavljac="";
+								    if(porudzbina.dostavljac!=null){
+								    	dostavljac=porudzbina.dostavljac.korisnickoIme;
+								    }
+								    let tdNaziv = $('<td> <div class="popup" onclick="iskociPopUP(\'' + brojac+  '\')"><p  style=\"color: #765FAB; font-size: 20px;\" ><b id="izlistajPorudzbineAdminGlavnaLista'+brojac+'"> Porudzbina ' +(brojac+1)
+											+ '</br>'+ porudzbina.ukupnaCena +' din</b></p> <span class="popuptext" id="' + brojac
+											+'"><b>Status porudzbine:</b> <i id="spanPorudzbinaStatusPorudzbine'+brojac+'">'+ porudzbina.statusPorudzbine +'</i> </br><b>Napomena:</b> '+ porudzbina.napomena +' </br><b>Cena:</b> <i id="spanPorudzbinaUkupnaCena'+brojac+'">'+ porudzbina.ukupnaCena + '</i> din</br><b>Kupac:</b> <i id="spanPorudzbinaKupac'+brojac+'">'+ porudzbina.kupacKojiNarucuje.korisnickoIme +
+											'</i> </br><b>Dostavljac:'+dostavljac+'</b> </br></span>'+
+											' </div>');	
+								    let tdIzmeni= null;
+								    if(porudzbina.statusPorudzbine=="poruceno"){
+										tdIzmeni = $('<td id="LinkIzmenaStatusaPorudzbine'+porudzbina.id+'" ><a class="statusPorudzbine" href="/WebProjekat/rest/porudzbina/menjajStatus/'+brojac+'uToku">Promeni u toku</a></td>');
+								    }
+								    else if(porudzbina.statusPorudzbine=="u toku"){
+										tdIzmeni = $('<td id="LinkIzmenaStatusaPorudzbine'+porudzbina.id+'"><a class="statusPorudzbine" href="/WebProjekat/rest/porudzbina/menjajStatus/'+brojac+'dostavljeno">Promeni u dostavljeno</a></td>');
+								    	
+								    }else{
+								    	tdIzmeni = $('<td></td>');
+								    }
+								    
+								    let tdStatus = $('<td id="promeniStatusPorudzbine'+porudzbina.id+'">'+porudzbina.statusPorudzbine+'</td>');
+
+									tr.append(tdNaziv).append(tdStatus);
+									if(porudzbina.dostavljac==null && porudzbina.statusPorudzbine=="poruceno"){
+										let tdPreuzmi = $('<td id="LinkPreuzmiPorudzbinu'+porudzbina.id+'"><a class="preuzmiPorudzbinu" href="/WebProjekat/rest/dostavljaci/preuzmiPorudzbinu/'+brojac+'">Preuzmi porudzbinu</a></td>');
+										tr.append(tdPreuzmi);
+										$('#nedodeljenePorudzbineTabela tbody').append(tr);
+									}
+									else if(porudzbina.dostavljac.korisnickoIme==korisnik.korisnickoIme){
+										let tdOtkazi = "";
+										if(porudzbina.statusPorudzbine=="u toku" || porudzbina.statusPorudzbine=="poruceno")
+										 	tdOtkazi=$('<td id="otkaziPorudzbinuLink'+porudzbina.id+'"><a class="statusPorudzbine" style="color:red" href="/WebProjekat/rest/porudzbina/menjajStatus/'+brojac+'otkazano">Otkazi porudzbinu</a></td>');
+										
+									    tr.append(tdIzmeni).append(tdOtkazi);
+										$('#porudzbineDodeljeneMeniTabela tbody').append(tr);
+									}
+									
+									brojac=brojac+1;
+							 }
+							
+						 
+							
+				
+						}
+					});
 				}
 				
 			}

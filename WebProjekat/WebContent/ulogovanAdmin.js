@@ -1578,11 +1578,26 @@ $(document).on("click",".izbrisiPorudzbinu",function(e){
 			type: "DELETE" ,
 			success : function(povratnaVrednost) {
 				alert("Porudzbina uspesno obrisana!");
+				$(kliknutiElement).parent().parent().remove();
+
 			}
 	 }); 
 	 
 	 
 });
+
+$(document).on("click","#izlogujAdministratora",function(e){
+	e.preventDefault();
+	
+	//sada otkrivamo ono sto treba neregistrovani korisnik da vidi
+	//a sakrivamo ono sto je admin video
+	$('#navigacijaPreciceNeregistrovaniKorisnik').show();
+	$("[class*='administratorUlogovan']").addClass('administratorNijeUlogovan');
+	$("[class*='sakriOdAdministratora']").show();
+	$("#adminTabela tbody tr").remove(); //brisemo sve iz spiska od admina
+    $("#adminTabela thead tr").remove();
+});
+
 
  
  function iskociPopUP(ime) {

@@ -173,4 +173,19 @@ public class PorudzbinaService {
 		
 		return dao.obrisiPorudzbinuAdmin(porudzbinaID);
 	}
+	
+	/*
+	 * Menja status porudzbine u "U TOKU" ili "DOSTAVLJENO" ili "OTKAZANO"
+	 * */
+	@GET
+	@Path("/menjajStatus/{idIStatus}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Porudzbina promeniStatus(@PathParam("idIStatus") String idIStatus) throws IOException{
+		PorudzbinaDAO dao =(PorudzbinaDAO) ctx.getAttribute("porudzbinaDAO");
+		
+		return dao.promeniStatus(idIStatus);
+	}
+	
+	
+	
 }

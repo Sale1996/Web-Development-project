@@ -316,3 +316,11 @@
     display:inline-block;
     padding:10px;
 	}
+	
+	
+	/*
+	DOSTAVLJAC CSS
+	*/
+	.dostavljacNijeUlogovan{
+  	visibility: hidden;
+   }

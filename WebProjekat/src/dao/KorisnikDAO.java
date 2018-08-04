@@ -109,6 +109,31 @@ public class KorisnikDAO {
 		 * Za administratora i dostavljaca radimo isto samo sto pitamo da li je 
 		 * korisnikVrati ima nesto u polju telefona pa ako jeste onda moze dalje
 		 * */
+		
+		Boolean proveriDostavljaca=false;
+		if(korisnikVrati==null){
+			proveriDostavljaca=true;			
+		}else if(korisnikVrati.getKontaktTelefon().equals("NePostojiKorisnik")){
+			proveriDostavljaca=true;
+		}
+		
+		if(proveriDostavljaca){
+			if(dostavljaci.size()>0){
+				for(Dostavljac item : dostavljaci.values()){
+					if(item.getKorisnickoIme().equals(korisnik.getKorisnickoIme())){
+						if(item.getLozinka().equals(korisnik.getLozinka())){
+							korisnikVrati=item;
+							break;
+						}else{
+							korisnikVrati=new Korisnik("","","","","","LozinkaNeValja","");		
+							break;
+						}
+					}
+				}
+			}
+		}
+		
+		
 		return korisnikVrati;
 		
 	}
@@ -151,6 +176,8 @@ public class KorisnikDAO {
 			korisnik = kupci.get(korisnickoIme);
 		else if(administratori.containsKey(korisnickoIme))
 			korisnik = administratori.get(korisnickoIme);
+		else if(dostavljaci.containsKey(korisnickoIme))
+			korisnik= dostavljaci.get(korisnickoIme);
 		
 		return korisnik;
 	}

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 public class Dostavljac extends Korisnik {
 	private Vozilo vozilo;
-	private ArrayList<Porudzbina> porudzbineDodeljeneMeni = new ArrayList<Porudzbina>();
 	
 	public Dostavljac(){
 		
@@ -23,5 +22,13 @@ public class Dostavljac extends Korisnik {
 				this.emailAdresa = emailAdresa;
 				this.datumRegistracije = LocalDateTime.now();
 				
+	}
+
+	public Vozilo getVozilo() {
+		return vozilo;
+	}
+
+	public void setVozilo(Vozilo vozilo) {
+		this.vozilo = vozilo;
 	}
 }

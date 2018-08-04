@@ -38,6 +38,7 @@
         <script src="pocetnaStranica.js"></script>
         <script src="ulogovanKupac.js"></script>
         <script src="ulogovanAdmin.js"></script>
+        <script src="ulogovanDostavljac.js"></script>
         
       
     </head>
@@ -90,6 +91,14 @@
                                         	<ul class="nav navbar-nav navbar-right">
 	                                            <li><a id="OtvoriNalogAdministratora"  href="#">Nalog</a></li>
 	                                            <li><a id="izlogujAdministratora" href="#">Odjavi se</a></li>
+	                                        </ul> 
+                                        </div>
+                                        
+                                        <!-- Za dostavljaca precice -->
+                                        <div id="navigacijaPreciceDostavljaca" class="dostavljacNijeUlogovan">
+                                        	<ul class="nav navbar-nav navbar-right">
+	                                            <li><a id="OtvoriNalogDostavljaca"  href="#">Nalog</a></li>
+	                                            <li><a id="izlogujDostavljaca" href="#">Odjavi se</a></li>
 	                                        </ul> 
                                         </div>
                                     </div>
@@ -1064,6 +1073,66 @@
 		  </form>
  
 	   </div>
-	     	   
+	   
+	   
+	   <!-- DOSTAVLJAC HTML  -->
+		   <!-- DOSTAVLJAC HTML  -->
+		   	   <!-- DOSTAVLJAC HTML  -->
+		   	   	   <!-- DOSTAVLJAC HTML  -->
+		   	   	   	   <!-- DOSTAVLJAC HTML  -->
+		   	   	   	   	   <!-- DOSTAVLJAC HTML  -->
+		   	   	   	   	   	   <!-- DOSTAVLJAC HTML  -->
+		   	   	   	   	   	   	   <!-- DOSTAVLJAC HTML  -->
+		   	   	   	   	   	   	   	   <!-- DOSTAVLJAC HTML  -->
+	 <div class="dostavljacNijeUlogovan" style="margin-left: 38%">
+	 	<h3 style="color:#7D59C6; font-size:25">Vozilo:</h3>
+	 	<p id="voziloDostavlajca" style="font-size:20"></p><a id="izmeniDodajVoziloDostavlajc" href="#">Izmeni/Dodaj vozilo</a>	
+	 	</br>
+	 	
+	 	<h3 style="color:#7D59C6; font-size:25">Porudzbine dodeljene meni</h3>
+	 	<table id="porudzbineDodeljeneMeniTabela" class="tableNalogKorisnika" style="margin-left: 2%;">
+					<thead>
+					</thead>
+					<tbody>
+					</tbody>
+		</table>	
+	 	
+	 	<h3 style="color:#7D59C6; font-size:25">Spisak nedodeljenih porudzbina</h3>
+	 	<table id="nedodeljenePorudzbineTabela" class="tableNalogKorisnika" style="margin-left: 2%;">
+					<thead>
+					</thead>
+					<tbody>
+					</tbody>
+		</table>	
+	 	
+	 </div>	  
+	 
+	 <!-- POP UP PROZOR ZA IZBOR VOZILA DOSTAVLJACA -->
+	 <div id="dodajPromeniVoziloDostavljacu" class="modal">
+  
+		  <form class="modal-content animate" id="dodajPromeniVoziloDostavljacu2" >
+		        
+		    <div class="imgcontainer">
+		      <span  onclick="document.getElementById('dodajPromeniVoziloDostavljacu').style.display='none'"  class="closePopUpLogin" title="Zatvori prozor">&times;</span>
+		      <h2  style="text-align:center; color: #8C7797">Vozilo dostavljaca</h2>
+		    </div>
+		  
+		  <div class="container" >
+		      <!-- dostavljac porudzbine -->
+		       <p style="margin-left: 19.5%;color: #8C7797;font-size: 20"><b>Izaberi vozilo dostavljaca:</b></p>
+			  <select id="slobodnaVozila" style="margin-left: 19.5%" name="slobodnaVozila">
+			  </select>
+			  </br>
+			  
+			
+		     
+		      </br>      
+		      <input class="button" style="margin-left: 28%; margin-right: 42%" style="background-color: #5F8DAB" type="submit" value="Izmeni">
+		     </div>
+		    
+		  </form>
+ 
+	   </div> 
+	  	     	   
     </body>
 </html>

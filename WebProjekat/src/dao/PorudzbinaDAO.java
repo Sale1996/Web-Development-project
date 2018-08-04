@@ -27,6 +27,7 @@ public class PorudzbinaDAO {
 	public PorudzbinaDAO(String contextPath){
 		this.contextPath=contextPath;
 		loadPorudzbine(contextPath);
+		trenutniBrojPoruzbine=porudzbine.size();
 	}
 	
 	/***
@@ -338,7 +339,7 @@ public class PorudzbinaDAO {
 		//unistavamo sessiju
 		session.invalidate();
 		
-		porudzbine.add(porudzbinaZaNaruciti);
+		dodajPorudzbinu(porudzbinaZaNaruciti);
 		savePorudzbine();
 		
 		
@@ -354,5 +355,27 @@ public class PorudzbinaDAO {
 		porudzbine.remove(Integer.parseInt(porudzbinaID));
 		savePorudzbine();
 		return "ok";
+	}
+
+	/*
+	 * Funkcija koja menja status porudzbine
+	 * */
+	public Porudzbina promeniStatus(String idIStatus) throws IOException {
+		String idPorudzbine = idIStatus.substring(0,1);
+		String status=idIStatus.substring(1);
+		
+		Porudzbina porudzbina= porudzbine.get(Integer.parseInt(idPorudzbine));
+		if(status.contains("Toku")){
+			porudzbina.setStatusPorudzbine("u toku");
+		}
+		else if(status.equals("dostavljeno")){
+			porudzbina.setStatusPorudzbine("dostavljeno");
+			//OVDE CES UBACIVATI DODATNE POENE AKO TREBA!!!
+			//TO CES KASNIJE RADITI!!
+		}else if(status.equals("otkazano")){
+			porudzbina.setStatusPorudzbine("otkazano");
+		}
+		savePorudzbine();
+		return porudzbina;
 	}
 }
