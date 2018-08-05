@@ -122,4 +122,16 @@ public class ArtikalService {
 		return dao.obrisiArtikal(artikal);
 		
 	}
+	
+	/*
+	 * Funckija koja vraca top20 artikala (10 jela i 10pica)
+	 * */
+	@GET
+	@Path("/dajMiTop10")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ArrayList<Artikal> vratiTop10(){
+		ArtikalDAO dao = (ArtikalDAO) ctx.getAttribute("artikalDAO");
+		
+		return dao.vratiTop10();
+	}
 }

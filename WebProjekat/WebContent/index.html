@@ -124,12 +124,20 @@
                                     <div class="main_home wow fadeInUp" data-wow-duration="700ms">
                                         <h2 style="color: white">Najpopularnija jela</h2>
                                        <!--OVDE STRPAJ LISTU JELA NAJPOPULARNIJIH KAO TABELU -->
-                                        <table class="tableTOP10" id="tabelaTop10Jela" >
+                                        <table class="tableTOP10" style="border : 0px" id="tabelaTop10Jela1" >
 											<thead>
 											</thead>
 											<tbody>
 											</tbody>
 										</table>
+										<table class="tableTOP10" style="border : 0px"  id="tabelaTop10Jela2" >
+											<thead>
+											</thead>
+											<tbody>
+											</tbody>
+										</table>
+										
+										
 
                                     </div>
                                 </div>
@@ -137,12 +145,20 @@
                                     <div class="main_home wow fadeInUp" data-wow-duration="700ms">
                                         <h2 style="color: white">Najpopularnija pica</h2>
                                         <!--OVDE STRPAJ LISTU PICA NAJPOPULARNIJIH KAO TABELU -->
-										<table class="tableTOP10" id="tabelaTop10Pica">
+										<table class="tableTOP10" style="border : 0px"  id="tabelaTop10Pica1">
 											<thead>
 											</thead>
 											<tbody>
 											</tbody>
 										</table>
+										<table class="tableTOP10" style="border : 0px"  id="tabelaTop10Pica2">
+											<thead>
+											</thead>
+											<tbody>
+											</tbody>
+										</table>
+										
+										
                                     </div>
                                 </div>
                                 
@@ -481,6 +497,11 @@
 				<form id="formaPoruciPorudzbinu">
   					<textarea  id="inputNapomenaPorudzbine" style="resize:none;margin-left: 16.5%" name="message" rows="6" cols="50"></textarea>
   					</br>
+  					<p style="font-size:20;margin-left: 16.5%;color: purple">Izaberite broj nagradnih poena za porudzbinu:</p>
+  					
+  					<input id="inputNagradniBodovi" style="margin-left: 16.5%" type="number" name="nagradniBodovi" placeholder="Nagradni bodovi">
+  					
+  					</br>
   					<input id="dugmePoruciArtikle" style="margin-left: 29%;font-size:20" type="submit" class="button" value="Naruci!">
 			    </form>
 		    </div>
@@ -533,7 +554,7 @@
     						</td>
 					    	<td>Restoran</td>
 							<td>
-							<input id="idRestoranPretragaAdmin" type="text" name="restoranPretraga" placeholder="Ime restorana">
+							<input id="" type="text" name="restoranPretraga" placeholder="Ime restorana">
     						</td>
 							<td><input class="button" style="background-color: #5F8DAB" type="submit" value="Pretrazi"></td>
 						</tr>
@@ -1169,7 +1190,13 @@
 		      <!-- napomena nove porudzbine -->
 		      <p style="margin-left: 2%;color: #8C7797;font-size: 20"><b>Napomena:</b></p> 
 		      <input id="napomenaNovePorudzbineAdmin" class="inputLoginPOPUP"  type="text">
-		      
+		      </br>
+  			  <p style="font-size:20;margin-left: 2%;color: purple">Izaberite broj nagradnih poena za porudzbinu:</p>
+  					
+  			  <input id="inputNagradniBodoviAdmin" style="margin-left: 2%" type="number" name="nagradniBodoviAdmin" placeholder="Nagradni bodovi">
+  					
+  			  </br>
+  			  </br>
 		      
 		      <!-- kupac porudzbine -->
 		       <p style="margin-left: 2%;color: #8C7797;font-size: 20"><b>Izaberi kupca:</b></p>

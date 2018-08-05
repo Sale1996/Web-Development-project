@@ -163,8 +163,10 @@ $('#formaIzmeneArtikla').submit(function(event){
 		 type: "GET",
 		 success: function(restorani){
 			 for(let restoran of restorani){
-				 let optionRestoran = $('<option value="'+restoran.naziv+'">'+restoran.naziv+'</option>');
-				 $("#restoranArtiklaKreiranje").append(optionRestoran);
+				 if(restoran.obrisan==false){
+					 let optionRestoran = $('<option value="'+restoran.naziv+'">'+restoran.naziv+'</option>');
+					 $("#restoranArtiklaKreiranje").append(optionRestoran);
+				 }
 			 }
 			 $("#noviArtikal").show();
 
@@ -632,6 +634,7 @@ $('#formaDodavanjaRestorana').submit(function(event){
 		 url:'rest/vozila',
 		 type: "GET",
 		 success: function(vozila){
+			 
 			 let tr=$('<tr></tr>');
 			 
 			 //ovde ubacujemo link za dodavanje novog artikla na vrh tabele
@@ -642,16 +645,18 @@ $('#formaDodavanjaRestorana').submit(function(event){
 			 
 			
 			 for(let vozilo of vozila){
-				    tr=$('<tr></tr>');
-				    let tdNaziv = $('<td> <div class="popup" onclick="iskociPopUP(\'' + vozilo.registarskaOznaka+  '\')"><p style=\"color: #765FAB; font-size: 20px;\" ><b>' +vozilo.marka+ ' ' + vozilo.model
-							+ '</b></p> <span class="popuptext" id="' + vozilo.registarskaOznaka
-							+'"><b>Marka:</b> '+ vozilo.marka +' </br><b>Model:</b> '+ vozilo.model +' </br><b>Tip:</b> '+ vozilo.tip + ' </br><b>Registarska oznaka:</b> '+ vozilo.registarskaOznaka +
-							' </br><b>Godina proizvodnje:</b> '+ vozilo.godinaProizvodnje + '</br><b>Napomena:</b> '+ vozilo.napomena +'</span>'+
-							' </div>');		
-					let tdIzmeni = $('<td><a class="izmeniVozilo" href="/WebProjekat/rest/vozila/'+vozilo.registarskaOznaka+'">Izmeni</a></td>');
-					let tdObrisi=$('<td><a class="izbrisiVozilo" style="color:red" href="/WebProjekat/rest/vozila/'+vozilo.registarskaOznaka+'">Obrisi</a></td>');
-					tr.append(tdNaziv).append(tdIzmeni).append(tdObrisi);
-					$('#adminTabela tbody').append(tr);
+				    if(vozilo.obrisan==false){
+					    tr=$('<tr></tr>');
+					    let tdNaziv = $('<td> <div class="popup" onclick="iskociPopUP(\'' + vozilo.registarskaOznaka+  '\')"><p style=\"color: #765FAB; font-size: 20px;\" ><b>' +vozilo.marka+ ' ' + vozilo.model
+								+ '</b></p> <span class="popuptext" id="' + vozilo.registarskaOznaka
+								+'"><b>Marka:</b> '+ vozilo.marka +' </br><b>Model:</b> '+ vozilo.model +' </br><b>Tip:</b> '+ vozilo.tip + ' </br><b>Registarska oznaka:</b> '+ vozilo.registarskaOznaka +
+								' </br><b>Godina proizvodnje:</b> '+ vozilo.godinaProizvodnje + '</br><b>Napomena:</b> '+ vozilo.napomena +'</span>'+
+								' </div>');		
+						let tdIzmeni = $('<td><a class="izmeniVozilo" href="/WebProjekat/rest/vozila/'+vozilo.registarskaOznaka+'">Izmeni</a></td>');
+						let tdObrisi=$('<td><a class="izbrisiVozilo" style="color:red" href="/WebProjekat/rest/vozila/'+vozilo.registarskaOznaka+'">Obrisi</a></td>');
+						tr.append(tdNaziv).append(tdIzmeni).append(tdObrisi);
+						$('#adminTabela tbody').append(tr);
+				    }
 			 }
 			
 		 }
@@ -1158,19 +1163,21 @@ $('#formaIzmenaVozila').submit(function(event){
 			 
 			 var brojac=0;//cisto da bi smo pisali "Porudzbina1"
 			 for(let porudzbina of porudzbine){
-				    tr=$('<tr></tr>');
-				    let tdNaziv = $('<td> <div class="popup" onclick="iskociPopUP(\'' + brojac+  '\')"><p  style=\"color: #765FAB; font-size: 20px;\" ><b id="izlistajPorudzbineAdminGlavnaLista'+brojac+'"> Porudzbina ' +(brojac+1)
-							+ '</br>'+ porudzbina.ukupnaCena +' din</b></p> <span class="popuptext" id="' + brojac
-							+'"><b>Status porudzbine:</b> <i id="spanPorudzbinaStatusPorudzbine'+brojac+'">'+ porudzbina.statusPorudzbine +'</i> </br><b>Napomena:</b> '+ porudzbina.napomena +' </br><b>Cena:</b> <i id="spanPorudzbinaUkupnaCena'+brojac+'">'+ porudzbina.ukupnaCena + '</i> din</br><b>Kupac:</b> <i id="spanPorudzbinaKupac'+brojac+'">'+ porudzbina.kupacKojiNarucuje.korisnickoIme +
-							'</i> </br><b>Dostavljac:</b> </br><b>Datum porudzbine:</b>'+ porudzbina.dan +'.'+porudzbina.mesec+ '.'+ porudzbina.godina + '.</span>'+
-							' </div>');		
-				    /*+ porudzbina.dostavljac.korisnickoIme + */
-					let tdIzmeni = $('<td><a class="izmeniPorudzbinu" href="/WebProjekat/rest/porudzbina/'+brojac+'">Izmeni porudzbinu</a></td>');
-					let tdObrisi=$('<td><a class="izbrisiPorudzbinu" style="color:red" href="/WebProjekat/rest/porudzbina/'+brojac+'">Obrisi</a></td>');
-
-					tr.append(tdNaziv).append(tdIzmeni).append(tdObrisi);
-					$('#adminTabela tbody').append(tr);
-					brojac=brojac+1;
+				 if(porudzbina.obrisana==false){
+					    tr=$('<tr></tr>');
+					    let tdNaziv = $('<td> <div class="popup" onclick="iskociPopUP(\'' + brojac+  '\')"><p  style=\"color: #765FAB; font-size: 20px;\" ><b id="izlistajPorudzbineAdminGlavnaLista'+brojac+'"> Porudzbina ' +(brojac+1)
+								+ '</br>'+ porudzbina.ukupnaCena +' din</b></p> <span class="popuptext" id="' + brojac
+								+'"><b>Status porudzbine:</b> <i id="spanPorudzbinaStatusPorudzbine'+brojac+'">'+ porudzbina.statusPorudzbine +'</i> </br><b>Napomena:</b> '+ porudzbina.napomena +' </br><b>Cena:</b> <i id="spanPorudzbinaUkupnaCena'+brojac+'">'+ porudzbina.ukupnaCena + '</i> din</br><b>Kupac:</b> <i id="spanPorudzbinaKupac'+brojac+'">'+ porudzbina.kupacKojiNarucuje.korisnickoIme +
+								'</i> </br><b>Dostavljac:</b> </br><b>Datum porudzbine:</b>'+ porudzbina.dan +'.'+porudzbina.mesec+ '.'+ porudzbina.godina + '.</span>'+
+								' </div>');		
+					    /*+ porudzbina.dostavljac.korisnickoIme + */
+						let tdIzmeni = $('<td><a class="izmeniPorudzbinu" href="/WebProjekat/rest/porudzbina/'+brojac+'">Izmeni porudzbinu</a></td>');
+						let tdObrisi=$('<td><a class="izbrisiPorudzbinu" style="color:red" href="/WebProjekat/rest/porudzbina/'+brojac+'">Obrisi</a></td>');
+	
+						tr.append(tdNaziv).append(tdIzmeni).append(tdObrisi);
+						$('#adminTabela tbody').append(tr);
+						brojac=brojac+1;
+				 }
 			 }
 			
 		 }
@@ -1584,9 +1591,14 @@ $('#dodajNovuPorudzbinuAdmin2').submit(function(event){
 	var napomena = $('#napomenaNovePorudzbineAdmin').val();
 	var kupacID = $('#kupacPorudzbineNovaPorudzbina').val();
 	var dostavljacID = $('#dostavljacPorudzbineNovaPorudzbina').val();
+	var nagradniBodovi=$('#inputNagradniBodoviAdmin').val();
 	
 	if(kupacID==""){
 		alert("Moras postaviti kupca porudzbine!");
+		return;
+	}
+	if(nagradniBodovi<0){
+		alert("Broj nagradnih bodova za porudzbinu ne sme biti manji od nule!");
 		return;
 	}
 	
@@ -1594,19 +1606,25 @@ $('#dodajNovuPorudzbinuAdmin2').submit(function(event){
 	 $.ajax({
 		    url: 'rest/porudzbina/napraviPorudzbinuAdmin', //url
 			type: "PUT" ,
-			data: JSON.stringify({korisnickoIme : kupacID,lozinka:dostavljacID,ime:napomena,prezime:'',uloga:'',kontaktTelefon:'',emailAdresa:''}),
+			data: JSON.stringify({korisnickoIme : kupacID,lozinka:dostavljacID,ime:napomena,prezime:nagradniBodovi,uloga:'',kontaktTelefon:'',emailAdresa:''}),
 			contentType: 'application/json',
 			success : function(string) {
 				if(string=="nemaArtikle"){
 					alert("Nemas artikle!");
 					return;
-				}else{
-					$('#dodajNovuPorudzbinuAdmin').hide();
-					$('#podaciOPorudzbiniNovaPorudzbina tbody tr').remove();
-					$('#artikalPorudzbineNovaPorudzbina option').remove();
-					$('#kupacPorudzbineNovaPorudzbina option').remove();
-					$('#dostavljacPorudzbineNovaPorudzbina option').remove();
 				}
+				if(string=="kupacNemaBodova"){
+					alert("Kupac nema toliko nagradnih bodova!");
+					return;
+				}
+				
+				
+				$('#dodajNovuPorudzbinuAdmin').hide();
+				$('#podaciOPorudzbiniNovaPorudzbina tbody tr').remove();
+				$('#artikalPorudzbineNovaPorudzbina option').remove();
+				$('#kupacPorudzbineNovaPorudzbina option').remove();
+				$('#dostavljacPorudzbineNovaPorudzbina option').remove();
+			
 			}
 	 }); 
 	
@@ -1719,34 +1737,35 @@ $('#promeniStatusPorudzbine2').submit(function(event){
 		 
 		 
 		 for(let artikal of artikli){
-			    tr=$('<tr></tr>');
-
-			/*
-			 * prvo cemo vrsiti proveru da li je artikal pice ili hrana, kako bi mogli da namestimo adekvatnu kolicinsku meru
-			 * i boju teksta u prikazu
-			 * */
-			    let kolicinskaMera;
-				let bojaNaziva;
-				if(artikal.tip == "jelo"){
-					kolicinskaMera= "gr";
-					bojaNaziva="style=\"color: #A05623; font-size: 20px;\"";
-					
-					
-				}else{
-					kolicinskaMera="ml";
-					bojaNaziva="style=\"color: #2376A0; font-size: 20px;\"";
-				}
-				let tdNaziv = $('<td> <div class="popup" onclick="iskociPopUP(\'' + artikal.naziv + artikal.restoran +  '2\')"><p '+bojaNaziva+' ><b>' + artikal.naziv
-						+ '</b></p> <span class="popuptext" id="'+ artikal.naziv + artikal.restoran
-						+'2"><b>Naziv:</b> '+ artikal.naziv +' </br><b>Cena:</b> '+ artikal.jedinicnaCena +' din</br><b>Opis:</b> '+ artikal.opis +' </br><b>Kolicina:</b> '+
-						artikal.kolicina + ' ' + kolicinskaMera +' </br><b>Restoran:</b> '+ artikal.restoran +'</span> </div></td>');
-				
-				let tdIzmeni = $('<td><a class="izmeniArtikal" href="/WebProjekat/rest/artikli/dajArtikal/'+artikal.naziv+artikal.restoran+'">Izmeni</a></td>');
-				let tdObrisi=$('<td><a class="izbrisiArtikal" style="color:red" href="/WebProjekat/rest/artikli/'+artikal.naziv+artikal.restoran+'">Obrisi</a></td>');
-				tr.append(tdNaziv).append(tdIzmeni).append(tdObrisi);
-				$('#adminTabela tbody').append(tr);
+			 if(artikal.obrisan==false){
+					    tr=$('<tr></tr>');
+		
+					/*
+					 * prvo cemo vrsiti proveru da li je artikal pice ili hrana, kako bi mogli da namestimo adekvatnu kolicinsku meru
+					 * i boju teksta u prikazu
+					 * */
+					    let kolicinskaMera;
+						let bojaNaziva;
+						if(artikal.tip == "jelo"){
+							kolicinskaMera= "gr";
+							bojaNaziva="style=\"color: #A05623; font-size: 20px;\"";
+							
+							
+						}else{
+							kolicinskaMera="ml";
+							bojaNaziva="style=\"color: #2376A0; font-size: 20px;\"";
+						}
+						let tdNaziv = $('<td> <div class="popup" onclick="iskociPopUP(\'' + artikal.naziv + artikal.restoran +  '2\')"><p '+bojaNaziva+' ><b>' + artikal.naziv
+								+ '</b></p> <span class="popuptext" id="'+ artikal.naziv + artikal.restoran
+								+'2"><b>Naziv:</b> '+ artikal.naziv +' </br><b>Cena:</b> '+ artikal.jedinicnaCena +' din</br><b>Opis:</b> '+ artikal.opis +' </br><b>Kolicina:</b> '+
+								artikal.kolicina + ' ' + kolicinskaMera +' </br><b>Restoran:</b> '+ artikal.restoran +'</span> </div></td>');
+						
+						let tdIzmeni = $('<td><a class="izmeniArtikal" href="/WebProjekat/rest/artikli/dajArtikal/'+artikal.naziv+artikal.restoran+'">Izmeni</a></td>');
+						let tdObrisi=$('<td><a class="izbrisiArtikal" style="color:red" href="/WebProjekat/rest/artikli/'+artikal.naziv+artikal.restoran+'">Obrisi</a></td>');
+						tr.append(tdNaziv).append(tdIzmeni).append(tdObrisi);
+						$('#adminTabela tbody').append(tr);
+				 }
 		 }
-	 
  }
  
  function izlistajRestoraneAdmin(restorani){
@@ -1774,15 +1793,17 @@ $('#promeniStatusPorudzbine2').submit(function(event){
 		 
 		 
 		 for(let restoran of restorani){
-			    tr=$('<tr></tr>');
-			    let tdNaziv = $('<td> <div class="popup" onclick="iskociPopUP(\'' + restoran.naziv +  '\')"><p style=\"color: #765FAB; font-size: 20px;\" ><b>' + restoran.naziv
-						+ '</b></p> <span class="popuptext" id="' + restoran.naziv 
-						+'"><b>Naziv:</b> '+ restoran.naziv +' </br><b>Adresa:</b> '+ restoran.adresa +' </br><b>Kategorija:</b> '+ restoran.kategorija +'</span>'+
-						' </div>');		
-				let tdIzmeni = $('<td><a class="izmeniRestoran" href="/WebProjekat/rest/restorani/jedanRestoran/'+restoran.naziv+'">Izmeni</a></td>');
-				let tdObrisi=$('<td><a class="izbrisiRestoran" style="color:red" href="/WebProjekat/rest/restorani/'+restoran.naziv+'">Obrisi</a></td>');
-				tr.append(tdNaziv).append(tdIzmeni).append(tdObrisi);
-				$('#adminTabela tbody').append(tr);
+			    if(restoran.obrisan==false){
+				    tr=$('<tr></tr>');
+				    let tdNaziv = $('<td> <div class="popup" onclick="iskociPopUP(\'' + restoran.naziv +  '\')"><p style=\"color: #765FAB; font-size: 20px;\" ><b>' + restoran.naziv
+							+ '</b></p> <span class="popuptext" id="' + restoran.naziv 
+							+'"><b>Naziv:</b> '+ restoran.naziv +' </br><b>Adresa:</b> '+ restoran.adresa +' </br><b>Kategorija:</b> '+ restoran.kategorija +'</span>'+
+							' </div>');		
+					let tdIzmeni = $('<td><a class="izmeniRestoran" href="/WebProjekat/rest/restorani/jedanRestoran/'+restoran.naziv+'">Izmeni</a></td>');
+					let tdObrisi=$('<td><a class="izbrisiRestoran" style="color:red" href="/WebProjekat/rest/restorani/'+restoran.naziv+'">Obrisi</a></td>');
+					tr.append(tdNaziv).append(tdIzmeni).append(tdObrisi);
+					$('#adminTabela tbody').append(tr);
+			    }
 		 }
 	 
  }

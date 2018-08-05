@@ -13,9 +13,11 @@ $(document).on("click","#izmeniDodajVoziloDostavlajc",function(e){
 		type:"GET",
 		success: function(vozila) {
 			for(let vozilo of vozila){
-				if(vozilo.daLiJeUUpotrebi==false){
-					let option= $('<option value="'+vozilo.registarskaOznaka+'">'+vozilo.registarskaOznaka+' ( '+vozilo.marka +' '+vozilo.model+') </option>');
-					$("#slobodnaVozila").append(option);
+				if(vozilo.obrisan==false){
+					if(vozilo.daLiJeUUpotrebi==false){
+						let option= $('<option value="'+vozilo.registarskaOznaka+'">'+vozilo.registarskaOznaka+' ( '+vozilo.marka +' '+vozilo.model+') </option>');
+						$("#slobodnaVozila").append(option);
+					}
 				}
 			}
 			
@@ -60,7 +62,6 @@ $(document).on("click",".statusPorudzbine",function(e){
 		 url: url,
 		 type: "GET" ,
 		 success : function(porudzbina) {
-		 //ref="/WebProjekat/rest/porudzbina/uTokuPorudzbina/'+brojac+'">Promeni u toku</a></td>');
 			if(porudzbina.statusPorudzbine=="u toku"){
 			 $("#LinkIzmenaStatusaPorudzbine"+porudzbina.id).html('<a class="statusPorudzbine" href="/WebProjekat/rest/porudzbina/menjajStatus/'+porudzbina.id+'dostavljeno">Promeni u dostavljeno</a>');	
 			 $("#promeniStatusPorudzbine"+porudzbina.id).html(porudzbina.statusPorudzbine);

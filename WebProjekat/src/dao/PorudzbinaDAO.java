@@ -342,6 +342,22 @@ public class PorudzbinaDAO {
 		//ukoliko nema artikla onda ovo vrati i napomeni korisnika
 		if(porudzbinaZaNaruciti.getArtikli().size()==0)
 			return "nemaArtikle";
+		
+		
+		//ovde cemo sada prema nagradnim bodovima da namestimo ukupnu cenu porudzbine!
+		int nagradniBodovi = Integer.parseInt(informacije.getPrezime());
+		if(kupacKojiNarucuje.getNagradniBodovi()<nagradniBodovi){
+			return "kupacNemaBodova";
+		}
+		
+		int procenatUkupneCene= porudzbinaZaNaruciti.getUkupnaCena()/100;
+		int popust = 3*nagradniBodovi*procenatUkupneCene;
+		//sada smanjujemo ukupn cenu
+		porudzbinaZaNaruciti.setUkupnaCena(porudzbinaZaNaruciti.getUkupnaCena()-popust);
+		//i smanjujemo nagradne bodove kupcu
+		kupacKojiNarucuje.setNagradniBodovi(kupacKojiNarucuje.getNagradniBodovi()-nagradniBodovi);
+		
+		
 		porudzbinaZaNaruciti.setKupacKojiNarucuje(kupacKojiNarucuje);
 		porudzbinaZaNaruciti.setDostavljac(dostavljacKojiNarucuje);
 		porudzbinaZaNaruciti.setNapomena(napomena);
@@ -351,6 +367,7 @@ public class PorudzbinaDAO {
 		
 		dodajPorudzbinu(porudzbinaZaNaruciti,artikalDao);
 		savePorudzbine();
+		kupacDao.saveKupac();
 		
 		
 		
@@ -371,7 +388,7 @@ public class PorudzbinaDAO {
 	/*
 	 * Funkcija koja menja status porudzbine
 	 * */
-	public Porudzbina promeniStatus(String idIStatus) throws IOException {
+	public Porudzbina promeniStatus(String idIStatus, KupacDAO kupacDao) throws IOException {
 		String idPorudzbine = idIStatus.substring(0,1);
 		String status=idIStatus.substring(1);
 		
@@ -381,8 +398,18 @@ public class PorudzbinaDAO {
 		}
 		else if(status.equals("dostavljeno")){
 			porudzbina.setStatusPorudzbine("dostavljeno");
-			//OVDE CES UBACIVATI DODATNE POENE AKO TREBA!!!
-			//TO CES KASNIJE RADITI!!
+			/*
+			 * Ovde gledamo da li je porudzbina premasia sumu od 500 din, ako jeste
+			 * onda cemo dodati jedan angradni bod kupcu (naravno ukoliko nema vec 10!)
+			 * */
+			if(porudzbina.getUkupnaCena()>500){
+				int trenutniNagradniBodoviKupca = porudzbina.getKupacKojiNarucuje().getNagradniBodovi();
+				if(trenutniNagradniBodoviKupca<10){
+					porudzbina.getKupacKojiNarucuje().setNagradniBodovi(++trenutniNagradniBodoviKupca);
+					kupacDao.saveKupac();
+				}
+			}
+			
 		}else if(status.equals("otkazano")){
 			porudzbina.setStatusPorudzbine("otkazano");
 		}

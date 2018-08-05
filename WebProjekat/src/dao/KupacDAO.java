@@ -200,10 +200,32 @@ public class KupacDAO {
 	 * i u listu porudzbian korisnika te zatim cuvamo podatke u txt fajl.
 	 * Napon toga praznimo iz sessije tu porudzbinu..
 	 * */
-	public String poruciSveArtikle(HttpServletRequest request, PorudzbinaDAO daoPorudzbina, String napomena, ArtikalDAO daoArtikal) throws IOException {
+	public String poruciSveArtikle(HttpServletRequest request, PorudzbinaDAO daoPorudzbina, Porudzbina porudzbina, ArtikalDAO daoArtikal) throws IOException {
 		HttpSession sesija = request.getSession();
+		
 		Porudzbina trenutnaPorudzbina = (Porudzbina) sesija.getAttribute("porudzbina");
-		trenutnaPorudzbina.setNapomena(napomena); //dodali smo napomenu u porudzbinu ako je bilo
+		//u polje ID smo smestili broj nagradnih poena koje korisnik hoce da postavi
+		//i ukoliko je to veci broj nego sto korisnik ima, moramo ga obavestiti da ne
+		//moze da izvsri porudzbinu
+		if(porudzbina.getId()>trenutnaPorudzbina.getKupacKojiNarucuje().getNagradniBodovi()){
+			return "PrevisePoena";
+		}
+		/*
+		 * Posto je sve uredu, korisniku postavljamo novi broj nagradnih poena
+		 * ukupnu cenu smanjujemo za (3*broj nagradnih poena) %
+		 * */
+		int trenutniBrojNagradnihPoenaKupca= trenutnaPorudzbina.getKupacKojiNarucuje().getNagradniBodovi();
+		trenutnaPorudzbina.getKupacKojiNarucuje().setNagradniBodovi(trenutniBrojNagradnihPoenaKupca-porudzbina.getId());
+		
+		//sada smanjujemo ukupnu cenu
+		int jedanProcenat= trenutnaPorudzbina.getUkupnaCena()/100;
+		int smanjiZa = 3*porudzbina.getId()*jedanProcenat;
+		
+		trenutnaPorudzbina.setUkupnaCena(trenutnaPorudzbina.getUkupnaCena()-smanjiZa);
+		
+		
+		//sada mozemo dalje da radimo posao
+		trenutnaPorudzbina.setNapomena(porudzbina.getNapomena()); //dodali smo napomenu u porudzbinu ako je bilo
 		trenutnaPorudzbina.postaviVreme();
 		daoPorudzbina.dodajPorudzbinu(trenutnaPorudzbina, daoArtikal);
 		daoPorudzbina.savePorudzbine();

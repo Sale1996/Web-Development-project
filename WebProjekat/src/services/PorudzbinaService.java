@@ -183,8 +183,8 @@ public class PorudzbinaService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Porudzbina promeniStatus(@PathParam("idIStatus") String idIStatus) throws IOException{
 		PorudzbinaDAO dao =(PorudzbinaDAO) ctx.getAttribute("porudzbinaDAO");
-		
-		return dao.promeniStatus(idIStatus);
+		KupacDAO kupacDao = (KupacDAO) ctx.getAttribute("kupacDAO");
+		return dao.promeniStatus(idIStatus, kupacDao);
 	}
 	
 }

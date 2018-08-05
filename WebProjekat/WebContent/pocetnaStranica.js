@@ -1,17 +1,35 @@
-function addTop10ArtikalTr(artikal) {
-	
-	let tr = $('<tr></tr>');
-	let tdNaziv = $('<td class="tableTOP10naziv">' + artikal.naziv + '</td>');
-	let tdCena = $('<td>' + artikal.jedinicnaCena + ' din' + '</td>');
-	let tdDugme = $('<td><button class="button ovoJeZaKupca kupiArtikal kupacUlogovan" ><a style="color:white;font-size:20" href="rest/kupac/naruciArtikal/'+ artikal.naziv + artikal.restoran+'">Kupi</a></button> </td>')
-	
-	tr.append(tdNaziv).append(tdCena).append(tdDugme); // ovde samo dodajemo u kolone tabele vidis naziv pa cena pa link
-	if(artikal.tip == "jelo"){
-		$('#tabelaTop10Jela tbody').append(tr);
+function addTop10ArtikalTr(artikli) {
+	let brojPica=0;
+	let brojJela=0;
+	for (let artikal of artikli) {
+		let tr = $('<tr></tr>');
+		let tdNaziv = $('<td class="tableTOP10naziv">' + artikal.naziv + '</td>');
+		let tdCena = $('<td>' + artikal.jedinicnaCena + ' din' + '</td>');
+		let tdDugme = $('<td><button class="button ovoJeZaKupca kupiArtikal kupacUlogovan" ><a style="color:white;font-size:20" href="rest/kupac/naruciArtikal/'+ artikal.naziv + artikal.restoran+'">Kupi</a></button> </td>');
+		//ukoliko je obrisan, mi ga ne pisemo
+		if(artikal.obrisan==false){
+			tr.append(tdNaziv).append(tdCena).append(tdDugme); // ovde samo dodajemo u kolone tabele vidis naziv pa cena pa link
+			if(artikal.tip == "jelo"){
+				if((brojJela%2)==0){
+					$('#tabelaTop10Jela1 tbody').append(tr);
+				}else{
+					$('#tabelaTop10Jela2 tbody').append(tr);
+
+				}
+				brojJela++;
+			}
+			else if(artikal.tip=="pice"){
+				if((brojPica%2)==0){
+					$('#tabelaTop10Pica1 tbody').append(tr);
+
+				}else{
+					$('#tabelaTop10Pica2 tbody').append(tr);
+				}
+				brojPica++;
+			}
+		}
 	}
-	else if(artikal.tip=="pice"){
-		$('#tabelaTop10Pica tbody').append(tr);
-	}
+	
 }
 
 /*
@@ -25,47 +43,48 @@ function addSviArtikli(artikli){
 	let broj=0; //ovaj broj nam govori dal smo popunili jedan red ili ne , ideja je da iammo po 2 artikla u jednom redu
 	for(let artikal of artikli){
 		
+		//ako je artikal obrisan, mi ga ne ispisujemo
+		if(artikal.obrisan==false){
+				/*
+				 * prvo cemo vrsiti proveru da li je artikal pice ili hrana, kako bi mogli da namestimo adekvatnu kolicinsku meru
+				 * i boju teksta u prikazu
+				 * */
+				let kolicinskaMera;
+				let bojaNaziva;
+				if(artikal.tip == "jelo"){
+					kolicinskaMera= "gr";
+					bojaNaziva="style=\"color: #A05623; font-size: 20px;\"";
+					
+					
+				}else{
+					kolicinskaMera="ml";
+					bojaNaziva="style=\"color: #2376A0; font-size: 20px;\"";
+				}
+				
+				
+				let tdNaziv = $('<td> <div class="popup" onclick="iskociPopUP(\'' + artikal.naziv + artikal.restoran +  '\')"><p '+bojaNaziva+' ><b>' + artikal.naziv
+						+ '</b></p> <span class="popuptext" id="'+ artikal.naziv + artikal.restoran 
+						+'"><b>Naziv:</b> '+ artikal.naziv +' </br><b>Cena:</b> '+ artikal.jedinicnaCena +' din</br><b>Opis:</b> '+ artikal.opis +' </br><b>Kolicina:</b> '+
+						artikal.kolicina + ' ' + kolicinskaMera +' </br><b>Restoran:</b> '+ artikal.restoran +'</span> </div></td>');
+				
+				let tdCena = $('<td>' + artikal.jedinicnaCena + ' din' + '</td>');
+				let tdDugme = $('<td><button class="button ovoJeZaKupca kupiArtikal kupacUlogovan" ><a style="color:white;font-size:20" href="rest/kupac/naruciArtikal/'+ artikal.naziv + artikal.restoran+'">Kupi</a></button> </td>');
+				tr.append(tdNaziv).append(tdCena).append(tdDugme); // ovde samo dodajemo u kolone tabele vidis naziv pa cena pa link
+				broj++;
 		
 		
-		/*
-		 * prvo cemo vrsiti proveru da li je artikal pice ili hrana, kako bi mogli da namestimo adekvatnu kolicinsku meru
-		 * i boju teksta u prikazu
-		 * */
-		let kolicinskaMera;
-		let bojaNaziva;
-		if(artikal.tip == "jelo"){
-			kolicinskaMera= "gr";
-			bojaNaziva="style=\"color: #A05623; font-size: 20px;\"";
-			
-			
-		}else{
-			kolicinskaMera="ml";
-			bojaNaziva="style=\"color: #2376A0; font-size: 20px;\"";
-		}
-		
-		
-		let tdNaziv = $('<td> <div class="popup" onclick="iskociPopUP(\'' + artikal.naziv + artikal.restoran +  '\')"><p '+bojaNaziva+' ><b>' + artikal.naziv
-				+ '</b></p> <span class="popuptext" id="'+ artikal.naziv + artikal.restoran 
-				+'"><b>Naziv:</b> '+ artikal.naziv +' </br><b>Cena:</b> '+ artikal.jedinicnaCena +' din</br><b>Opis:</b> '+ artikal.opis +' </br><b>Kolicina:</b> '+
-				artikal.kolicina + ' ' + kolicinskaMera +' </br><b>Restoran:</b> '+ artikal.restoran +'</span> </div></td>');
-		
-		let tdCena = $('<td>' + artikal.jedinicnaCena + ' din' + '</td>');
-		let tdDugme = $('<td><button class="button ovoJeZaKupca kupiArtikal kupacUlogovan" ><a style="color:white;font-size:20" href="rest/kupac/naruciArtikal/'+ artikal.naziv + artikal.restoran+'">Kupi</a></button> </td>');
-		tr.append(tdNaziv).append(tdCena).append(tdDugme); // ovde samo dodajemo u kolone tabele vidis naziv pa cena pa link
-		broj++;
-
-
-		if(broj==1){
-			$('#tabelaSviArtikli1 tbody').append(tr);
-		}
-		else if(broj==2){
-			$('#tabelaSviArtikli2 tbody').append(tr);
-		}
-		else if(broj==3){
-			$('#tabelaSviArtikli3 tbody').append(tr);
-			broj=0;
-		}
-	}	
+				if(broj==1){
+					$('#tabelaSviArtikli1 tbody').append(tr);
+				}
+				else if(broj==2){
+					$('#tabelaSviArtikli2 tbody').append(tr);
+				}
+				else if(broj==3){
+					$('#tabelaSviArtikli3 tbody').append(tr);
+					broj=0;
+				}
+			}
+	}
 }
 
 
@@ -74,44 +93,48 @@ function ispisiRestorane(restorani){
 	let broj=0; 
 	
 	for (let restoran of restorani){
-		/*
-		 * Prvo cemo da proverimo da li je taj restoran u listi omiljenih restorana ulogovanog korisnika
-		 * ako jeste onda cemo mu namestiti klasu koja odgovara obojenom srcu
-		 * ako nije onda cemo ostaviti prazno srce
-		 * */
-		var omiljeni='class="heart fa fa-heart-o ovoJeZaKupca kupacUlogovan omiljeniRestoranSrce"';
-		if(restoran.daLiJeOmiljeni==true){
-			omiljeni='class="heart fa fa-heart kupacUlogovan omiljeniRestoranSrce"';
-		}
+		//ako je restoran obrisan, nemoj ga pisati (a to je ako je on na polju obrisan == true
+		if(restoran.obrisan==false){
+		
+			/*
+			 * Prvo cemo da proverimo da li je taj restoran u listi omiljenih restorana ulogovanog korisnika
+			 * ako jeste onda cemo mu namestiti klasu koja odgovara obojenom srcu
+			 * ako nije onda cemo ostaviti prazno srce
+			 * */
+			var omiljeni='class="heart fa fa-heart-o ovoJeZaKupca kupacUlogovan omiljeniRestoranSrce"';
+			if(restoran.daLiJeOmiljeni==true){
+				omiljeni='class="heart fa fa-heart kupacUlogovan omiljeniRestoranSrce"';
+			}
+		
+			
+			tr=$('<tr></tr>');
+			
+			let tdNaziv = $('<td> <div class="popup" onclick="iskociPopUP(\'' + restoran.naziv +  '\')"><p style=\"color: #765FAB; font-size: 40px;\" ><b>' + restoran.naziv
+					+ '</b></p> <span class="popuptext" id="' + restoran.naziv 
+					+'"><b>Naziv:</b> '+ restoran.naziv +' </br><b>Adresa:</b> '+ restoran.adresa +' </br><b>Kategorija:</b> '+ restoran.kategorija +'</span>'+
+					' </div><div><a href="rest/kupac/dodajRestoran/'+ restoran.naziv+'" '+omiljeni+'></a></div>' +
+					
+					'</br> <button class="button" id="dugmePretragaArtikalaPoRestoranu"><a href="rest/artikli/izlistajArtikle/' +restoran.naziv + '"><p style="color: white">Pogledaj artikle!</p></a></button></td> ');
+			
+			//let tdDugme = $('<td> </td>');
+			tr.append(tdNaziv); // ovde samo dodajemo u kolone tabele vidis naziv pa cena pa link
+			broj++;
 	
+	
+			if(broj==1){
+				$('#tabelaSviRestorani2 tbody').append(tr);
+			}
+			else if(broj==2){
+				$('#tabelaSviRestorani2 tbody').append(tr);
+			}
+			else if(broj==3){
+				$('#tabelaSviRestorani3 tbody').append(tr);
+				broj=0;
+			}
+			
 		
-		tr=$('<tr></tr>');
-		
-		let tdNaziv = $('<td> <div class="popup" onclick="iskociPopUP(\'' + restoran.naziv +  '\')"><p style=\"color: #765FAB; font-size: 40px;\" ><b>' + restoran.naziv
-				+ '</b></p> <span class="popuptext" id="' + restoran.naziv 
-				+'"><b>Naziv:</b> '+ restoran.naziv +' </br><b>Adresa:</b> '+ restoran.adresa +' </br><b>Kategorija:</b> '+ restoran.kategorija +'</span>'+
-				' </div><div><a href="rest/kupac/dodajRestoran/'+ restoran.naziv+'" '+omiljeni+'></a></div>' +
-				
-				'</br> <button class="button" id="dugmePretragaArtikalaPoRestoranu"><a href="rest/artikli/izlistajArtikle/' +restoran.naziv + '"><p style="color: white">Pogledaj artikle!</p></a></button></td> ');
-		
-		//let tdDugme = $('<td> </td>');
-		tr.append(tdNaziv); // ovde samo dodajemo u kolone tabele vidis naziv pa cena pa link
-		broj++;
-
-
-		if(broj==1){
-			$('#tabelaSviRestorani2 tbody').append(tr);
-		}
-		else if(broj==2){
-			$('#tabelaSviRestorani2 tbody').append(tr);
-		}
-		else if(broj==3){
-			$('#tabelaSviRestorani3 tbody').append(tr);
-			broj=0;
-		}
-		
-		
-	}	
+		}	
+	}
 }
 
 
@@ -124,9 +147,22 @@ $(document).ready(function() {
 			 * ovo je bio test za top10 artikala iz picai jela , ovo koristi listu svih artikala tako da ce se u buducnosti
 			 * izmeniti da koristi samo listu top10 artikala
 			 * */
-			for (let artikal of artikli) {
-				addTop10ArtikalTr(artikal);
-			}
+			
+			//OVDE NAPRAVI AJAX POZIV KOJI CE NAM VRATITI TOP 10 PICA 
+			//I TOP 10 ARTIKALA, ZNACI 20 ARTIKALA VRACA!!!!
+			$.ajax({
+				url: 'rest/artikli/dajMiTop10', //url
+				type: "GET" ,
+				success : function(artikli) {
+					addTop10ArtikalTr(artikli);
+					$("[class*='ovoJeZaKupca']").addClass("kupacNijeUlogovan"); //pojavljuju se u slucaju logovanja korisnika
+
+
+				}
+			});
+			
+			
+			
 			$("#dugmeKojeBriseListuRestorana").hide(); //pojavljuje se u posebnim slucajevima
 			$("#dugmePonistavanjaFilteraArtikala").hide(); //pojavljuje se u posebnim slucajevima
 			
@@ -422,45 +458,47 @@ $(document).ready(function() {
 							 
 							 var brojac=0;//cisto da bi smo pisali "Porudzbina1"
 							 for(let porudzbina of porudzbine){
-								    tr=$('<tr></tr>');
-								    var dostavljac="";
-								    if(porudzbina.dostavljac!=null){
-								    	dostavljac=porudzbina.dostavljac.korisnickoIme;
-								    }
-								    let tdNaziv = $('<td> <div class="popup" onclick="iskociPopUP(\'' + brojac+  '\')"><p  style=\"color: #765FAB; font-size: 20px;\" ><b id="izlistajPorudzbineAdminGlavnaLista'+brojac+'"> Porudzbina ' +(brojac+1)
-											+ '</br>'+ porudzbina.ukupnaCena +' din</b></p> <span class="popuptext" id="' + brojac
-											+'"><b>Status porudzbine:</b> <i id="spanPorudzbinaStatusPorudzbine'+brojac+'">'+ porudzbina.statusPorudzbine +'</i> </br><b>Napomena:</b> '+ porudzbina.napomena +' </br><b>Cena:</b> <i id="spanPorudzbinaUkupnaCena'+brojac+'">'+ porudzbina.ukupnaCena + '</i> din</br><b>Kupac:</b> <i id="spanPorudzbinaKupac'+brojac+'">'+ porudzbina.kupacKojiNarucuje.korisnickoIme +
-											'</i> </br><b>Dostavljac:'+dostavljac+'</b> </br></span>'+
-											' </div>');	
-								    let tdIzmeni= null;
-								    if(porudzbina.statusPorudzbine=="poruceno"){
-										tdIzmeni = $('<td id="LinkIzmenaStatusaPorudzbine'+porudzbina.id+'" ><a class="statusPorudzbine" href="/WebProjekat/rest/porudzbina/menjajStatus/'+brojac+'uToku">Promeni u toku</a></td>');
-								    }
-								    else if(porudzbina.statusPorudzbine=="u toku"){
-										tdIzmeni = $('<td id="LinkIzmenaStatusaPorudzbine'+porudzbina.id+'"><a class="statusPorudzbine" href="/WebProjekat/rest/porudzbina/menjajStatus/'+brojac+'dostavljeno">Promeni u dostavljeno</a></td>');
-								    	
-								    }else{
-								    	tdIzmeni = $('<td></td>');
-								    }
-								    
-								    let tdStatus = $('<td id="promeniStatusPorudzbine'+porudzbina.id+'">'+porudzbina.statusPorudzbine+'</td>');
-
-									tr.append(tdNaziv).append(tdStatus);
-									if(porudzbina.dostavljac==null && porudzbina.statusPorudzbine=="poruceno"){
-										let tdPreuzmi = $('<td id="LinkPreuzmiPorudzbinu'+porudzbina.id+'"><a class="preuzmiPorudzbinu" href="/WebProjekat/rest/dostavljaci/preuzmiPorudzbinu/'+brojac+'">Preuzmi porudzbinu</a></td>');
-										tr.append(tdPreuzmi);
-										$('#nedodeljenePorudzbineTabela tbody').append(tr);
-									}
-									else if(porudzbina.dostavljac.korisnickoIme==korisnik.korisnickoIme){
-										let tdOtkazi = "";
-										if(porudzbina.statusPorudzbine=="u toku" || porudzbina.statusPorudzbine=="poruceno")
-										 	tdOtkazi=$('<td id="otkaziPorudzbinuLink'+porudzbina.id+'"><a class="statusPorudzbine" style="color:red" href="/WebProjekat/rest/porudzbina/menjajStatus/'+brojac+'otkazano">Otkazi porudzbinu</a></td>');
+								    if(porudzbina.obrisana==false){
+									    tr=$('<tr></tr>');
+									    var dostavljac="";
+									    if(porudzbina.dostavljac!=null){
+									    	dostavljac=porudzbina.dostavljac.korisnickoIme;
+									    }
+									    let tdNaziv = $('<td> <div class="popup" onclick="iskociPopUP(\'' + brojac+  '\')"><p  style=\"color: #765FAB; font-size: 20px;\" ><b id="izlistajPorudzbineAdminGlavnaLista'+brojac+'"> Porudzbina ' +(brojac+1)
+												+ '</br>'+ porudzbina.ukupnaCena +' din</b></p> <span class="popuptext" id="' + brojac
+												+'"><b>Status porudzbine:</b> <i id="spanPorudzbinaStatusPorudzbine'+brojac+'">'+ porudzbina.statusPorudzbine +'</i> </br><b>Napomena:</b> '+ porudzbina.napomena +' </br><b>Cena:</b> <i id="spanPorudzbinaUkupnaCena'+brojac+'">'+ porudzbina.ukupnaCena + '</i> din</br><b>Kupac:</b> <i id="spanPorudzbinaKupac'+brojac+'">'+ porudzbina.kupacKojiNarucuje.korisnickoIme +
+												'</i> </br><b>Dostavljac:'+dostavljac+'</b> </br></span>'+
+												' </div>');	
+									    let tdIzmeni= null;
+									    if(porudzbina.statusPorudzbine=="poruceno"){
+											tdIzmeni = $('<td id="LinkIzmenaStatusaPorudzbine'+porudzbina.id+'" ><a class="statusPorudzbine" href="/WebProjekat/rest/porudzbina/menjajStatus/'+brojac+'uToku">Promeni u toku</a></td>');
+									    }
+									    else if(porudzbina.statusPorudzbine=="u toku"){
+											tdIzmeni = $('<td id="LinkIzmenaStatusaPorudzbine'+porudzbina.id+'"><a class="statusPorudzbine" href="/WebProjekat/rest/porudzbina/menjajStatus/'+brojac+'dostavljeno">Promeni u dostavljeno</a></td>');
+									    	
+									    }else{
+									    	tdIzmeni = $('<td></td>');
+									    }
+									    
+									    let tdStatus = $('<td id="promeniStatusPorudzbine'+porudzbina.id+'">'+porudzbina.statusPorudzbine+'</td>');
+	
+										tr.append(tdNaziv).append(tdStatus);
+										if(porudzbina.dostavljac==null && porudzbina.statusPorudzbine=="poruceno"){
+											let tdPreuzmi = $('<td id="LinkPreuzmiPorudzbinu'+porudzbina.id+'"><a class="preuzmiPorudzbinu" href="/WebProjekat/rest/dostavljaci/preuzmiPorudzbinu/'+brojac+'">Preuzmi porudzbinu</a></td>');
+											tr.append(tdPreuzmi);
+											$('#nedodeljenePorudzbineTabela tbody').append(tr);
+										}
+										else if(porudzbina.dostavljac.korisnickoIme==korisnik.korisnickoIme){
+											let tdOtkazi = "";
+											if(porudzbina.statusPorudzbine=="u toku" || porudzbina.statusPorudzbine=="poruceno")
+											 	tdOtkazi=$('<td id="otkaziPorudzbinuLink'+porudzbina.id+'"><a class="statusPorudzbine" style="color:red" href="/WebProjekat/rest/porudzbina/menjajStatus/'+brojac+'otkazano">Otkazi porudzbinu</a></td>');
+											
+										    tr.append(tdIzmeni).append(tdOtkazi);
+											$('#porudzbineDodeljeneMeniTabela tbody').append(tr);
+										}
 										
-									    tr.append(tdIzmeni).append(tdOtkazi);
-										$('#porudzbineDodeljeneMeniTabela tbody').append(tr);
-									}
-									
-									brojac=brojac+1;
+										brojac=brojac+1;
+								    }
 							 }
 							
 						 

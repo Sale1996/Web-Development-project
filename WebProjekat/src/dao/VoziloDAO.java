@@ -11,6 +11,7 @@ import java.util.Map;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import beans.Dostavljac;
 import beans.Vozilo;
 
 public class VoziloDAO {
@@ -164,13 +165,25 @@ public class VoziloDAO {
 		return vrati;
 	}
 //brisanje vozila
-	public String obrisiVozilo(String vozilo) throws IOException {
+	public String obrisiVozilo(String vozilo, DostavljacDAO dostavljacDao) throws IOException {
 		//trazimo vozilo
+		Vozilo voziloZaBrisati=null;
 		for(Vozilo item : vozila.values()){
 			if(item.getRegistarskaOznaka().equals(vozilo)){
 				item.setObrisan(true);
 				saveVozilo();
+				voziloZaBrisati=item;
 				break;
+			}
+		}
+		
+		//brisemo vozilo od dostavljaca, ukoliko je zauzeto!
+		if(voziloZaBrisati.getDaLiJeUUpotrebi()){
+			for(Dostavljac item : dostavljacDao.getDostavljaci().values()){
+				if(item.getVozilo().getRegistarskaOznaka().equals(voziloZaBrisati.getRegistarskaOznaka())){
+					item.setVozilo(null);
+					break;
+				}
 			}
 		}
 		return "ok";

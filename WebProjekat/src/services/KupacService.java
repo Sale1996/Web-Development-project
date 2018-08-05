@@ -100,7 +100,7 @@ public class KupacService {
 	@POST
 	@Path("/naruci/")
 	@Produces(MediaType.TEXT_PLAIN)
-	public String finalnoPoruciArtikle(@Context HttpServletRequest request, String napomena) throws IOException{
+	public String finalnoPoruciArtikle(@Context HttpServletRequest request, Porudzbina napomena) throws IOException{
 		KupacDAO dao = (KupacDAO) ctx.getAttribute("kupacDAO");
 		PorudzbinaDAO daoPorudzbina = (PorudzbinaDAO) ctx.getAttribute("porudzbinaDAO");
 		ArtikalDAO daoArtikal = (ArtikalDAO) ctx.getAttribute("artikalDAO");//ovo koristimo posto cemo u artikle dodati info da je porucen, pa da mozemo da ga sacuvamo

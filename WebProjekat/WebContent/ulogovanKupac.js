@@ -117,14 +117,23 @@ $(document).ready(function() {
 	 * */
 	$('#formaPoruciPorudzbinu').submit(function(event){
 		event.preventDefault();
-		let napomena= $('#inputNapomenaPorudzbine').val();
+		let napomena = $('#inputNapomenaPorudzbine').val();
+		let nagradniBodovi = $('#inputNagradniBodovi').val();
+		if(nagradniBodovi<0){
+			alert("Nagradni bodovi ne mogu biti negativni!");
+			return;
+		}
 		
 		$.ajax({
 	        url: 'rest/kupac/naruci',
-	        contentType: "application/json; charset=utf-8",
-	        data: {'napomena': napomena},
-	        type: 'POST',
+	        type: "POST" ,
+			data: JSON.stringify({napomena: napomena,id:nagradniBodovi,ukupnaCena:'',obrisana:'',statusPorudzbine:''}),
+			contentType: 'application/json',
 	        success: function (result) {
+	        	if(result=="PrevisePoena"){
+	        		alert("Nemate toliki broj nagradnih poena!");
+	        		return;
+	        	}
 	        	$("#korisnickaKorpa").hide();
 	    		$("#podaciOUnutrasnjostiKorpe tbody tr").remove();
 	    		$("#inputNapomenaPorudzbine").val("");
@@ -242,15 +251,18 @@ $(document).ready(function() {
 				let trTelefon= $('<tr><td><b>Kontakt telefon:</b></td><td>'+ kupac.kontaktTelefon +' </td></tr>');
 				let trEmail=$('<tr><td><b>Email:</b></td><td>'+ kupac.emailAdresa +' </td></tr>');
 				let trDatumRegistracije=$('<tr><td><b>Datum registracije:</b></td><td>'+ kupac.dan +'.'+kupac.mesec+ '.'+ kupac.godina + '. </td></tr>');
-				$("#podaciOKorisniku tbody").append(trIme).append(trPrezime).append(trUloga).append(trTelefon).append(trEmail).append(trDatumRegistracije);
+				let trNagradniPoeniKorisnika= $('<tr><td><b>Nagradni bodovi:</b></td><td>'+kupac.nagradniBodovi+'</td></tr>')
+				$("#podaciOKorisniku tbody").append(trIme).append(trPrezime).append(trUloga).append(trTelefon).append(trEmail).append(trDatumRegistracije).append(trNagradniPoeniKorisnika);
 				
 				//sada ide ispis omiljenih restorana u prozor naloga
 				for(let restoran of kupac.omiljeniRestorani){
-					let tr= $('<tr></tr>');
-					let tdNaziv = $('<td><b>' + restoran.naziv+'</b> </td>');
-					let tdAdresa = $('<td style="font-size:17">'+ restoran.adresa+ '</td>');
-					tr.append(tdNaziv).append(tdAdresa);
-					$('#TabelaomiljeniRestoraniKorisnika tbody').append(tr);
+					if(restoran.obrisan==false){
+						let tr= $('<tr></tr>');
+						let tdNaziv = $('<td><b>' + restoran.naziv+'</b> </td>');
+						let tdAdresa = $('<td style="font-size:17">'+ restoran.adresa+ '</td>');
+						tr.append(tdNaziv).append(tdAdresa);
+						$('#TabelaomiljeniRestoraniKorisnika tbody').append(tr);
+					}
 				}
 				
 				$.ajax({
@@ -259,18 +271,20 @@ $(document).ready(function() {
 					success: function(porudzbine){
 						let broj=1;
 						for(let porudzbina of porudzbine){
-							if(porudzbina.kupacKojiNarucuje.korisnickoIme == kupac.korisnickoIme){
-								let tr=$('<tr></tr>');
-								let tdPorudzbina='<td><b style="font-size:16">Porudzbina '+ broj +'</b></br>Artikli:</br>';
-								for(let artikal of porudzbina.artikli){
-									tdPorudzbina = tdPorudzbina + artikal.naziv + " (" + artikal.restoran + " ) </br>";
+							if(porudzbina.obrisana==false){
+								if(porudzbina.kupacKojiNarucuje.korisnickoIme == kupac.korisnickoIme){
+									let tr=$('<tr></tr>');
+									let tdPorudzbina='<td><b style="font-size:16">Porudzbina '+ broj +'</b></br>Artikli:</br>';
+									for(let artikal of porudzbina.artikli){
+										tdPorudzbina = tdPorudzbina + artikal.naziv + " (" + artikal.restoran + " ) </br>";
+									}
+									//ovde fali jos vreme porudzbine ne znmo kako sta 
+									tdPorudzbina=tdPorudzbina + "</br>Datum porudzbine:"+ porudzbina.dan +"."+porudzbina.mesec+ "."+ porudzbina.godina + ".</td>";
+									tdTd=$(tdPorudzbina);
+									tr.append(tdTd);
+									$("#TabelaZadnjePoruzbineKorisnika").append(tr);
+									broj=broj+1;
 								}
-								//ovde fali jos vreme porudzbine ne znmo kako sta 
-								tdPorudzbina=tdPorudzbina + "</br>Datum porudzbine:"+ porudzbina.dan +"."+porudzbina.mesec+ "."+ porudzbina.godina + ".</td>";
-								tdTd=$(tdPorudzbina);
-								tr.append(tdTd);
-								$("#TabelaZadnjePoruzbineKorisnika").append(tr);
-								broj=broj+1;
 							}
 						}
 					}

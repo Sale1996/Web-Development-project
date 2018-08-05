@@ -4,8 +4,10 @@ import java.util.ArrayList;
 
 public class Kupac extends Korisnik {
    private ArrayList<Restoran> omiljeniRestorani = new ArrayList<Restoran>();
+   private int nagradniBodovi;
    
    public Kupac(){   
+	   nagradniBodovi=0;
    }
    
    /* *
@@ -37,6 +39,14 @@ public ArrayList<Restoran> getOmiljeniRestorani() {
 
 public void setOmiljeniRestorani(ArrayList<Restoran> omiljeniRestorani) {
 	this.omiljeniRestorani = omiljeniRestorani;
+}
+
+public int getNagradniBodovi() {
+	return nagradniBodovi;
+}
+
+public void setNagradniBodovi(int nagradniBodovi) {
+	this.nagradniBodovi = nagradniBodovi;
 }
 
 

@@ -16,6 +16,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import beans.Vozilo;
+import dao.DostavljacDAO;
 import dao.VoziloDAO;
 
 @Path("/vozila")
@@ -76,8 +77,9 @@ public class VoziloService {
 	@Produces(MediaType.TEXT_PLAIN)
 	public String obrisiVozilo(@PathParam("vozilo") String vozilo) throws IOException{
 		VoziloDAO dao = (VoziloDAO) ctx.getAttribute("voziloDAO");
+		DostavljacDAO dostavljacDao = (DostavljacDAO) ctx.getAttribute("dostavljacDAO");
 		
-		return dao.obrisiVozilo(vozilo);
+		return dao.obrisiVozilo(vozilo, dostavljacDao);
 	}
 	
 	

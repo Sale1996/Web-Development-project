@@ -224,4 +224,60 @@ public class ArtikalDAO {
 		}
 		return "ok";
 	}
+
+
+	public ArrayList<Artikal> vratiTop10() {
+		ArrayList<Artikal> jela = new ArrayList<Artikal>();
+		ArrayList<Artikal> pica = new ArrayList<Artikal>();
+		
+		for(Artikal item : artikli.values()){
+			if(item.getTip().equals("pice")){
+				pica.add(item);
+			}else{
+				jela.add(item);
+			}
+		}
+		
+		//sada idemo sortiranje pica
+		 int n = pica.size();  
+	     Artikal temp = null;
+	     for(int i=0; i < n; i++){  
+	         for(int j=1; j < (n-i); j++){  
+	              if(pica.get(j-1).getKolikoSamPutaKupljen() < pica.get(j).getKolikoSamPutaKupljen()){  
+	                 
+                     temp = pica.get(j-1);  
+                     pica.set(j-1,pica.get(j));
+                     pica.set(j,temp); 
+	               }  
+	                          
+	          }  
+	     } 
+	     
+	     
+	     //sada idemo sortiranje jela
+
+	     n = jela.size();  
+	     temp = null;
+	     for(int i=0; i < n; i++){  
+	         for(int j=1; j < (n-i); j++){  
+	              if(jela.get(j-1).getKolikoSamPutaKupljen() < jela.get(j).getKolikoSamPutaKupljen()){  
+	                 
+                     temp = jela.get(j-1);  
+                     jela.set(j-1,jela.get(j));
+                     jela.set(j,temp); 
+	               }  
+	                          
+	          }  
+	     } 
+	     
+	     ArrayList<Artikal> top10JelaPica= new ArrayList<Artikal>();
+	     
+	     for(int i=0;i<10;i++){
+	    	 top10JelaPica.add(jela.get(i));
+	    	 top10JelaPica.add(pica.get(i));
+	     }
+	     
+	     
+		return top10JelaPica;
+	}
 }
