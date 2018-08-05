@@ -18,7 +18,7 @@ $(document).on("click","#OtvoriNalogAdministratora",function(e){
 			let trUloga = $('<tr><td><b>Uloga:</b></td><td>'+ admin.uloga +' </td></tr>');
 			let trTelefon= $('<tr><td><b>Kontakt telefon:</b></td><td>'+ admin.kontaktTelefon +' </td></tr>');
 			let trEmail=$('<tr><td><b>Email:</b></td><td>'+ admin.emailAdresa +' </td></tr>');
-			let trDatumRegistracije=$('<tr><td><b>Datum registracije:</b></td><td>'+ admin.datum +' </td></tr>');
+			let trDatumRegistracije=$('<tr><td><b>Datum registracije:</b></td><td>'+ admin.dan +'.'+admin.mesec+ '.'+ admin.godina + '.</td></tr>');
 			$("#podaciOAdminu tbody").append(trIme).append(trPrezime).append(trUloga).append(trTelefon).append(trEmail).append(trDatumRegistracije);				
 		}
 		
@@ -41,55 +41,13 @@ $(document).on("click","#izlazIzNalogaAdministratora",function(e){
  * */
  $(document).on("click","#izlistajArtikleAdmin",function(e){
 	 e.preventDefault();
-	 //ukoliko je neki red menija bio selektovan, moramo da obrisemo tu selekciju
-	 $("[class*='selektovanaTabelaAdmin']").removeClass('selektovanaTabelaAdmin');
-	 //i stavljamo je na nas trenutni red
-	 $("#izlistajArtikleAdmin").addClass('selektovanaTabelaAdmin');
-	 //brisemo sve stavke koje su se pre nalazile u toj tabli
-	 $('#adminTabela thead tr').remove();
-	 $('#adminTabela tbody tr').remove();
+	 
 	 
 	 $.ajax({
 		 url:'rest/artikli',
 		 type: "GET",
 		 success: function(artikli){
-			 let tr=$('<tr></tr>');
-			 
-			 //ovde ubacujemo link za dodavanje novog artikla na vrh tabele
-			 let trHead = $('<tr></tr>');
-			 let tdHead= $('<td><a id="dodajNoviArtikalLink" style="color: #50AE94" href="/WebProjekat/rest/artikli/dodajNovi/">Dodaj novi Artikal</a></td>');
-			 trHead.append(tdHead);
-			 $("#adminTabela thead").append(trHead);
-			 
-			 
-			 for(let artikal of artikli){
-				    tr=$('<tr></tr>');
-
-				/*
-				 * prvo cemo vrsiti proveru da li je artikal pice ili hrana, kako bi mogli da namestimo adekvatnu kolicinsku meru
-				 * i boju teksta u prikazu
-				 * */
-				    let kolicinskaMera;
-					let bojaNaziva;
-					if(artikal.tip == "jelo"){
-						kolicinskaMera= "gr";
-						bojaNaziva="style=\"color: #A05623; font-size: 20px;\"";
-						
-						
-					}else{
-						kolicinskaMera="ml";
-						bojaNaziva="style=\"color: #2376A0; font-size: 20px;\"";
-					}
-					let tdNaziv = $('<td> <div class="popup" onclick="iskociPopUP(\'' + artikal.naziv + artikal.restoran +  '2\')"><p '+bojaNaziva+' ><b>' + artikal.naziv
-							+ '</b></p> <span class="popuptext" id="'+ artikal.naziv + artikal.restoran
-							+'2"><b>Naziv:</b> '+ artikal.naziv +' </br><b>Cena:</b> '+ artikal.jedinicnaCena +' din</br><b>Opis:</b> '+ artikal.opis +' </br><b>Kolicina:</b> '+
-							artikal.kolicina + ' ' + kolicinskaMera +' </br><b>Restoran:</b> '+ artikal.restoran +'</span> </div></td>');
-					
-					let tdIzmeni = $('<td><a class="izmeniArtikal" href="/WebProjekat/rest/artikli/dajArtikal/'+artikal.naziv+artikal.restoran+'">Izmeni</a></td>');
-					let tdObrisi=$('<td><a class="izbrisiArtikal" style="color:red" href="/WebProjekat/rest/artikli/'+artikal.naziv+artikal.restoran+'">Obrisi</a></td>');
-					tr.append(tdNaziv).append(tdIzmeni).append(tdObrisi);
-					$('#adminTabela tbody').append(tr);
-			 }
+			 izlistajArtikleAdmin(artikli);
 		 }
 	 });
  });
@@ -318,7 +276,57 @@ $('#formaDodavanjaArtikla').submit(function(event){
   
 	 });		
 	
-		 
+ 
+ 
+	/*
+	 * AKTIVIRA SE NA SUBMIT FORMU PRETRAGE ARTIKLA OD STRANE ADMINISTRATORA
+	 * */
+	$('#formaPretragaArtikalaAdmin').submit(function(event){
+		event.preventDefault();
+		let naziv = $('#inputNazivPretragaArtikla').val();
+		let cenaMin = $('#inputCenaMinPretragaArtikla').val();
+		let cenaMax = $('#inputCenaMaxPretragaArtikla').val();
+		let kategorija =$('#tipPretragaAdmin').val();
+		let restoran = $('#idRestoranPretragaAdmin').val();
+		
+		if(cenaMin<0 || cenaMax<0){
+			$('#errorPretragaArtiklaAdmin').text('Cena ne sme biti negativna!');
+			$('#errorPretragaArtiklaAdmin').show().delay(2000).fadeOut();
+			return;
+		}
+		$("#errorPretragaArtiklaAdmin").hide();
+		$.ajax({
+		    url: '/WebProjekat/rest/artikli',
+		    type: "POST" ,
+			data: JSON.stringify({naziv:naziv,jedinicnaCena:cenaMin,opis:'',kolicina:cenaMax,tip:kategorija,restoran:restoran }),
+			contentType: 'application/json',
+			success: function(artikli){
+				
+				izlistajArtikleAdmin(artikli); //izlistavamo sve artikle iz filtera
+				
+				let dugmeZaPonistavanje = $('<td><button class="button"  id="dugmePonistavanjaFilteraArtikalaAdmin" style="background-color : #5F8DAB">Ponisti filter</button></td>');
+				let tr = $('<tr></tr>');
+				tr.append(dugmeZaPonistavanje);
+				$("#adminTabela thead").append(tr);
+				
+				
+			}
+		});
+		
+		
+		
+	});
+
+	$(document).on("click","#dugmePonistavanjaFilteraArtikalaAdmin",function(e){
+		e.preventDefault();
+		 $.ajax({
+			 url:'rest/artikli',
+			 type: "GET",
+			 success: function(artikli){
+				 izlistajArtikleAdmin(artikli);
+			 }
+		 });
+	});
 		 
 	/* AKCIJE VEZANE ZA RESTORANE 
 	 * */
@@ -339,42 +347,61 @@ $('#formaDodavanjaArtikla').submit(function(event){
   * */
  $(document).on("click","#izlistajRestoraneAdmin",function(e){
 	 e.preventDefault();
-	 //ukoliko je neki red menija bio selektovan, moramo da obrisemo tu selekciju
-	 $("[class*='selektovanaTabelaAdmin']").removeClass('selektovanaTabelaAdmin');
-	 //i stavljamo je na nas trenutni red
-	 $("#izlistajRestoraneAdmin").addClass('selektovanaTabelaAdmin');
-	 //brisemo sve stavke koje su se pre nalazile u toj tabli
-	 $('#adminTabela thead tr').remove();
-	 $('#adminTabela tbody tr').remove();
+	 
 	 
 	 $.ajax({
 		 url:'rest/restorani',
 		 type: "GET",
 		 success: function(restorani){
-			 let tr=$('<tr></tr>');
-			 
-			 //ovde ubacujemo link za dodavanje novog artikla na vrh tabele
-			 let trHead = $('<tr></tr>');
-			 let tdHead= $('<td><a id="dodajNoviRestoran" style="color: #50AE94" href="#">Dodaj novi restoran</a></td>');
-			 trHead.append(tdHead);
-			 $("#adminTabela thead").append(trHead);
-			 
-			 
-			 for(let restoran of restorani){
-				    tr=$('<tr></tr>');
-				    let tdNaziv = $('<td> <div class="popup" onclick="iskociPopUP(\'' + restoran.naziv +  '\')"><p style=\"color: #765FAB; font-size: 20px;\" ><b>' + restoran.naziv
-							+ '</b></p> <span class="popuptext" id="' + restoran.naziv 
-							+'"><b>Naziv:</b> '+ restoran.naziv +' </br><b>Adresa:</b> '+ restoran.adresa +' </br><b>Kategorija:</b> '+ restoran.kategorija +'</span>'+
-							' </div>');		
-					let tdIzmeni = $('<td><a class="izmeniRestoran" href="/WebProjekat/rest/restorani/jedanRestoran/'+restoran.naziv+'">Izmeni</a></td>');
-					let tdObrisi=$('<td><a class="izbrisiRestoran" style="color:red" href="/WebProjekat/rest/restorani/'+restoran.naziv+'">Obrisi</a></td>');
-					tr.append(tdNaziv).append(tdIzmeni).append(tdObrisi);
-					$('#adminTabela tbody').append(tr);
-			 }
+			 izlistajRestoraneAdmin(restorani);
 		 }
 	 });
  });
-		 
+ 
+ /*
+  * Aktivira se na submit formu pretrage restorana
+  * */
+ $('#formaPretragaRestoranaAdmin').submit(function(event){
+		event.preventDefault();
+		var naziv = $('#nazivRestoranaAdmin').val();
+		var ulica= $('#ulicaRestoranaAdmin').val();
+		var kategorija = $("#tipPretragaRestoranAdmin").val();
+		
+		
+		$.ajax({
+			url: 'rest/restorani/pretraga', //url
+			type: "POST" ,
+			data: JSON.stringify({naziv:naziv,adresa:ulica,kategorija:kategorija}),
+			contentType: 'application/json',
+			success : function(restorani) {
+				izlistajRestoraneAdmin(restorani);
+				
+				let dugmeZaPonistavanje = $('<td><button class="button"  id="dugmePonistavanjaFilteraRestoranaAdmin" style="background-color : #5F8DAB">Ponisti filter</button></td>');
+				let tr = $('<tr></tr>');
+				tr.append(dugmeZaPonistavanje);
+				$("#adminTabela thead").append(tr);
+			}
+		});
+ });
+ 
+ /*
+  * Ponistavanje filtera restorana u admin rezimu
+  * 
+  * */
+ $(document).on("click","#dugmePonistavanjaFilteraRestoranaAdmin",function(e){
+	 e.preventDefault();
+	 
+	 
+	 $.ajax({
+		 url:'rest/restorani',
+		 type: "GET",
+		 success: function(restorani){
+			 izlistajRestoraneAdmin(restorani);
+		 }
+	 });
+ });
+	
+ 
  /*
   * FUNKCIJA KOJA OTVARA PROZOR IZMENE RESTORANA
   * */
@@ -595,6 +622,11 @@ $('#formaDodavanjaRestorana').submit(function(event){
 	 //brisemo sve stavke koje su se pre nalazile u toj tabli
 	 $('#adminTabela thead tr').remove();
 	 $('#adminTabela tbody tr').remove();
+	 
+	//SAKRIVAMO FORMU ZA TRAZENJE ARTIKLA KOJOM UPRAVLJA ADMINISTRATOR
+		$("#pretragaArtiklaAdministrator").hide();
+		//a takodje i restorana
+		$("#pretragaRestoranaAdmin").hide();
 	 
 	 $.ajax({
 		 url:'rest/vozila',
@@ -886,6 +918,11 @@ $('#formaIzmenaVozila').submit(function(event){
 	 $('#adminTabela thead tr').remove();
 	 $('#adminTabela tbody tr').remove();
 	 
+	//SAKRIVAMO FORMU ZA TRAZENJE ARTIKLA KOJOM UPRAVLJA ADMINISTRATOR
+		$("#pretragaArtiklaAdministrator").hide();
+		//a takodje i restorana
+		$("#pretragaRestoranaAdmin").hide();
+	 
 	 $.ajax({
 		 url:'rest/kupac',
 		 type: "GET",
@@ -901,7 +938,7 @@ $('#formaIzmenaVozila').submit(function(event){
 				    let tdNaziv = $('<td> <div class="popup" onclick="iskociPopUP(\'' + kupac.korisnickoIme+  '\')"><p style=\"color: #765FAB; font-size: 20px;\" ><b>' +kupac.korisnickoIme
 							+ '</b></p> <span class="popuptext" id="' + kupac.korisnickoIme
 							+'"><b>Ime:</b> '+ kupac.ime +' </br><b>Prezime:</b> '+ kupac.prezime +' </br><b>Uloga:</b> '+ kupac.uloga + ' </br><b>Kontakt telefon:</b> '+ kupac.kontaktTelefon +
-							' </br><b>email adresa:</b> '+ kupac.emailAdresa + '</br><b>Datum registracije:</b></span>'+
+							' </br><b>email adresa:</b> '+ kupac.emailAdresa + '</br><b>Datum registracije:</b>'+ kupac.dan +'.'+kupac.mesec+ '.'+ kupac.godina + '.</span>'+
 							' </div>');		
 					let tdIzmeni = $('<td><a class="izmeniUloguKorisnika" href="/WebProjekat/rest/korisnik/dajMiKorisnika/'+kupac.korisnickoIme+'">Izmeni ulogu</a></td>');
 					tr.append(tdNaziv).append(tdIzmeni);
@@ -998,6 +1035,10 @@ $('#formaIzmenaVozila').submit(function(event){
 	 //brisemo sve stavke koje su se pre nalazile u toj tabli
 	 $('#adminTabela thead tr').remove();
 	 $('#adminTabela tbody tr').remove();
+	//SAKRIVAMO FORMU ZA TRAZENJE ARTIKLA KOJOM UPRAVLJA ADMINISTRATOR
+		$("#pretragaArtiklaAdministrator").hide();
+		//a takodje i restorana
+		$("#pretragaRestoranaAdmin").hide();
 	 
 	 $.ajax({
 		 url:'rest/dostavljaci',
@@ -1015,7 +1056,7 @@ $('#formaIzmenaVozila').submit(function(event){
 				    let tdNaziv = $('<td> <div class="popup" onclick="iskociPopUP(\'' + dostavljac.korisnickoIme+  '\')"><p style=\"color: #765FAB; font-size: 20px;\" ><b>' +dostavljac.korisnickoIme
 							+ '</b></p> <span class="popuptext" id="' + dostavljac.korisnickoIme
 							+'"><b>Ime:</b> '+ dostavljac.ime +' </br><b>Prezime:</b> '+ dostavljac.prezime +' </br><b>Uloga:</b> '+ dostavljac.uloga + ' </br><b>Kontakt telefon:</b> '+ dostavljac.kontaktTelefon +
-							' </br><b>email adresa:</b> '+ dostavljac.emailAdresa + '</br><b>Datum registracije:</b></span>'+
+							' </br><b>email adresa:</b> '+ dostavljac.emailAdresa + '</br><b>Datum registracije:</b>'+ dostavljac.dan +'.'+dostavljac.mesec+ '.'+ dostavljac.godina + '.</span>'+
 							' </div>');		
 					let tdIzmeni = $('<td><a class="izmeniUloguKorisnika" href="/WebProjekat/rest/korisnik/dajMiKorisnika/'+dostavljac.korisnickoIme+'">Izmeni ulogu</a></td>');
 					tr.append(tdNaziv).append(tdIzmeni);
@@ -1039,6 +1080,11 @@ $('#formaIzmenaVozila').submit(function(event){
 	 $('#adminTabela thead tr').remove();
 	 $('#adminTabela tbody tr').remove();
 	 
+	//SAKRIVAMO FORMU ZA TRAZENJE ARTIKLA KOJOM UPRAVLJA ADMINISTRATOR
+		$("#pretragaArtiklaAdministrator").hide();
+		//a takodje i restorana
+		$("#pretragaRestoranaAdmin").hide();
+	 
 	 $.ajax({
 		 url:'rest/administrator',
 		 type: "GET",
@@ -1055,7 +1101,7 @@ $('#formaIzmenaVozila').submit(function(event){
 				    let tdNaziv = $('<td> <div class="popup" onclick="iskociPopUP(\'' + admin.korisnickoIme+  '\')"><p style=\"color: #765FAB; font-size: 20px;\" ><b>' +admin.korisnickoIme
 							+ '</b></p> <span class="popuptext" id="' + admin.korisnickoIme
 							+'"><b>Ime:</b> '+ admin.ime +' </br><b>Prezime:</b> '+ admin.prezime +' </br><b>Uloga:</b> '+ admin.uloga + ' </br><b>Kontakt telefon:</b> '+ admin.kontaktTelefon +
-							' </br><b>email adresa:</b> '+ admin.emailAdresa + '</br><b>Datum registracije:</b></span>'+
+							' </br><b>email adresa:</b> '+ admin.emailAdresa + '</br><b>Datum registracije:</b>'+ admin.dan +'.'+admin.mesec+ '.'+ admin.godina + '.</span>'+
 							' </div>');		
 					let tdIzmeni = $('<td><a class="izmeniUloguKorisnika" href="/WebProjekat/rest/korisnik/dajMiKorisnika/'+admin.korisnickoIme+'">Izmeni ulogu</a></td>');
 					tr.append(tdNaziv).append(tdIzmeni);
@@ -1094,6 +1140,11 @@ $('#formaIzmenaVozila').submit(function(event){
 	 $('#adminTabela thead tr').remove();
 	 $('#adminTabela tbody tr').remove();
 	 
+	//SAKRIVAMO FORMU ZA TRAZENJE ARTIKLA KOJOM UPRAVLJA ADMINISTRATOR
+		$("#pretragaArtiklaAdministrator").hide();
+		//a takodje i restorana
+		$("#pretragaRestoranaAdmin").hide();
+	 
 	 $.ajax({
 		 url:'rest/porudzbina',
 		 type: "GET",
@@ -1111,7 +1162,7 @@ $('#formaIzmenaVozila').submit(function(event){
 				    let tdNaziv = $('<td> <div class="popup" onclick="iskociPopUP(\'' + brojac+  '\')"><p  style=\"color: #765FAB; font-size: 20px;\" ><b id="izlistajPorudzbineAdminGlavnaLista'+brojac+'"> Porudzbina ' +(brojac+1)
 							+ '</br>'+ porudzbina.ukupnaCena +' din</b></p> <span class="popuptext" id="' + brojac
 							+'"><b>Status porudzbine:</b> <i id="spanPorudzbinaStatusPorudzbine'+brojac+'">'+ porudzbina.statusPorudzbine +'</i> </br><b>Napomena:</b> '+ porudzbina.napomena +' </br><b>Cena:</b> <i id="spanPorudzbinaUkupnaCena'+brojac+'">'+ porudzbina.ukupnaCena + '</i> din</br><b>Kupac:</b> <i id="spanPorudzbinaKupac'+brojac+'">'+ porudzbina.kupacKojiNarucuje.korisnickoIme +
-							'</i> </br><b>Dostavljac:</b> </br></span>'+
+							'</i> </br><b>Dostavljac:</b> </br><b>Datum porudzbine:</b>'+ porudzbina.dan +'.'+porudzbina.mesec+ '.'+ porudzbina.godina + '.</span>'+
 							' </div>');		
 				    /*+ porudzbina.dostavljac.korisnickoIme + */
 					let tdIzmeni = $('<td><a class="izmeniPorudzbinu" href="/WebProjekat/rest/porudzbina/'+brojac+'">Izmeni porudzbinu</a></td>');
@@ -1180,7 +1231,9 @@ $('#formaIzmenaVozila').submit(function(event){
 				
 				$("#izmenaPorudzbineAdmin").show();
 				
-			
+				//OVDE STAVLJAMO ID U POLJE IZMENE STATUSA PORUDZBINE
+				//STO CEMO KIRSTITI PRI IZMENI STATUSA
+				$("#statusPorudzbineLink").val(porudzbina.id);
 			 
 		  }
 	  });
@@ -1586,6 +1639,7 @@ $(document).on("click",".izbrisiPorudzbinu",function(e){
 	 
 });
 
+//LOGOUT ADMINA
 $(document).on("click","#izlogujAdministratora",function(e){
 	e.preventDefault();
 	
@@ -1596,6 +1650,40 @@ $(document).on("click","#izlogujAdministratora",function(e){
 	$("[class*='sakriOdAdministratora']").show();
 	$("#adminTabela tbody tr").remove(); //brisemo sve iz spiska od admina
     $("#adminTabela thead tr").remove();
+    
+  //SAKRIVAMO FORMU ZA TRAZENJE ARTIKLA KOJOM UPRAVLJA ADMINISTRATOR
+	$("#pretragaArtiklaAdministrator").hide();
+	//a takodje i restorana
+	$("#pretragaRestoranaAdmin").hide();
+});
+
+
+/*
+ * MENJANJE STATUSA PORUDZBINE ADMIN
+ * */
+$(document).on("click","#izmeniStatusPorudzbineAdmin",function(e){
+	e.preventDefault();
+	$("#promeniStatusPorudzbine").show();
+	//statusPorudzbineLink ima link porudzbine tako da ne moramo da brinemo za kasnije
+});
+
+/*
+ * Konkretno menjanje statusa, gore je bilo samo otvaranje prozora
+ * */
+$('#promeniStatusPorudzbine2').submit(function(event){
+	event.preventDefault();
+	var indexPorudzbine = $("#statusPorudzbineLink").val();
+	var statusPorudzbine=$("#statusPorudzbineIzmena").val();
+	
+	$.ajax({
+		url: 'rest/porudzbina/menjajStatus/'+indexPorudzbine+statusPorudzbine, //url
+		type: "GET" ,
+		success : function(povratnaVrednost) {
+			$("#promeniStatusPorudzbine").hide();
+			
+
+		}
+	});
 });
 
 
@@ -1604,5 +1692,99 @@ $(document).on("click","#izlogujAdministratora",function(e){
 		var popup = document.getElementById(ime);
 	    popup.classList.toggle("show");
 	}
+ 
+ function izlistajArtikleAdmin(artikli){
+
+		//ukoliko je neki red menija bio selektovan, moramo da obrisemo tu selekciju
+		 $("[class*='selektovanaTabelaAdmin']").removeClass('selektovanaTabelaAdmin');
+		 //i stavljamo je na nas trenutni red
+		 $("#izlistajArtikleAdmin").addClass('selektovanaTabelaAdmin');
+		 //brisemo sve stavke koje su se pre nalazile u toj tabli
+		 $('#adminTabela thead tr').remove();
+		 $('#adminTabela tbody tr').remove();
+		 
+		 //otkrivamo formu trazenja artikala!
+		 $('#pretragaArtiklaAdministrator').show();
+	     //sakrivamo formu za restorane, u slucaju da je bilo otvoreno
+		 $("#pretragaRestoranaAdmin").hide();
+		
+		 let tr=$('<tr></tr>');
+		 
+		 //ovde ubacujemo link za dodavanje novog artikla na vrh tabele
+		 let trHead = $('<tr></tr>');
+		 let tdHead= $('<td><a id="dodajNoviArtikalLink" style="color: #50AE94" href="/WebProjekat/rest/artikli/dodajNovi/">Dodaj novi Artikal</a></td>');
+		 
+		 trHead.append(tdHead);
+		 $("#adminTabela thead").append(trHead);
+		 
+		 
+		 for(let artikal of artikli){
+			    tr=$('<tr></tr>');
+
+			/*
+			 * prvo cemo vrsiti proveru da li je artikal pice ili hrana, kako bi mogli da namestimo adekvatnu kolicinsku meru
+			 * i boju teksta u prikazu
+			 * */
+			    let kolicinskaMera;
+				let bojaNaziva;
+				if(artikal.tip == "jelo"){
+					kolicinskaMera= "gr";
+					bojaNaziva="style=\"color: #A05623; font-size: 20px;\"";
+					
+					
+				}else{
+					kolicinskaMera="ml";
+					bojaNaziva="style=\"color: #2376A0; font-size: 20px;\"";
+				}
+				let tdNaziv = $('<td> <div class="popup" onclick="iskociPopUP(\'' + artikal.naziv + artikal.restoran +  '2\')"><p '+bojaNaziva+' ><b>' + artikal.naziv
+						+ '</b></p> <span class="popuptext" id="'+ artikal.naziv + artikal.restoran
+						+'2"><b>Naziv:</b> '+ artikal.naziv +' </br><b>Cena:</b> '+ artikal.jedinicnaCena +' din</br><b>Opis:</b> '+ artikal.opis +' </br><b>Kolicina:</b> '+
+						artikal.kolicina + ' ' + kolicinskaMera +' </br><b>Restoran:</b> '+ artikal.restoran +'</span> </div></td>');
+				
+				let tdIzmeni = $('<td><a class="izmeniArtikal" href="/WebProjekat/rest/artikli/dajArtikal/'+artikal.naziv+artikal.restoran+'">Izmeni</a></td>');
+				let tdObrisi=$('<td><a class="izbrisiArtikal" style="color:red" href="/WebProjekat/rest/artikli/'+artikal.naziv+artikal.restoran+'">Obrisi</a></td>');
+				tr.append(tdNaziv).append(tdIzmeni).append(tdObrisi);
+				$('#adminTabela tbody').append(tr);
+		 }
+	 
+ }
+ 
+ function izlistajRestoraneAdmin(restorani){
+
+		//ukoliko je neki red menija bio selektovan, moramo da obrisemo tu selekciju
+		 $("[class*='selektovanaTabelaAdmin']").removeClass('selektovanaTabelaAdmin');
+		 //i stavljamo je na nas trenutni red
+		 $("#izlistajRestoraneAdmin").addClass('selektovanaTabelaAdmin');
+		 //brisemo sve stavke koje su se pre nalazile u toj tabli
+		 $('#adminTabela thead tr').remove();
+		 $('#adminTabela tbody tr').remove();
+		 
+		//SAKRIVAMO FORMU ZA TRAZENJE ARTIKLA KOJOM UPRAVLJA ADMINISTRATOR
+		$("#pretragaArtiklaAdministrator").hide();
+		//otkrivamo formu za trazenje restorana
+		$("#pretragaRestoranaAdmin").show();
+		 
+		 let tr=$('<tr></tr>');
+		 
+		 //ovde ubacujemo link za dodavanje novog artikla na vrh tabele
+		 let trHead = $('<tr></tr>');
+		 let tdHead= $('<td><a id="dodajNoviRestoran" style="color: #50AE94" href="#">Dodaj novi restoran</a></td>');
+		 trHead.append(tdHead);
+		 $("#adminTabela thead").append(trHead);
+		 
+		 
+		 for(let restoran of restorani){
+			    tr=$('<tr></tr>');
+			    let tdNaziv = $('<td> <div class="popup" onclick="iskociPopUP(\'' + restoran.naziv +  '\')"><p style=\"color: #765FAB; font-size: 20px;\" ><b>' + restoran.naziv
+						+ '</b></p> <span class="popuptext" id="' + restoran.naziv 
+						+'"><b>Naziv:</b> '+ restoran.naziv +' </br><b>Adresa:</b> '+ restoran.adresa +' </br><b>Kategorija:</b> '+ restoran.kategorija +'</span>'+
+						' </div>');		
+				let tdIzmeni = $('<td><a class="izmeniRestoran" href="/WebProjekat/rest/restorani/jedanRestoran/'+restoran.naziv+'">Izmeni</a></td>');
+				let tdObrisi=$('<td><a class="izbrisiRestoran" style="color:red" href="/WebProjekat/rest/restorani/'+restoran.naziv+'">Obrisi</a></td>');
+				tr.append(tdNaziv).append(tdIzmeni).append(tdObrisi);
+				$('#adminTabela tbody').append(tr);
+		 }
+	 
+ }
 	
 });

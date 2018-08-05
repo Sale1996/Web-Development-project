@@ -132,7 +132,13 @@ $(document).ready(function() {
 			
 			addSviArtikli(artikli);
 			$("[class*='ovoJeZaKupca']").addClass("kupacNijeUlogovan"); //pojavljuju se u slucaju logovanja korisnika
-
+			$("#pretragaRestoranaPocetna").hide();
+			
+			
+			//SAKRIVAMO FORMU ZA TRAZENJE ARTIKLA KOJOM UPRAVLJA ADMINISTRATOR
+			$("#pretragaArtiklaAdministrator").hide();
+			//a takodje i restorana
+			$("#pretragaRestoranaAdmin").hide();
 			
 		}
 		});
@@ -184,6 +190,8 @@ $(document).ready(function() {
 			url: 'rest/artikli', //url
 			type: "GET" ,
 			success : function(artikli) {
+				$("#pretragaRestoranaPocetna").hide();
+				
 				$("#dugmeKojeBriseListuRestorana").hide();
 				//sada trebamo da obrisemo red u tabeli
 				$("#tabelaSviRestorani1  tr").remove();
@@ -209,6 +217,7 @@ $(document).ready(function() {
 			url : url,
 			type: 'GET',
 			success: function(restorani){
+				$("#pretragaRestoranaPocetna").show();
 				//sada trebamo da obrisemo red u tabeli
 				$("#tabelaSviRestorani1  tr").remove();
 				$("#tabelaSviRestorani2  tr").remove();
@@ -373,6 +382,12 @@ $(document).ready(function() {
 					//sve div-ove koje smo obelezili sa ovom klasom sakrivamo ga
 					$("[class*='sakriOdAdministratora']").hide();
 					
+					//SAKRIVAMO FORMU ZA TRAZENJE ARTIKLA KOJOM UPRAVLJA ADMINISTRATOR
+					$("#pretragaArtiklaAdministrator").hide();
+					//a takodje i restorana
+					$("#pretragaRestoranaAdmin").hide();
+					
+					
 					//zatvaramo prozor logovanja i brisemo njegova polja
 					$('#modal-wrapper').hide();
 					$('#korisnickoImeInputLogovanje').val("");
@@ -459,8 +474,73 @@ $(document).ready(function() {
 		});
 		
 	});
+	
+	
+	
+	/*
+	 * Funkcija koja nam sluzi da vrsimo pretragu po restoranima
+	 * i vraca nam listu restorana koja odgovara toj pretrazi!
+	 * */
+	$('#formaPretragaRestoranaPocetnaStrana').submit(function(event){
+		event.preventDefault();
+		var naziv = $('#nazivRestoranaPretragaPocetna').val();
+		var ulica= $('#ulicaRestoranaPretragaPocetna').val();
+		var kategorija = $("#tipPretragaRestoran").val();
+		
+		
+		$.ajax({
+			url: 'rest/restorani/pretraga', //url
+			type: "POST" ,
+			data: JSON.stringify({naziv:naziv,adresa:ulica,kategorija:kategorija}),
+			contentType: 'application/json',
+			success : function(restorani) {
+
+				$("#pretragaRestoranaPocetna").show();
+				//sada trebamo da obrisemo red u tabeli
+				$("#tabelaSviRestorani1  tr").remove();
+				$("#tabelaSviRestorani2  tr").remove();
+				$("#tabelaSviRestorani3  tr").remove();
+				/*
+				 * Radi preglednosti obrisali smo sve artikle i oni ce se kasnije dodati ako prekinemo rezim prikaza restorana 
+				 * ili klikom na neki restoran
+				 * */
+				$("#tabelaSviArtikli1  tr").remove();
+				$("#tabelaSviArtikli2  tr").remove();
+				$("#tabelaSviArtikli3  tr").remove();
+				$("#dugmeTogglePretraga").hide();
+				$("#dugmeKojeBriseListuRestorana").show();
+				$("#dugmePonistavanjaFilteraArtikala").hide();
+				$('#formaPretragaArtikala').hide();
+
+
+				ispisiRestorane(restorani);
+				if($("#navigacijaPreciceNeregistrovaniKorisnik").hasClass("kupacNijeUlogovan")){
+					 $("[class*='kupacNijeUlogovan']").removeClass('kupacNijeUlogovan');
+				}
+						
+			}
+		});
+	});	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 		
 });
+
+
+
 
 
 function iskociPopUP(ime) {

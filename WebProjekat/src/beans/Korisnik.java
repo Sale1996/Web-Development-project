@@ -14,15 +14,16 @@ public class Korisnik {
    protected String uloga;
    protected String kontaktTelefon;
    protected String emailAdresa;
-   protected LocalDateTime datumRegistracije;
+   protected int dan;
+   protected int mesec;
+   protected int godina;
  //  protected Date datum;
    
    public Korisnik(){
-		this.datumRegistracije = LocalDateTime.now();
-	//	Instant instant= datumRegistracije.toInstant(null);
-		//datum = Date.from(instant);
-		
-
+	   LocalDateTime datumRegistracije = LocalDateTime.now();;
+	   godina= datumRegistracije.getYear();
+	   mesec =  datumRegistracije.getMonthValue();
+	   dan = datumRegistracije.getDayOfMonth();
    }
    
    
@@ -37,9 +38,10 @@ public class Korisnik {
 			this.uloga = uloga;
 			this.kontaktTelefon = kontaktTelefon;
 			this.emailAdresa = emailAdresa;
-			this.datumRegistracije = LocalDateTime.now();
-			//Instant instant= datumRegistracije.toInstant(null);
-			//datum = Date.from(instant);
+			LocalDateTime datumRegistracije = LocalDateTime.now();;
+		    godina= datumRegistracije.getYear();
+		    mesec =  datumRegistracije.getMonthValue();
+		    dan = datumRegistracije.getDayOfMonth();
 			
 }
 
@@ -88,12 +90,7 @@ public class Korisnik {
 	public void setEmailAdresa(String emailAdresa) {
 		this.emailAdresa = emailAdresa;
 	}
-	public LocalDateTime getDatumRegistracije() {
-		return datumRegistracije;
-	}
-	public void setDatumRegistracije(LocalDateTime datumRegistracije) {
-		this.datumRegistracije = datumRegistracije;
-	}
+
 
 
 
@@ -105,6 +102,42 @@ public class Korisnik {
 
 	public void setLozinka2(String lozinka2) {
 		this.lozinka2 = lozinka2;
+	}
+
+
+
+	public int getDan() {
+		return dan;
+	}
+
+
+
+	public void setDan(int dan) {
+		this.dan = dan;
+	}
+
+
+
+	public int getMesec() {
+		return mesec;
+	}
+
+
+
+	public void setMesec(int mesec) {
+		this.mesec = mesec;
+	}
+
+
+
+	public int getGodina() {
+		return godina;
+	}
+
+
+
+	public void setGodina(int godina) {
+		this.godina = godina;
 	}
 
 

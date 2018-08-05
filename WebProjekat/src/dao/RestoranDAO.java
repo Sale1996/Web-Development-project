@@ -192,6 +192,60 @@ public class RestoranDAO {
 		artikalDAO.saveArtikle();
 		return "ok";
 	}
+/*
+ * Vraca restorane koji odgovaraju ulici i naziu restorana uslova
+ * */
+	public ArrayList<Restoran> pretragaRestorane(Restoran uslovRestoran) {
+		//znaci korisnik moze ili samo po nazivu ili samo po ulici 
+		//da vrsi pretragu , ali moze i oboje pa cemo da ispitamo sta li 
+		//je izabrao
+		ArrayList<Restoran> restoraniZaVratiti=new ArrayList<Restoran>();
+		if(!uslovRestoran.getNaziv().equals("")){
+			for(Restoran item : restorani.values()){
+				if(item.getNaziv().contains(uslovRestoran.getNaziv())){
+					restoraniZaVratiti.add(item);
+				}
+			}
+		}
+		
+		if(!uslovRestoran.getAdresa().equals("")){
+			if(!uslovRestoran.getNaziv().equals("")){
+				//sada obrnuta logika , gledamo samo one prociscene
+				//i ako NE ODGOVARA adresi onda ga BRISEMO iz te liste!
+				for(Restoran item : restoraniZaVratiti){
+					if(!item.getAdresa().contains(uslovRestoran.getAdresa())){
+						restoraniZaVratiti.remove(item);
+					}
+				}
+			}else{
+				//ukoliko se poklapaju dodajemo u listu
+				//idemo isto kao sa nazivom , jer naziv nije bio postojao
+				for(Restoran item : restorani.values()){
+					if(item.getAdresa().contains(uslovRestoran.getAdresa())){
+						restoraniZaVratiti.add(item);
+					}
+				}
+			}
+		}
+		
+		if(!uslovRestoran.getKategorija().equals("")){
+			if(!uslovRestoran.getNaziv().equals("") || !uslovRestoran.getAdresa().equals("")){
+				for(Restoran item : restoraniZaVratiti){
+					if(!item.getKategorija().contains(uslovRestoran.getKategorija())){
+						restoraniZaVratiti.remove(item);
+					}
+				}	
+			}else{
+				for(Restoran item : restorani.values()){
+					if(item.getKategorija().contains(uslovRestoran.getKategorija())){
+						restoraniZaVratiti.add(item);
+					}
+				}
+			}
+		}
+		
+		return restoraniZaVratiti;
+	}
 	
 	
 }

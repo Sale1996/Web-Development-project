@@ -11,6 +11,7 @@ public class Artikal {
    private int brojArtikala; //koristice se samo prilikom porudzbine
    private String stariNaziv;  
    private Boolean obrisan;
+   private int kolikoSamPutaKupljen; //cuva informaciju koliko je puta narucen artikal
    
    
    
@@ -25,10 +26,12 @@ public class Artikal {
 		this.tip = tip;
 		this.restoran= restoran;
 		this.obrisan=false;
+		this.kolikoSamPutaKupljen=0;
 	}
 
     public Artikal(){
     	this.obrisan=false;
+    	this.kolikoSamPutaKupljen=0;
     }
 
 
@@ -159,6 +162,14 @@ public class Artikal {
 
 	public void setObrisan(Boolean obrisan) {
 		this.obrisan = obrisan;
+	}
+
+	public int getKolikoSamPutaKupljen() {
+		return kolikoSamPutaKupljen;
+	}
+
+	public void setKolikoSamPutaKupljen(int kolikoSamPutaKupljen) {
+		this.kolikoSamPutaKupljen = kolikoSamPutaKupljen;
 	}
 	
 	

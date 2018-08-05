@@ -200,12 +200,12 @@ public class KupacDAO {
 	 * i u listu porudzbian korisnika te zatim cuvamo podatke u txt fajl.
 	 * Napon toga praznimo iz sessije tu porudzbinu..
 	 * */
-	public String poruciSveArtikle(HttpServletRequest request, PorudzbinaDAO daoPorudzbina, String napomena) throws IOException {
+	public String poruciSveArtikle(HttpServletRequest request, PorudzbinaDAO daoPorudzbina, String napomena, ArtikalDAO daoArtikal) throws IOException {
 		HttpSession sesija = request.getSession();
 		Porudzbina trenutnaPorudzbina = (Porudzbina) sesija.getAttribute("porudzbina");
 		trenutnaPorudzbina.setNapomena(napomena); //dodali smo napomenu u porudzbinu ako je bilo
-		trenutnaPorudzbina.setDatumIVremePorudzbine(LocalDateTime.now());
-		daoPorudzbina.dodajPorudzbinu(trenutnaPorudzbina);
+		trenutnaPorudzbina.postaviVreme();
+		daoPorudzbina.dodajPorudzbinu(trenutnaPorudzbina, daoArtikal);
 		daoPorudzbina.savePorudzbine();
 		sesija.setAttribute("porudzbina", null);
 		

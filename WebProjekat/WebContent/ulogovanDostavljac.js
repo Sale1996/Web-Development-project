@@ -95,21 +95,25 @@ $(document).on("click",".preuzmiPorudzbinu",function(e){
 		 url: url,
 		 type: "GET" ,
 		 success : function(porudzbina) {
-				$(kliknutiElement).parent().parent().remove();
-
-			    tr=$('<tr></tr>');
-			    let tdNaziv = $('<td> <div class="popup" onclick="iskociPopUP(\'' + porudzbina.id+  '\')"><p  style=\"color: #765FAB; font-size: 20px;\" ><b id="izlistajPorudzbineAdminGlavnaLista'+porudzbina.id+'"> Porudzbina ' +(porudzbina.id+1)
-						+ '</br>'+ porudzbina.ukupnaCena +' din</b></p> <span class="popuptext" id="' + porudzbina.id
-						+'"><b>Status porudzbine:</b> <i id="spanPorudzbinaStatusPorudzbine'+porudzbina.id+'">'+ porudzbina.statusPorudzbine +'</i> </br><b>Napomena:</b> '+ porudzbina.napomena +' </br><b>Cena:</b> <i id="spanPorudzbinaUkupnaCena'+porudzbina.id+'">'+ porudzbina.ukupnaCena + '</i> din</br><b>Kupac:</b> <i id="spanPorudzbinaKupac'+porudzbina.id+'">'+ porudzbina.kupacKojiNarucuje.korisnickoIme +
-						'</i> </br><b>Dostavljac:'+porudzbina.dostavljac.korisnickoIme+'</b> </br></span>'+
-						' </div>');	
-			    let tdIzmeni = $('<td id="LinkIzmenaStatusaPorudzbine'+porudzbina.id+'" ><a class="statusPorudzbine" href="/WebProjekat/rest/porudzbina/menjajStatus/'+porudzbina.id+'uToku">Promeni u toku</a></td>');
-			    let tdStatus = $('<td id="promeniStatusPorudzbine'+porudzbina.id+'">'+porudzbina.statusPorudzbine+'</td>');
-			    let	tdOtkazi=$('<td id="otkaziPorudzbinuLink'+porudzbina.id+'"><a class="statusPorudzbine" style="color:red" href="/WebProjekat/rest/porudzbina/menjajStatus/'+porudzbina.id+'otkazano">Otkazi porudzbinu</a></td>');
-
-			    tr.append(tdNaziv).append(tdStatus).append(tdIzmeni).append(tdOtkazi);
-				$('#porudzbineDodeljeneMeniTabela tbody').append(tr);
-		
+			 	if(porudzbina!=null){
+					$(kliknutiElement).parent().parent().remove();
+				    tr=$('<tr></tr>');
+				    let tdNaziv = $('<td> <div class="popup" onclick="iskociPopUP(\'' + porudzbina.id+  '\')"><p  style=\"color: #765FAB; font-size: 20px;\" ><b id="izlistajPorudzbineAdminGlavnaLista'+porudzbina.id+'"> Porudzbina ' +(porudzbina.id+1)
+							+ '</br>'+ porudzbina.ukupnaCena +' din</b></p> <span class="popuptext" id="' + porudzbina.id
+							+'"><b>Status porudzbine:</b> <i id="spanPorudzbinaStatusPorudzbine'+porudzbina.id+'">'+ porudzbina.statusPorudzbine +'</i> </br><b>Napomena:</b> '+ porudzbina.napomena +' </br><b>Cena:</b> <i id="spanPorudzbinaUkupnaCena'+porudzbina.id+'">'+ porudzbina.ukupnaCena + '</i> din</br><b>Kupac:</b> <i id="spanPorudzbinaKupac'+porudzbina.id+'">'+ porudzbina.kupacKojiNarucuje.korisnickoIme +
+							'</i> </br><b>Dostavljac:'+porudzbina.dostavljac.korisnickoIme+'</b> </br></span>'+
+							' </div>');	
+				    let tdIzmeni = $('<td id="LinkIzmenaStatusaPorudzbine'+porudzbina.id+'" ><a class="statusPorudzbine" href="/WebProjekat/rest/porudzbina/menjajStatus/'+porudzbina.id+'uToku">Promeni u toku</a></td>');
+				    let tdStatus = $('<td id="promeniStatusPorudzbine'+porudzbina.id+'">'+porudzbina.statusPorudzbine+'</td>');
+				    let	tdOtkazi=$('<td id="otkaziPorudzbinuLink'+porudzbina.id+'"><a class="statusPorudzbine" style="color:red" href="/WebProjekat/rest/porudzbina/menjajStatus/'+porudzbina.id+'otkazano">Otkazi porudzbinu</a></td>');
+	
+				    tr.append(tdNaziv).append(tdStatus).append(tdIzmeni).append(tdOtkazi);
+					$('#porudzbineDodeljeneMeniTabela tbody').append(tr);
+			 	}
+			 	else{
+			 		alert("Imate porudzbinu u toku, prvo resite to pre nego sto uzmete za sebe novu porudzbinu!");
+			 		return;
+			 	}
 		 }
 	 });
 	
@@ -135,7 +139,7 @@ $(document).on("click","#OtvoriNalogDostavljaca",function(e){
 			let trUloga = $('<tr><td><b>Uloga:</b></td><td>'+ admin.uloga +' </td></tr>');
 			let trTelefon= $('<tr><td><b>Kontakt telefon:</b></td><td>'+ admin.kontaktTelefon +' </td></tr>');
 			let trEmail=$('<tr><td><b>Email:</b></td><td>'+ admin.emailAdresa +' </td></tr>');
-			let trDatumRegistracije=$('<tr><td><b>Datum registracije:</b></td><td>'+ admin.datum +' </td></tr>');
+			let trDatumRegistracije=$('<tr><td><b>Datum registracije:</b></td><td>'+ admin.dan +'.'+admin.mesec+ '.'+ admin.godina + '. </td></tr>');
 			$("#podaciOAdminu tbody").append(trIme).append(trPrezime).append(trUloga).append(trTelefon).append(trEmail).append(trDatumRegistracije);				
 		}
 		

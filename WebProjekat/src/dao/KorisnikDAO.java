@@ -207,7 +207,9 @@ public class KorisnikDAO {
 			//ukoliko je uloga kupac
 			if(korisnik.getUloga().equals("kupac")){
 				Kupac noviKupac = new Kupac();
-				noviKupac.setDatumRegistracije(korisnikZaMenjanjeUloge.getDatumRegistracije());
+				noviKupac.setGodina(korisnikZaMenjanjeUloge.getGodina());
+				noviKupac.setMesec(korisnikZaMenjanjeUloge.getMesec());
+				noviKupac.setDan(korisnikZaMenjanjeUloge.getDan());
 				noviKupac.setEmailAdresa(korisnikZaMenjanjeUloge.getEmailAdresa());
 				noviKupac.setIme(korisnikZaMenjanjeUloge.getIme());
 				noviKupac.setKontaktTelefon(korisnikZaMenjanjeUloge.getKontaktTelefon());
@@ -226,7 +228,9 @@ public class KorisnikDAO {
 			}
 			else if(korisnik.getUloga().equals("dostavljac")){
 				Dostavljac noviDostavljac = new Dostavljac();
-				noviDostavljac.setDatumRegistracije(korisnikZaMenjanjeUloge.getDatumRegistracije());
+				noviDostavljac.setGodina(korisnikZaMenjanjeUloge.getGodina());
+				noviDostavljac.setMesec(korisnikZaMenjanjeUloge.getMesec());
+				noviDostavljac.setDan(korisnikZaMenjanjeUloge.getDan());
 				noviDostavljac.setEmailAdresa(korisnikZaMenjanjeUloge.getEmailAdresa());
 				noviDostavljac.setIme(korisnikZaMenjanjeUloge.getIme());
 				noviDostavljac.setKontaktTelefon(korisnikZaMenjanjeUloge.getKontaktTelefon());
@@ -244,7 +248,9 @@ public class KorisnikDAO {
 				
 			}else{
 				Administrator noviAdministrator = new Administrator();
-				noviAdministrator.setDatumRegistracije(korisnikZaMenjanjeUloge.getDatumRegistracije());
+				noviAdministrator.setGodina(korisnikZaMenjanjeUloge.getGodina());
+				noviAdministrator.setMesec(korisnikZaMenjanjeUloge.getMesec());
+				noviAdministrator.setDan(korisnikZaMenjanjeUloge.getDan());
 				noviAdministrator.setEmailAdresa(korisnikZaMenjanjeUloge.getEmailAdresa());
 				noviAdministrator.setIme(korisnikZaMenjanjeUloge.getIme());
 				noviAdministrator.setKontaktTelefon(korisnikZaMenjanjeUloge.getKontaktTelefon());

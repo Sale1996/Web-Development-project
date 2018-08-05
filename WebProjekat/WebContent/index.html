@@ -191,9 +191,9 @@
                         <button class="button"  id="dugmePonistavanjaFilteraArtikala" style="background-color : #5F8DAB">Ponisti filter</button>
                         </div>
                         <div >
-                        	<!-- ovde ce da ide forma za pretrazivanje -->
+                        	<!-- ovde ce da ide forma za pretrazivanje artikala -->
                         	<form id="formaPretragaArtikala" hidden="true">
-								<tabSle class="tableTOP10" style="text-align: left; background-color: rgba(32, 139, 174, 0.02); color: #000000">
+								<table class="tableTOP10" style="text-align: left; background-color: rgba(32, 139, 174, 0.02); color: #000000">
 									<tr>
 										<td>Naziv </td><td><input type="text" name="name" placeholder="Ime artikla"></td>
 										<td>Cena </td><td><input type="number" name="priceLowest" placeholder="Cena od:"></td><td><input type="number" name="priceHighest" placeholder="Cena do"></td>
@@ -220,6 +220,35 @@
 							
 							</form>
                         </div>
+                        <p id="errorPretragaArtikla" style="color : #AB6C5F; font-size: 20px; " hidden="true"> </p>
+									
+						</br>	
+                        <!-- FORMA ZA PRETRAZIVANJE RESTORANA SAMO U SLUCAJU KADA KLIKNEMO NA NEKI LINK!! -->
+                        <div id="pretragaRestoranaPocetna" style="margin-left: 28%">
+                        	<!-- ovde ce da ide forma za pretrazivanje restorana! -->
+                        	<form id="formaPretragaRestoranaPocetnaStrana">
+								<table class="tableTOP10" style="text-align: left; background-color: rgba(32, 139, 174, 0.02); color: #000000">
+									<tr>
+										<td>Naziv </td><td><input id="nazivRestoranaPretragaPocetna" type="text" name="name" placeholder="Naziv restorana"></td>
+										<td>Ulica </td><td><input id="ulicaRestoranaPretragaPocetna" type="text" name="ulica" placeholder="Ulica restorana"></td>
+										<td><select id="tipPretragaRestoran" name="tipPretragaRestoran">
+										        <option value=""></option>
+          										<option value="Domaca">Domaca kuhinja</option>
+         										<option value="Rostilj">Rostilj</option>
+         										<option value="Kineski">Kineski restoran</option>
+         										<option value="Indijski">Indijski restoran</option>
+         										<option value="Poslasticarnica">Poslasticarnica</option>
+         										<option value="Picerija">Picerija</option>
+        									</select>
+        								</td>
+										<td><input class="button" style="background-color: #5F8DAB" type="submit" value="Pretrazi"></td>
+									</tr>
+								</table>								
+							</form>
+                        </div>
+                        </br>
+                        
+                        
                         <div>
                     		<table class="tableSVIArtikli" style="float: left;"id="tabelaSviRestorani1">
 							
@@ -483,6 +512,63 @@
 			</ul>
    		</div>
    		<div>
+   			</br>
+			<div id="pretragaArtiklaAdministrator" style="margin-left: 34%;">
+			
+                    	<!-- ovde ce da ide forma za pretrazivanje artikala -->
+               <form id="formaPretragaArtikalaAdmin" >
+				  <table class="tableTOP10" style="text-align: left; background-color: rgba(32, 139, 174, 0.02); color: #000000">
+						<tr>
+							<td>Naziv </td><td><input id="inputNazivPretragaArtikla" type="text" name="name" placeholder="Ime artikla"></td>
+							<td>Cena </td><td><input id="inputCenaMinPretragaArtikla" type="number" name="priceLowest" placeholder="Cena od:"></td><td><input id="inputCenaMaxPretragaArtikla" type="number" name="priceHighest" placeholder="Cena do"></td>
+						</tr>
+						<tr>
+							<td>Tip</td>
+							<td>
+								<select id="tipPretragaAdmin" name="tipPretraga">
+						        	<option value=""></option>
+      								<option value="jelo">jelo</option>
+     								<option value="pice">pice</option>
+    							</select>
+    						</td>
+					    	<td>Restoran</td>
+							<td>
+							<input id="idRestoranPretragaAdmin" type="text" name="restoranPretraga" placeholder="Ime restorana">
+    						</td>
+							<td><input class="button" style="background-color: #5F8DAB" type="submit" value="Pretrazi"></td>
+						</tr>
+					
+					</table>
+				
+					<p id="errorPretragaArtiklaAdmin" style="color : #AB6C5F; font-size: 20px; " hidden="true"> </p>
+					
+			
+				</form>
+            </div>
+            <!-- FORMA ZA PRETRAZIVANJE RESTORANA SAMO U SLUCAJU KADA KLIKNEMO NA NEKI LINK!! -->
+            <div id="pretragaRestoranaAdmin" style="margin-left: 34%">
+                      	<!-- ovde ce da ide forma za pretrazivanje restorana! -->
+                 <form id="formaPretragaRestoranaAdmin">
+					<table class="tableTOP10" style="text-align: left; background-color: rgba(32, 139, 174, 0.02); color: #000000">
+						<tr>
+							<td>Naziv </td><td><input id="nazivRestoranaAdmin" type="text" name="name" placeholder="Naziv restorana"></td>
+							<td>Ulica </td><td><input id="ulicaRestoranaAdmin" type="text" name="ulica" placeholder="Ulica restorana"></td>
+							<td><select id="tipPretragaRestoranAdmin" name="tipPretragaRestoranAdmin">
+								    <option value=""></option>
+        							<option value="Domaca">Domaca kuhinja</option>
+       								<option value="Rostilj">Rostilj</option>
+       								<option value="Kineski">Kineski restoran</option>
+       								<option value="Indijski">Indijski restoran</option>
+       								<option value="Poslasticarnica">Poslasticarnica</option>
+       								<option value="Picerija">Picerija</option>
+      							</select>
+      						</td>
+							<td><input class="button" style="background-color: #5F8DAB" type="submit" value="Pretrazi"></td>
+						</tr>
+					</table>								
+				</form>
+            </div>
+            </br>   		
    			<table id="adminTabela" class="tableNalogKorisnika" style="margin-left: 40%;">
 					<thead>
 					</thead>
@@ -942,12 +1028,46 @@
 					<tbody>
 					</tbody>
 				</table>				
-				
+				</br>
+				<a id="izmeniStatusPorudzbineAdmin" href="#">Izmeni status porudzbine</a>
 		    </div>
 		    
 		  </div>
 	   </div>	
-	   
+
+
+	   <!-- IZMENA STATUSA PORUDZBINE -->
+	  <div id="promeniStatusPorudzbine" class="modal">
+  
+		  <form class="modal-content animate" id="promeniStatusPorudzbine2" >
+		        
+		    <div class="imgcontainer">
+		      <span  onclick="document.getElementById('promeniStatusPorudzbine').style.display='none'"  class="closePopUpLogin" title="Zatvori prozor">&times;</span>
+		      <h2  style="text-align:center; color: #8C7797">Izmena statusa porudzbine</h2>
+		    </div>
+		  
+		  <div class="container" >
+		      <!-- kupac porudzbine -->
+		       <p style="margin-left: 19.5%;color: #8C7797;font-size: 20"><b>Izaberi status porudzbine:</b></p>
+			  <select id="statusPorudzbineIzmena" style="margin-left: 19.5%" name="StatusPorudzbineIzmena">
+			  	<option value="poruceno">Poruceno</option>
+			  	<option value="uToku">U toku</option>
+			  	<option value="dostavljeno">Dostavljeno</option>
+			  	<option value="otkazano">Otkazano</option>
+			  </select>
+			  </br>
+			  
+			  <!-- linkIzIzmenePorudzbine -->
+			  <input id="statusPorudzbineLink" style="visibility:hidden" class="inputLoginPOPUP"  type="text">
+			  
+		     
+		      </br>      
+		      <input class="button" style="margin-left: 28%; margin-right: 42%" style="background-color: #5F8DAB" type="submit" value="Izmeni">
+		     </div>
+		    
+		  </form>
+ 
+	   </div> 	   
 	   
 	   <!-- IZMENA KUPCA PORUDZBINE -->
 	  <div id="promeniKupcaPorudzbine" class="modal">
@@ -998,6 +1118,7 @@
 			  
 			  <!-- linkIzIzmenePorudzbine -->
 			  <input id="dostavljacPorudzbineLink" style="visibility:hidden" class="inputLoginPOPUP"  type="text">
+			  
 			  
 		     
 		      </br>      

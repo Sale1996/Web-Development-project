@@ -9,15 +9,9 @@ public class Administrator extends Korisnik {
 	}
 	public Administrator(String korisnickoIme, String lozinka, String ime, String prezime, String uloga, String kontaktTelefon,
 			String emailAdresa) {
-				super();
-				this.korisnickoIme = korisnickoIme;
-				this.lozinka = lozinka;
-				this.ime = ime;
-				this.prezime = prezime;
-				this.uloga = uloga;
-				this.kontaktTelefon = kontaktTelefon;
-				this.emailAdresa = emailAdresa;
-				this.datumRegistracije = LocalDateTime.now();
+		
+			super(korisnickoIme,lozinka,ime,prezime,uloga,kontaktTelefon,emailAdresa);
+
 				
 	}
 	

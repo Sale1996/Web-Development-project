@@ -110,4 +110,17 @@ public class RestoranService {
 		return dao.izbrisiRestoran(restoran,artikalDAO);
 	}
 	
+	
+	/*
+	 * Vraca restorane u zavisnosti od pretrage sta smo utrefili
+	 * */
+	@POST
+	@Path("/pretraga")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ArrayList<Restoran> pretragaRestorana(Restoran uslovRestoran){
+		RestoranDAO dao = (RestoranDAO) ctx.getAttribute("restoranDAO");
+		
+		return dao.pretragaRestorane(uslovRestoran);
+	}
+	
 }

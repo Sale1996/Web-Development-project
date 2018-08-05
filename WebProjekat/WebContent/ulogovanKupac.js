@@ -241,7 +241,7 @@ $(document).ready(function() {
 				let trUloga = $('<tr><td><b>Uloga:</b></td><td>'+ kupac.uloga +' </td></tr>');
 				let trTelefon= $('<tr><td><b>Kontakt telefon:</b></td><td>'+ kupac.kontaktTelefon +' </td></tr>');
 				let trEmail=$('<tr><td><b>Email:</b></td><td>'+ kupac.emailAdresa +' </td></tr>');
-				let trDatumRegistracije=$('<tr><td><b>Datum registracije:</b></td><td>'+ kupac.datum +' </td></tr>');
+				let trDatumRegistracije=$('<tr><td><b>Datum registracije:</b></td><td>'+ kupac.dan +'.'+kupac.mesec+ '.'+ kupac.godina + '. </td></tr>');
 				$("#podaciOKorisniku tbody").append(trIme).append(trPrezime).append(trUloga).append(trTelefon).append(trEmail).append(trDatumRegistracije);
 				
 				//sada ide ispis omiljenih restorana u prozor naloga
@@ -266,7 +266,7 @@ $(document).ready(function() {
 									tdPorudzbina = tdPorudzbina + artikal.naziv + " (" + artikal.restoran + " ) </br>";
 								}
 								//ovde fali jos vreme porudzbine ne znmo kako sta 
-								tdPorudzbina=tdPorudzbina + "</td>";
+								tdPorudzbina=tdPorudzbina + "</br>Datum porudzbine:"+ porudzbina.dan +"."+porudzbina.mesec+ "."+ porudzbina.godina + ".</td>";
 								tdTd=$(tdPorudzbina);
 								tr.append(tdTd);
 								$("#TabelaZadnjePoruzbineKorisnika").append(tr);

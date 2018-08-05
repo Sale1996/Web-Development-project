@@ -160,8 +160,9 @@ public class PorudzbinaService {
 		PorudzbinaDAO dao = (PorudzbinaDAO) ctx.getAttribute("porudzbinaDAO");
 		KupacDAO kupacDao = (KupacDAO) ctx.getAttribute("kupacDAO");
 		DostavljacDAO dostavljacDao = (DostavljacDAO) ctx.getAttribute("dostavljacDAO");
+		ArtikalDAO artikalDao = (ArtikalDAO) ctx.getAttribute("artikalDAO");
 		
-		return dao.finalnaPorudzbinaAdmin(request,informacije, kupacDao, dostavljacDao);
+		return dao.finalnaPorudzbinaAdmin(request,informacije, kupacDao, dostavljacDao,artikalDao);
 	}
 	
 	
@@ -185,7 +186,5 @@ public class PorudzbinaService {
 		
 		return dao.promeniStatus(idIStatus);
 	}
-	
-	
 	
 }

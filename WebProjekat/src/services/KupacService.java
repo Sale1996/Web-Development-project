@@ -103,8 +103,9 @@ public class KupacService {
 	public String finalnoPoruciArtikle(@Context HttpServletRequest request, String napomena) throws IOException{
 		KupacDAO dao = (KupacDAO) ctx.getAttribute("kupacDAO");
 		PorudzbinaDAO daoPorudzbina = (PorudzbinaDAO) ctx.getAttribute("porudzbinaDAO");
+		ArtikalDAO daoArtikal = (ArtikalDAO) ctx.getAttribute("artikalDAO");//ovo koristimo posto cemo u artikle dodati info da je porucen, pa da mozemo da ga sacuvamo
 		
-		return dao.poruciSveArtikle(request,daoPorudzbina,napomena);
+		return dao.poruciSveArtikle(request,daoPorudzbina,napomena , daoArtikal);
 	}
 	
 	/* *

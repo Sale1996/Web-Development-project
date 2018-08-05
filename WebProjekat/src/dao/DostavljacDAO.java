@@ -111,13 +111,26 @@ public class DostavljacDAO {
 		HttpSession session = request.getSession();
 		Dostavljac dostavljac = (Dostavljac) session.getAttribute("korisnik");
 		
-		Porudzbina porudzbinaZaPreuzeti = porudzbinaDao.getPorudzbine().get(Integer.parseInt(idPorudzbine));
-		
-		porudzbinaZaPreuzeti.setDostavljac(dostavljac);
-		
-		porudzbinaDao.savePorudzbine();
-		saveDostavljac();
-		
+		Boolean daLiMoze = true;
+		for(Porudzbina item : porudzbinaDao.getPorudzbine()){
+			if(item.getDostavljac()!=null){
+				if(item.getDostavljac().getKorisnickoIme().equals(dostavljac.getKorisnickoIme())){
+					if(item.getStatusPorudzbine().equals("u toku")){
+						daLiMoze=false;
+						break;
+					}
+				}
+			}
+		}
+		Porudzbina porudzbinaZaPreuzeti=null;
+		if(daLiMoze){
+			porudzbinaZaPreuzeti = porudzbinaDao.getPorudzbine().get(Integer.parseInt(idPorudzbine));
+			
+			porudzbinaZaPreuzeti.setDostavljac(dostavljac);
+			
+			porudzbinaDao.savePorudzbine();
+			saveDostavljac();
+		}
 		
 		return porudzbinaZaPreuzeti;
 	}

@@ -77,12 +77,22 @@ public class PorudzbinaDAO {
 	
 	}
 	
-	public void dodajPorudzbinu(Porudzbina porudzbina) throws IOException{
+	public void dodajPorudzbinu(Porudzbina porudzbina, ArtikalDAO artikalDao) throws IOException{
 		//trenutni broj poruzbine koristimo kako bi lakse znali da nadjemo
 		//porudzbinu u odredjenim situacijama
 		porudzbina.setId(trenutniBrojPoruzbine);
 		porudzbine.add(porudzbina);
 		trenutniBrojPoruzbine++;
+		//sada ovde trebamo da azuriramo svaki artikal da zna da je kupljen jos jednom !
+		int brojKupovineArtikla;
+		for(Artikal item : porudzbina.getArtikli()){
+			//znaci u mapi vidimo koliko je komada u jednoj porudzbini kupljen ovaj artikal i odna to dodajemo 
+			//na nas artikal u atribut "kolikoSamPutaKupljen"
+			brojKupovineArtikla = porudzbina.getMapaARTIKALbrojPorudzbina().get(item.getNaziv()+item.getRestoran());
+			item.setKolikoSamPutaKupljen(item.getKolikoSamPutaKupljen()+brojKupovineArtikla);
+		}
+		//sada trebamo sacuvati sve te artikle  i porudzbine
+		artikalDao.saveArtikle(); 
 		savePorudzbine();
 
 	}
@@ -306,7 +316,7 @@ public class PorudzbinaDAO {
 	 * Korisnik nam sluzi samo kao pomoc pri prenosu podataka o porudzbini, 
 	 * da ne moramo praviti poseban objekat samo za to
 	 * */
-	public String finalnaPorudzbinaAdmin(HttpServletRequest request, Korisnik informacije, KupacDAO kupacDao, DostavljacDAO dostavljacDao) throws IOException {
+	public String finalnaPorudzbinaAdmin(HttpServletRequest request, Korisnik informacije, KupacDAO kupacDao, DostavljacDAO dostavljacDao, ArtikalDAO artikalDao) throws IOException {
 		String kupacID = informacije.getKorisnickoIme();
 		String dostavljacID = informacije.getLozinka();
 		String napomena = informacije.getIme();
@@ -339,7 +349,7 @@ public class PorudzbinaDAO {
 		//unistavamo sessiju
 		session.invalidate();
 		
-		dodajPorudzbinu(porudzbinaZaNaruciti);
+		dodajPorudzbinu(porudzbinaZaNaruciti,artikalDao);
 		savePorudzbine();
 		
 		
@@ -351,8 +361,9 @@ public class PorudzbinaDAO {
 
 	//brise porudzbinu po ID-u
 	public String obrisiPorudzbinuAdmin(String porudzbinaID) throws IOException {
-
-		porudzbine.remove(Integer.parseInt(porudzbinaID));
+		//logicki naravno brisemo
+		Porudzbina porudzbinaZaObrisati = porudzbine.get(Integer.parseInt(porudzbinaID));
+		porudzbinaZaObrisati.setObrisana(true);
 		savePorudzbine();
 		return "ok";
 	}
