@@ -119,6 +119,9 @@ public class KupacDAO {
 		
 		HttpSession session = request.getSession();
 		Kupac ulogovanKorisnik= (Kupac) session.getAttribute("korisnik");
+		if(ulogovanKorisnik==null){
+			return "NIJE ULOGOVAN";
+		}
 		ulogovanKorisnik.dodajIliObrisiOmiljeniRestoran(noviOmiljeniRestoran);
 		saveKupac();
 		

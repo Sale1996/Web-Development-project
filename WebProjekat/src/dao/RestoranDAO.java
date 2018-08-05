@@ -149,6 +149,10 @@ public class RestoranDAO {
 		restoranZaIzmenu.setKategorija(restoran.getKategorija());
 		
 		if(vrati.equals("")){
+			//ovo sto smo uradili jeste da smo updejtali kljuc u mapi
+			//u slucaju da smo promenili naziv restorana
+
+			restorani.put(restoranZaIzmenu.getNaziv(), restorani.remove(restoranZaIzmenu.getStariNaziv()));
 			saveRestoran();
 		}
 		

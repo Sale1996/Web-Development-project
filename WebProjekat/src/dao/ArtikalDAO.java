@@ -184,9 +184,14 @@ public class ArtikalDAO {
 		artikalZaIzmenu.setTip(artikal.getTip());
 		
 		if(vrati.equals("")){
+			//ovo sto smo uradili jeste da smo updejtali kljuc u mapi
+			//u slucaju da smo promenili naziv artikla		
+			artikli.put(artikalZaIzmenu.getNaziv()+artikalZaIzmenu.getRestoran(), artikli.remove(artikalZaIzmenu.getStariNaziv()+artikalZaIzmenu.getRestoran()));
+
 			//sada cuvamo artikle
 			saveArtikle();
 		}
+		
 		
 		return vrati;
 	}

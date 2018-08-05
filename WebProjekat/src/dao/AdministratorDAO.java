@@ -19,10 +19,9 @@ public class AdministratorDAO {
 	public AdministratorDAO(String contextPath) throws IOException{
 		this.contextPath=contextPath;
 		System.out.println("contextPath:"+ contextPath);
-		Administrator administratorMarko = new Administrator("Admin","admin","Marko","Markovic","admin","066123456","mmarkovic@gmail.com");
-		administratori.put(administratorMarko.getKorisnickoIme(), administratorMarko);
-		saveAdmin();
-	//	loadAdministratori(contextPath);
+		
+		//saveAdmin();
+		loadAdministratori(contextPath);
 	}
 	/* *
 	 * Ucitava administratore iz tekstualne datoteke administarotir.txt

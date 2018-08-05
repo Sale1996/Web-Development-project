@@ -553,7 +553,7 @@ $(document).ready(function() {
 
 				ispisiRestorane(restorani);
 				if($("#navigacijaPreciceNeregistrovaniKorisnik").hasClass("kupacNijeUlogovan")){
-					 $("[class*='kupacNijeUlogovan']").removeClass('kupacNijeUlogovan');
+				//	 $("[class*='kupacNijeUlogovan']").removeClass('kupacNijeUlogovan');
 				}
 						
 			}

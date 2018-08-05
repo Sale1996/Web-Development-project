@@ -247,6 +247,8 @@ $('#formaDodavanjaArtikla').submit(function(event){
 				//ukoliko je neki red menija bio selektovan, moramo da obrisemo tu selekciju
 				$("[class*='selektovanaTabelaAdmin']").removeClass('selektovanaTabelaAdmin');
 
+				//brisemo listu restorana u prozoru za dodavanje novog artikla
+				$("#restoranArtiklaKreiranje option").remove();
 				
 			}
 			//ukoliko vec ima naziv u povratnom stringu ce se naglasiti
@@ -1165,10 +1167,16 @@ $('#formaIzmenaVozila').submit(function(event){
 			 for(let porudzbina of porudzbine){
 				 if(porudzbina.obrisana==false){
 					    tr=$('<tr></tr>');
+					    
+					    let dostavljac = "";
+					    if(porudzbina.dostavljac!=null){
+					    	dostavljac=porudzbina.dostavljac.korisnickoIme;
+					    }
+					    
 					    let tdNaziv = $('<td> <div class="popup" onclick="iskociPopUP(\'' + brojac+  '\')"><p  style=\"color: #765FAB; font-size: 20px;\" ><b id="izlistajPorudzbineAdminGlavnaLista'+brojac+'"> Porudzbina ' +(brojac+1)
 								+ '</br>'+ porudzbina.ukupnaCena +' din</b></p> <span class="popuptext" id="' + brojac
 								+'"><b>Status porudzbine:</b> <i id="spanPorudzbinaStatusPorudzbine'+brojac+'">'+ porudzbina.statusPorudzbine +'</i> </br><b>Napomena:</b> '+ porudzbina.napomena +' </br><b>Cena:</b> <i id="spanPorudzbinaUkupnaCena'+brojac+'">'+ porudzbina.ukupnaCena + '</i> din</br><b>Kupac:</b> <i id="spanPorudzbinaKupac'+brojac+'">'+ porudzbina.kupacKojiNarucuje.korisnickoIme +
-								'</i> </br><b>Dostavljac:</b> </br><b>Datum porudzbine:</b>'+ porudzbina.dan +'.'+porudzbina.mesec+ '.'+ porudzbina.godina + '.</span>'+
+								'</i> </br><b>Dostavljac:</b>'+dostavljac+' </br><b>Datum porudzbine:</b>'+ porudzbina.dan +'.'+porudzbina.mesec+ '.'+ porudzbina.godina + '.</span>'+
 								' </div>');		
 					    /*+ porudzbina.dostavljac.korisnickoIme + */
 						let tdIzmeni = $('<td><a class="izmeniPorudzbinu" href="/WebProjekat/rest/porudzbina/'+brojac+'">Izmeni porudzbinu</a></td>');
@@ -1484,8 +1492,10 @@ $('#formaIzmenaVozila').submit(function(event){
 			success : function(artikli) {
 				if(artikli.length>0){
 					for(let artikal of artikli){
-						let option = $('<option value="'+artikal.naziv+artikal.restoran+'">'+artikal.naziv+'( '+ artikal.restoran+' )</option>');
-						$('#artikalPorudzbineNovaPorudzbina').append(option);
+						if(artikal.obrisan==false){
+							let option = $('<option value="'+artikal.naziv+artikal.restoran+'">'+artikal.naziv+'( '+ artikal.restoran+' )</option>');
+							$('#artikalPorudzbineNovaPorudzbina').append(option);
+						}
 					}
 				}
 			}
@@ -1497,6 +1507,10 @@ $('#formaIzmenaVozila').submit(function(event){
 			type: "GET" ,
 			success : function(kupci) {
 				if(kupci.length>0){
+					//stavljamo jedno prazno mesto
+					let option1 =$('<option value=""> </option>');
+					$('#kupacPorudzbineNovaPorudzbina').append(option1);
+
 					for(let kupac of kupci){
 						let option = $('<option value="'+kupac.korisnickoIme+'">'+kupac.korisnickoIme+'</option>');
 						$('#kupacPorudzbineNovaPorudzbina').append(option);
@@ -1511,6 +1525,9 @@ $('#formaIzmenaVozila').submit(function(event){
 			type: "GET" ,
 			success : function(dostavljaci) {
 				if(dostavljaci.length>0){
+					//stavljamo prvo prazno mesto jedno jer ne mora imati dostavlajca
+					let option1 =$('<option value=""> </option>');
+					$('#dostavljacPorudzbineNovaPorudzbina').append(option1);
 					for(let dostavljac of dostavljaci){
 						let option = $('<option value="'+dostavljac.korisnickoIme+'">'+dostavljac.korisnickoIme+'</option>');
 						$('#dostavljacPorudzbineNovaPorudzbina').append(option);

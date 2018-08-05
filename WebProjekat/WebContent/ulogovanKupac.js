@@ -13,8 +13,9 @@ $(document).ready(function() {
 				url : url,
 				type: 'GET',
 				success: function(vratio){
-					 $(kliknutiElement).toggleClass("fa-heart fa-heart-o");
-
+					 if(vratio=="ok"){
+						 $(kliknutiElement).toggleClass("fa-heart fa-heart-o");
+					 }
 				}
 		  });
 		  
