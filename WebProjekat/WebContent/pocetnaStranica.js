@@ -2,7 +2,7 @@ function addTop10ArtikalTr(artikli) {
 	let brojPica=0;
 	let brojJela=0;
 	for (let artikal of artikli) {
-		let tr = $('<tr></tr>');
+		let tr = $('<tr class="'+artikal.naziv+artikal.restoran+'"></tr>');
 		let tdNaziv = $('<td class="tableTOP10naziv">' + artikal.naziv + '</td>');
 		let tdCena = $('<td>' + artikal.jedinicnaCena + ' din' + '</td>');
 		let tdDugme = $('<td><button class="button ovoJeZaKupca kupiArtikal kupacUlogovan" ><a style="color:white;font-size:20" href="rest/kupac/naruciArtikal/'+ artikal.naziv + artikal.restoran+'">Kupi</a></button> </td>');
@@ -36,13 +36,13 @@ function addTop10ArtikalTr(artikli) {
  * Funkcija koja nam izlistava prosledjene artikle na pocetnu stranicu
  * */
 function addSviArtikli(artikli){
-	let tr=$('<tr ></tr>');
+	
 	/*
 	 * sledeci for sluzi da ubacimo sve moguce artikle u listu
 	 * */
 	let broj=0; //ovaj broj nam govori dal smo popunili jedan red ili ne , ideja je da iammo po 2 artikla u jednom redu
 	for(let artikal of artikli){
-		
+		let tr=$('<tr class="'+artikal.naziv+artikal.restoran+'" ></tr>');
 		//ako je artikal obrisan, mi ga ne ispisujemo
 		if(artikal.obrisan==false){
 				/*
@@ -89,10 +89,11 @@ function addSviArtikli(artikli){
 
 
 function ispisiRestorane(restorani){
-	let tr=$('<tr ></tr>');
+	
 	let broj=0; 
 	
 	for (let restoran of restorani){
+		let tr=$('<tr class="'+restoran.naziv+'" ></tr>');
 		//ako je restoran obrisan, nemoj ga pisati (a to je ako je on na polju obrisan == true
 		if(restoran.obrisan==false){
 		
@@ -107,7 +108,7 @@ function ispisiRestorane(restorani){
 			}
 		
 			
-			tr=$('<tr></tr>');
+			tr=$('<tr class="'+restoran.naziv+'"></tr>');
 			
 			let tdNaziv = $('<td> <div class="popup" onclick="iskociPopUP(\'' + restoran.naziv +  '\')"><p style=\"color: #765FAB; font-size: 40px;\" ><b>' + restoran.naziv
 					+ '</b></p> <span class="popuptext" id="' + restoran.naziv 
@@ -459,7 +460,7 @@ $(document).ready(function() {
 							 var brojac=0;//cisto da bi smo pisali "Porudzbina1"
 							 for(let porudzbina of porudzbine){
 								    if(porudzbina.obrisana==false){
-									    tr=$('<tr></tr>');
+									    tr=$('<tr class="porudzbina'+porudzbina.id+'"></tr>');
 									    var dostavljac="";
 									    if(porudzbina.dostavljac!=null){
 									    	dostavljac=porudzbina.dostavljac.korisnickoIme;

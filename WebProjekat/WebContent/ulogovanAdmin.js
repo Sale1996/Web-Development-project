@@ -273,9 +273,12 @@ $('#formaDodavanjaArtikla').submit(function(event){
 		  type: 'DELETE',
 		  success: function(poruka){
 			  if(poruka=="ok"){
+				var artikal = url.substring(38, url.length);
+				$("[class*='"+artikal+"']").remove();
 				alert("Uspesno obrisan artikal!");  
-				  }
+				  
 			  }
+			}
 		  });
   
 	 });		
@@ -584,6 +587,8 @@ $('#formaDodavanjaRestorana').submit(function(event){
 		  type: 'DELETE',
 		  success: function(poruka){
 			  if(poruka=="ok"){
+				var restoran = url.substring(28, url.length);
+			    $("[class*='"+restoran+"']").remove();
 				alert("Uspesno obrisan restoran!");  
 				  }
 			  }
@@ -648,7 +653,7 @@ $('#formaDodavanjaRestorana').submit(function(event){
 			
 			 for(let vozilo of vozila){
 				    if(vozilo.obrisan==false){
-					    tr=$('<tr></tr>');
+					    tr=$('<tr class="'+vozilo.registarskaOznaka+'"></tr>');
 					    let tdNaziv = $('<td> <div class="popup" onclick="iskociPopUP(\'' + vozilo.registarskaOznaka+  '\')"><p style=\"color: #765FAB; font-size: 20px;\" ><b>' +vozilo.marka+ ' ' + vozilo.model
 								+ '</b></p> <span class="popuptext" id="' + vozilo.registarskaOznaka
 								+'"><b>Marka:</b> '+ vozilo.marka +' </br><b>Model:</b> '+ vozilo.model +' </br><b>Tip:</b> '+ vozilo.tip + ' </br><b>Registarska oznaka:</b> '+ vozilo.registarskaOznaka +
@@ -897,6 +902,8 @@ $('#formaIzmenaVozila').submit(function(event){
 		  type: 'DELETE',
 		  success: function(poruka){
 			  if(poruka=="ok"){
+				var vozilo = url.substring(25, url.length);
+				$("[class*='"+vozilo+"']").remove();
 				alert("Uspesno obrisano vozilo!");  
 				  }
 			  }
@@ -1755,7 +1762,7 @@ $('#promeniStatusPorudzbine2').submit(function(event){
 		 
 		 for(let artikal of artikli){
 			 if(artikal.obrisan==false){
-					    tr=$('<tr></tr>');
+					    tr=$('<tr class="'+artikal.naziv+artikal.restoran+'"></tr>');
 		
 					/*
 					 * prvo cemo vrsiti proveru da li je artikal pice ili hrana, kako bi mogli da namestimo adekvatnu kolicinsku meru
@@ -1811,7 +1818,7 @@ $('#promeniStatusPorudzbine2').submit(function(event){
 		 
 		 for(let restoran of restorani){
 			    if(restoran.obrisan==false){
-				    tr=$('<tr></tr>');
+				    tr=$('<tr class="'+restoran.naziv+'"></tr>');
 				    let tdNaziv = $('<td> <div class="popup" onclick="iskociPopUP(\'' + restoran.naziv +  '\')"><p style=\"color: #765FAB; font-size: 20px;\" ><b>' + restoran.naziv
 							+ '</b></p> <span class="popuptext" id="' + restoran.naziv 
 							+'"><b>Naziv:</b> '+ restoran.naziv +' </br><b>Adresa:</b> '+ restoran.adresa +' </br><b>Kategorija:</b> '+ restoran.kategorija +'</span>'+

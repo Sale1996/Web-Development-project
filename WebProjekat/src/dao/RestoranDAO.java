@@ -121,7 +121,7 @@ public class RestoranDAO {
 		return null;
 	}
 
-	public String izmeniRestoran(Restoran restoran) throws IOException {
+	public String izmeniRestoran(Restoran restoran, ArtikalDAO artikalDao) throws IOException {
 		String vrati ="";
 		//ukoliko smo menjali naziv, moramo da proverimo da li 
 		//restoran vec postoji tu 
@@ -154,6 +154,21 @@ public class RestoranDAO {
 
 			restorani.put(restoranZaIzmenu.getNaziv(), restorani.remove(restoranZaIzmenu.getStariNaziv()));
 			saveRestoran();
+		}
+		
+		/*
+		 * Ako smo promenili naziv restorana, onda moramo da promenimo naziv
+		 * restorana svim artiklima koje poseduje , i takodje moramo da updejtamo
+		 * kljuc svakog ponaosob artikla!
+		 * */
+		if(!restoran.getNaziv().equals(restoran.getStariNaziv())){
+			for(Artikal item : artikalDao.getArtikli().values()){
+				item.setRestoran(restoranZaIzmenu.getNaziv());
+				artikalDao.getArtikli().put(item.getNaziv()+item.getRestoran(), artikalDao.getArtikli().remove(item.getNaziv()+restoran.getStariNaziv()));
+
+				
+			}
+			artikalDao.saveArtikle();
 		}
 		
 		return vrati;

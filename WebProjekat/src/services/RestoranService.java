@@ -83,7 +83,9 @@ public class RestoranService {
 	@Produces(MediaType.TEXT_PLAIN)
 	public String izmeniRestoran(Restoran restoran) throws IOException{
 		RestoranDAO dao = (RestoranDAO) ctx.getAttribute("restoranDAO");
-		return dao.izmeniRestoran(restoran);
+		ArtikalDAO artikalDAO = (ArtikalDAO) ctx.getAttribute("artikalDAO");
+		
+		return dao.izmeniRestoran(restoran,artikalDAO);
 	}
 	
 	/*

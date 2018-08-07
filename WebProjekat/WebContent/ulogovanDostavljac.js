@@ -15,7 +15,7 @@ $(document).on("click","#izmeniDodajVoziloDostavlajc",function(e){
 			for(let vozilo of vozila){
 				if(vozilo.obrisan==false){
 					if(vozilo.daLiJeUUpotrebi==false){
-						let option= $('<option value="'+vozilo.registarskaOznaka+'">'+vozilo.registarskaOznaka+' ( '+vozilo.marka +' '+vozilo.model+') </option>');
+						let option= $('<option class="'+vozilo.registarskaOznaka+'" value="'+vozilo.registarskaOznaka+'">'+vozilo.registarskaOznaka+' ( '+vozilo.marka +' '+vozilo.model+') </option>');
 						$("#slobodnaVozila").append(option);
 					}
 				}

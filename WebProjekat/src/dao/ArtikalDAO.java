@@ -236,10 +236,13 @@ public class ArtikalDAO {
 		ArrayList<Artikal> pica = new ArrayList<Artikal>();
 		
 		for(Artikal item : artikli.values()){
-			if(item.getTip().equals("pice")){
-				pica.add(item);
-			}else{
-				jela.add(item);
+			//ako artikal nije obrisan onda proveravaj kom tipu pripada
+			if(!item.getObrisan()){
+				if(item.getTip().equals("pice")){
+					pica.add(item);
+				}else{
+					jela.add(item);
+				}
 			}
 		}
 		
