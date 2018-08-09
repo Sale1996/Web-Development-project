@@ -134,6 +134,25 @@ public class KorisnikDAO {
 		}
 		
 		
+		
+		/*
+		 * Ukoliko je ulogovan kupac, moramo da obelezimo njegove omiljene restorane
+		 * pa cemo to da uradimo
+		 * */
+		if(korisnikVrati!=null){
+			if(korisnikVrati instanceof Kupac){
+				for(Restoran item : ((Kupac) korisnikVrati).getOmiljeniRestorani()){
+					//ovde radimo for petlju po vrednostima mape jer nesto ne radi get poziv po kljucu
+					for(Restoran item2 : restoranDAO.getRestorani().values()){
+						if(item2.getNaziv().equals(item.getNaziv())){
+							item2.setDaLiJeOmiljeni(true);
+							item.setDaLiJeOmiljeni(true);
+							break;
+						}
+					}
+				}
+			}
+		}
 		return korisnikVrati;
 		
 	}

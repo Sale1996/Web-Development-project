@@ -122,7 +122,7 @@ public class KupacDAO {
 		if(ulogovanKorisnik==null){
 			return "NIJE ULOGOVAN";
 		}
-		ulogovanKorisnik.dodajIliObrisiOmiljeniRestoran(noviOmiljeniRestoran);
+		ulogovanKorisnik.dodajIliObrisiOmiljeniRestoran(noviOmiljeniRestoran,restoranDao);
 		saveKupac();
 		
 		return "OK";

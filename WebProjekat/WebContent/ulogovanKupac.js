@@ -13,7 +13,7 @@ $(document).ready(function() {
 				url : url,
 				type: 'GET',
 				success: function(vratio){
-					 if(vratio=="ok"){
+					 if(vratio=="OK"){
 						 $(kliknutiElement).toggleClass("fa-heart fa-heart-o");
 					 }
 				}
