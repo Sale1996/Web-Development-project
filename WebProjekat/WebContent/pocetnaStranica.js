@@ -187,7 +187,7 @@ $(document).ready(function() {
 				type: "GET" ,
 				success : function(korisnik) {
 					if(korisnik!=null){
-					   ispisiHTMLpoKorisniku(korisnik.uloga);
+					   ispisiHTMLpoKorisniku(korisnik);
 					}
 				}
 			});
@@ -401,7 +401,7 @@ $(document).ready(function() {
 				}
 				
 				//ispisuje HTML na osnovu korisnika!
-				ispisiHTMLpoKorisniku(korisnik.uloga);
+				ispisiHTMLpoKorisniku(korisnik);
 				
 			}
 		});
@@ -466,7 +466,7 @@ $(document).ready(function() {
 	
 	
 function ispisiHTMLpoKorisniku(korisnik){
-	if(korisnik=="kupac"){
+	if(korisnik.uloga=="kupac"){
 		/*
 		 * Ako se ulogovao kupac znaci da cemo morati da izpremestamo izgled 
 		 * pocetnog prozora od pocetne stranice na onu koja dolikuje ulogovanom
@@ -485,7 +485,7 @@ function ispisiHTMLpoKorisniku(korisnik){
 		$('#korisnickoImeInputLogovanje').val("");
 		$('#passwordInputLogovanje').val("");
 		
-	}else if(korisnik=="admin"){
+	}else if(korisnik.uloga=="admin"){
 		/* *
 		 * Sakrivamo navigacioneprecice neregistrovanog korisnika
 		 * Sakrivamo spisak svih artikala, i funkcionalnost sortiranja artikala prema restoranu
@@ -511,7 +511,7 @@ function ispisiHTMLpoKorisniku(korisnik){
 		$('#korisnickoImeInputLogovanje').val("");
 		$('#passwordInputLogovanje').val("");
 
-	}else if(korisnik=="dostavljac"){
+	}else if(korisnik.uloga=="dostavljac"){
 		$('#navigacijaPreciceNeregistrovaniKorisnik').hide();
 		
 		$("[class*='dostavljacNijeUlogovan']").addClass('dostavljacUlogovan');
@@ -571,11 +571,8 @@ function ispisiHTMLpoKorisniku(korisnik){
 								$('#nedodeljenePorudzbineTabela tbody').append(tr);
 							}
 							else if(porudzbina.dostavljac.korisnickoIme==korisnik.korisnickoIme){
-								let tdOtkazi = "";
-								if(porudzbina.statusPorudzbine=="u toku" || porudzbina.statusPorudzbine=="poruceno")
-								 	tdOtkazi=$('<td id="otkaziPorudzbinuLink'+porudzbina.id+'"><a class="statusPorudzbine" style="color:red" href="/WebProjekat/rest/porudzbina/menjajStatus/'+brojac+'otkazano">Otkazi porudzbinu</a></td>');
 								
-							    tr.append(tdIzmeni).append(tdOtkazi);
+							    tr.append(tdIzmeni);
 								$('#porudzbineDodeljeneMeniTabela tbody').append(tr);
 							}
 							

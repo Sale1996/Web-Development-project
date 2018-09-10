@@ -1187,8 +1187,10 @@ $('#formaIzmenaVozila').submit(function(event){
 								' </div>');		
 					    /*+ porudzbina.dostavljac.korisnickoIme + */
 						let tdIzmeni = $('<td><a class="izmeniPorudzbinu" href="/WebProjekat/rest/porudzbina/'+brojac+'">Izmeni porudzbinu</a></td>');
+						
 						let tdObrisi=$('<td><a class="izbrisiPorudzbinu" style="color:red" href="/WebProjekat/rest/porudzbina/'+brojac+'">Obrisi</a></td>');
-	
+						
+						
 						tr.append(tdNaziv).append(tdIzmeni).append(tdObrisi);
 						$('#adminTabela tbody').append(tr);
 						brojac=brojac+1;
@@ -1641,6 +1643,10 @@ $('#dodajNovuPorudzbinuAdmin2').submit(function(event){
 					alert("Kupac nema toliko nagradnih bodova!");
 					return;
 				}
+				if(string =="neMozeDostavljac"){
+					alert("Dostavljac ima porudzbinu u toku! Pokusajte kasnije ili promenite dostavljaca.");
+					return;
+				}
 				
 				
 				$('#dodajNovuPorudzbinuAdmin').hide();
@@ -1685,18 +1691,27 @@ $(document).on("click",".izbrisiPorudzbinu",function(e){
 $(document).on("click","#izlogujAdministratora",function(e){
 	e.preventDefault();
 	
-	//sada otkrivamo ono sto treba neregistrovani korisnik da vidi
-	//a sakrivamo ono sto je admin video
-	$('#navigacijaPreciceNeregistrovaniKorisnik').show();
-	$("[class*='administratorUlogovan']").addClass('administratorNijeUlogovan');
-	$("[class*='sakriOdAdministratora']").show();
-	$("#adminTabela tbody tr").remove(); //brisemo sve iz spiska od admina
-    $("#adminTabela thead tr").remove();
-    
-  //SAKRIVAMO FORMU ZA TRAZENJE ARTIKLA KOJOM UPRAVLJA ADMINISTRATOR
-	$("#pretragaArtiklaAdministrator").hide();
-	//a takodje i restorana
-	$("#pretragaRestoranaAdmin").hide();
+	$.ajax({
+		url: 'rest/korisnik/izloguj',
+		type:"GET",
+		success: function(status) {
+			if(status=="ok"){
+				//sada otkrivamo ono sto treba neregistrovani korisnik da vidi
+				//a sakrivamo ono sto je admin video
+				$('#navigacijaPreciceNeregistrovaniKorisnik').show();
+				$("[class*='administratorUlogovan']").addClass('administratorNijeUlogovan');
+				$("[class*='sakriOdAdministratora']").show();
+				$("#adminTabela tbody tr").remove(); //brisemo sve iz spiska od admina
+			    $("#adminTabela thead tr").remove();
+			    
+			  //SAKRIVAMO FORMU ZA TRAZENJE ARTIKLA KOJOM UPRAVLJA ADMINISTRATOR
+				$("#pretragaArtiklaAdministrator").hide();
+				//a takodje i restorana
+				$("#pretragaRestoranaAdmin").hide();
+			}
+		}
+	});
+
 });
 
 

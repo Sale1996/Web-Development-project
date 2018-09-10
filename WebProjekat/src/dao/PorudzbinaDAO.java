@@ -336,6 +336,18 @@ public class PorudzbinaDAO {
 				break;
 			}
 		}
+		
+		//sada trebamo da vidimo da li postoji neka porudzbina koja je "u toku" a da ima naseg dostavljaca
+		for(Porudzbina item : porudzbine){
+			if(item.getDostavljac().getKorisnickoIme().equals(dostavljacKojiNarucuje.getKorisnickoIme())){
+				if(item.getStatusPorudzbine().equals("u toku")){
+					return "neMozeDostavljac";
+				}
+			}
+		}
+		
+		
+		
 		//nalazimo trenutnu porudzbinu i dodajemo joj finalne podatke
 		HttpSession session = request.getSession();
 		Porudzbina porudzbinaZaNaruciti= (Porudzbina) session.getAttribute("trenutnaPorudzbina");

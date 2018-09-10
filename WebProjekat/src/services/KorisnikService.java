@@ -119,4 +119,13 @@ public class KorisnikService {
 		return dao.promeniUlogu(korisnik);
 		
 	}
+	
+	@GET
+	@Path("/izloguj/")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String izlogujKorisnika(@Context HttpServletRequest request){
+		KorisnikDAO dao = (KorisnikDAO) ctx.getAttribute("korisnikDAO");
+		
+		return dao.izlogujKorisnika(request);
+	}
 }

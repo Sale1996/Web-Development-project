@@ -293,4 +293,10 @@ public class KorisnikDAO {
 		
 		return "ok";
 	}
+
+	public String izlogujKorisnika(HttpServletRequest request) {
+		HttpSession sesija = request.getSession();
+		sesija.invalidate();
+		return "ok";
+	}
 }

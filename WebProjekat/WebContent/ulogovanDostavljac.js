@@ -106,9 +106,8 @@ $(document).on("click",".preuzmiPorudzbinu",function(e){
 							' </div>');	
 				    let tdIzmeni = $('<td id="LinkIzmenaStatusaPorudzbine'+porudzbina.id+'" ><a class="statusPorudzbine" href="/WebProjekat/rest/porudzbina/menjajStatus/'+porudzbina.id+'uToku">Promeni u toku</a></td>');
 				    let tdStatus = $('<td id="promeniStatusPorudzbine'+porudzbina.id+'">'+porudzbina.statusPorudzbine+'</td>');
-				    let	tdOtkazi=$('<td id="otkaziPorudzbinuLink'+porudzbina.id+'"><a class="statusPorudzbine" style="color:red" href="/WebProjekat/rest/porudzbina/menjajStatus/'+porudzbina.id+'otkazano">Otkazi porudzbinu</a></td>');
 	
-				    tr.append(tdNaziv).append(tdStatus).append(tdIzmeni).append(tdOtkazi);
+				    tr.append(tdNaziv).append(tdStatus).append(tdIzmeni);
 					$('#porudzbineDodeljeneMeniTabela tbody').append(tr);
 			 	}
 			 	else{
@@ -119,6 +118,8 @@ $(document).on("click",".preuzmiPorudzbinu",function(e){
 	 });
 	
 });
+
+
 
 
 /* *
@@ -164,14 +165,24 @@ $(document).on("click","#izlazIzNalogaAdministratora",function(e){
 $(document).on("click","#izlogujDostavljaca",function(e){
 	e.preventDefault();
 	
-	//sada otkrivamo ono sto treba neregistrovani korisnik da vidi
-	//a sakrivamo ono sto je admin video
-	$('#navigacijaPreciceNeregistrovaniKorisnik').show();
-	$("[class*='dostavljacUlogovan']").addClass('dostavljacNijeUlogovan');
-	$("[class*='sakriOdAdministratora']").show();
-	$("#porudzbineDodeljeneMeniTabela tbody tr").remove(); //brisemo sve iz spiska od admina
-    $("#nedodeljenePorudzbineTabela thead tr").remove();
-    $("#voziloDostavlajca").text("");
+	$.ajax({
+		url: 'rest/korisnik/izloguj',
+		type:"GET",
+		success: function(status) {
+			if(status=="ok"){
+				//sada otkrivamo ono sto treba neregistrovani korisnik da vidi
+				//a sakrivamo ono sto je admin video
+				$('#navigacijaPreciceNeregistrovaniKorisnik').show();
+				$("[class*='dostavljacUlogovan']").addClass('dostavljacNijeUlogovan');
+				$("[class*='sakriOdAdministratora']").show();
+				$("#porudzbineDodeljeneMeniTabela tbody tr").remove(); //brisemo sve iz spiska od admina
+			    $("#nedodeljenePorudzbineTabela thead tr").remove();
+			    $("#voziloDostavlajca").text("");
+
+			}
+		}
+	});
+	
 });
 
 	
