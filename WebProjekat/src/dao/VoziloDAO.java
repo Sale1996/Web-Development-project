@@ -157,7 +157,8 @@ public class VoziloDAO {
 		
 		//ovo sto smo uradili jeste da smo updejtali kljuc u mapi
 		//u slucaju da smo promenili registarsku oznaku vozila
-		vozila.put(voziloZaIzmenu.getRegistarskaOznaka(), vozila.remove(vozilo.getStaraRegistarskaOznaka()));
+		vozila.remove(vozilo.getStaraRegistarskaOznaka());
+		vozila.put(voziloZaIzmenu.getRegistarskaOznaka(),voziloZaIzmenu );
 		
 		saveVozilo();
 		

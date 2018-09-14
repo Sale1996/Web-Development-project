@@ -68,21 +68,37 @@ function addSviArtikli(artikli){
 						artikal.kolicina + ' ' + kolicinskaMera +' </br><b>Restoran:</b> '+ artikal.restoran +'</span> </div></td>');
 				
 				let tdCena = $('<td>' + artikal.jedinicnaCena + ' din' + '</td>');
-				let tdDugme = $('<td><button class="button ovoJeZaKupca kupiArtikal kupacUlogovan" ><a style="color:white;font-size:20" href="rest/kupac/naruciArtikal/'+ artikal.naziv + artikal.restoran+'">Kupi</a></button> </td>');
-				tr.append(tdNaziv).append(tdCena).append(tdDugme); // ovde samo dodajemo u kolone tabele vidis naziv pa cena pa link
-				broj++;
-		
-		
-				if(broj==1){
-					$('#tabelaSviArtikli1 tbody').append(tr);
-				}
-				else if(broj==2){
-					$('#tabelaSviArtikli2 tbody').append(tr);
-				}
-				else if(broj==3){
-					$('#tabelaSviArtikli3 tbody').append(tr);
-					broj=0;
-				}
+				tr.append(tdNaziv).append(tdCena); // ovde samo dodajemo u kolone tabele vidis naziv pa cena pa link
+				
+				//ovde moramo da gledamo da li je korisnik ulogovan i ukoliko jeste onda mu dozvoliti da ima dugmad
+				$.ajax({
+					url : "rest/korisnik",
+					type : "GET",
+					success: function(korisnik){
+						if(korisnik!=null){
+							if(korisnik.uloga=="kupac"){
+								let tdDugme = $('<td><button class="button ovoJeZaKupca kupiArtikal kupacUlogovan" ><a style="color:white;font-size:20" href="rest/kupac/naruciArtikal/'+ artikal.naziv + artikal.restoran+'">Kupi</a></button> </td>');
+								tr.append(tdDugme);
+							}
+						}
+
+						broj++;
+				
+				
+						if(broj==1){
+							$('#tabelaSviArtikli1 tbody').append(tr);
+						}
+						else if(broj==2){
+							$('#tabelaSviArtikli2 tbody').append(tr);
+						}
+						else if(broj==3){
+							$('#tabelaSviArtikli3 tbody').append(tr);
+							broj=0;
+						}
+					}
+				});
+				
+				
 			}
 	}
 }
@@ -310,6 +326,7 @@ $(document).ready(function() {
 			success: function(artikli){
 				$("#dugmeTogglePretraga").show();
 				$("#dugmeKojeBriseListuRestorana").hide();
+				$("#pretragaRestoranaPocetna").hide();
 				$("#dugmePonistavanjaFilteraArtikala").show();
 				//sada trebamo da obrisemo red u tabeli
 				$("#tabelaSviRestorani1  tr").remove();
@@ -553,10 +570,10 @@ function ispisiHTMLpoKorisniku(korisnik){
 									' </div>');	
 						    let tdIzmeni= null;
 						    if(porudzbina.statusPorudzbine=="poruceno"){
-								tdIzmeni = $('<td id="LinkIzmenaStatusaPorudzbine'+porudzbina.id+'" ><a class="statusPorudzbine" href="/WebProjekat/rest/porudzbina/menjajStatus/'+brojac+'uToku">Promeni u toku</a></td>');
+								tdIzmeni = $('<td id="LinkIzmenaStatusaPorudzbine'+porudzbina.id+'" ><a class="statusPorudzbine" href="/WebProjekat/rest/porudzbina/menjajStatus/'+brojac+ '_' +'uToku">Promeni u toku</a></td>');
 						    }
 						    else if(porudzbina.statusPorudzbine=="u toku"){
-								tdIzmeni = $('<td id="LinkIzmenaStatusaPorudzbine'+porudzbina.id+'"><a class="statusPorudzbine" href="/WebProjekat/rest/porudzbina/menjajStatus/'+brojac+'dostavljeno">Promeni u dostavljeno</a></td>');
+								tdIzmeni = $('<td id="LinkIzmenaStatusaPorudzbine'+porudzbina.id+'"><a class="statusPorudzbine" href="/WebProjekat/rest/porudzbina/menjajStatus/'+brojac+'_' +'dostavljeno">Promeni u dostavljeno</a></td>');
 						    	
 						    }else{
 						    	tdIzmeni = $('<td></td>');

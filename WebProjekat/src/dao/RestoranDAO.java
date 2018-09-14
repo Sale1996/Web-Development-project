@@ -142,19 +142,26 @@ public class RestoranDAO {
 			}
 		}
 		
-		//sada vrsimo izmenu podataka
 		
-		restoranZaIzmenu.setNaziv(restoran.getNaziv());
-		restoranZaIzmenu.setAdresa(restoran.getAdresa());
-		restoranZaIzmenu.setKategorija(restoran.getKategorija());
+		
 		
 		if(vrati.equals("")){
+			//sada vrsimo izmenu podataka
+			String stariNaziv = restoranZaIzmenu.getNaziv();
+			restoranZaIzmenu.setNaziv(restoran.getNaziv());
+			restoranZaIzmenu.setAdresa(restoran.getAdresa());
+			restoranZaIzmenu.setKategorija(restoran.getKategorija());
 			//ovo sto smo uradili jeste da smo updejtali kljuc u mapi
 			//u slucaju da smo promenili naziv restorana
 
-			restorani.put(restoranZaIzmenu.getNaziv(), restorani.remove(restoranZaIzmenu.getStariNaziv()));
+			restorani.remove(stariNaziv);
+			restoranZaIzmenu.setStariNaziv(restoran.getNaziv());
+			restorani.put(restoranZaIzmenu.getNaziv(), restoranZaIzmenu);
 			saveRestoran();
+
 		}
+		
+
 		
 		/*
 		 * Ako smo promenili naziv restorana, onda moramo da promenimo naziv
@@ -162,11 +169,19 @@ public class RestoranDAO {
 		 * kljuc svakog ponaosob artikla!
 		 * */
 		if(!restoran.getNaziv().equals(restoran.getStariNaziv())){
+			Boolean nisu_svi_prosli=true;
+			while(nisu_svi_prosli){
+				nisu_svi_prosli=false;
 			for(Artikal item : artikalDao.getArtikli().values()){
-				item.setRestoran(restoranZaIzmenu.getNaziv());
-				artikalDao.getArtikli().put(item.getNaziv()+item.getRestoran(), artikalDao.getArtikli().remove(item.getNaziv()+restoran.getStariNaziv()));
-
+				if(item.getRestoran().equals(restoran.getNaziv())){
+					item.setRestoran(restoranZaIzmenu.getNaziv());
+					artikalDao.getArtikli().remove(item.getNaziv()+restoran.getStariNaziv());
+					artikalDao.getArtikli().put(item.getNaziv()+item.getRestoran(),item);
+					nisu_svi_prosli=true;
+					break;
+				}
 				
+			}
 			}
 			artikalDao.saveArtikle();
 		}

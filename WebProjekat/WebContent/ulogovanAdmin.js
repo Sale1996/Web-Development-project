@@ -1217,14 +1217,14 @@ $('#formaIzmenaVozila').submit(function(event){
 
 				for(let artikal of porudzbina.artikli){
 					let artikalID = artikal.naziv+artikal.restoran;
-					artikalID = artikalID.replace(' ','');
+					artikalID = artikalID.replace(/ /g,'');
 					
 					let tr = $('<tr></tr>');
-					let tdObrisi = $('<td><a class="obrisiArtikalPorudzbinaAdmin" href="/WebProjekat/rest/porudzbina/ukloniArtikalPorudzbina/'+porudzbina.id+artikal.naziv+ artikal.restoran+'">x</a></td>');
+					let tdObrisi = $('<td><a class="obrisiArtikalPorudzbinaAdmin" href="/WebProjekat/rest/porudzbina/ukloniArtikalPorudzbina/'+porudzbina.id+"_"+artikal.naziv+ artikal.restoran+'">x</a></td>');
 					let tdNaziv= $('<td>'+artikal.naziv+'</td>');
-					let tdSmanjiBroj = $('<td><a class="smanjiBrojArtikalaUPorudzbiniAdmin"  href="/WebProjekat/rest/porudzbina/smanjiBrojArtikala/'+porudzbina.id+artikal.naziv+ artikal.restoran+'">-</a></td>');
+					let tdSmanjiBroj = $('<td><a class="smanjiBrojArtikalaUPorudzbiniAdmin"  href="/WebProjekat/rest/porudzbina/smanjiBrojArtikala/'+porudzbina.id+"_"+artikal.naziv+ artikal.restoran+'">-</a></td>');
 					let tdKolicina = $('<td id="brojArtikalaPorudzbina'+ porudzbina.id+artikalID +'">'+ artikal.brojArtikala+'</td>');
-					let tdPovecajBroj = $('<td><a class="povecajBrojArtikalaUPorudzbiniAdmin"  href="/WebProjekat/rest/porudzbina/povecajBrojArtikala/'+porudzbina.id+artikal.naziv+ artikal.restoran+'">+</a></td>');
+					let tdPovecajBroj = $('<td><a class="povecajBrojArtikalaUPorudzbiniAdmin"  href="/WebProjekat/rest/porudzbina/povecajBrojArtikala/'+porudzbina.id+"_"+artikal.naziv+ artikal.restoran+'">+</a></td>');
 					let tdCena = $('<td>'+artikal.jedinicnaCena+'</td>');
 					tr.append(tdObrisi).append(tdNaziv).append(tdSmanjiBroj).append(tdKolicina).append(tdPovecajBroj).append(tdCena);
 					$("#podaciOPorudzbini tbody").append(tr);
@@ -1280,9 +1280,12 @@ $('#formaIzmenaVozila').submit(function(event){
 	 e.preventDefault();
 	 var kliknutiElement= e.target; //ovo nam vraca element koji je kliknut		  
 	 let url= $(kliknutiElement).attr('href');
-	 let idPorudzbine = url.charAt(48);
-	 let idArtikla = url.substring(49,url.length);
-	 idArtikla = idArtikla.replace(' ','');
+	 let delovi = url.split("_");
+	 //let idPorudzbine = url.charAt(48);
+	 let idPorudzbine = delovi[0].substring(48,delovi[0].length);
+	 // let idArtikla= url.substring(49,url.length);
+	 let idArtikla=delovi[1];
+	 idArtikla = idArtikla.replace(/ /g,'');
 	 var link='#brojArtikalaPorudzbina'+ idPorudzbine + idArtikla;
 	 var vrednostTrenutna = $(link).text();
 	 if(vrednostTrenutna==1){
@@ -1294,20 +1297,20 @@ $('#formaIzmenaVozila').submit(function(event){
 	 $.ajax({
 			url: url, //url
 			type: "GET" ,
-			success : function(idPorudzbine) {
-				var idPorudzbine1 = idPorudzbine.replace(' ','');
-				var link='#brojArtikalaPorudzbina'+ idPorudzbine1;
+			success : function(nebitno) {
+			//	var idPorudzbine1 = idPorudzbine.replace(' ','');
+			//	var link='#brojArtikalaPorudzbina'+ idPorudzbine1;
 				var Vrednost = $(link).text();
 				Vrednost = Vrednost - 1;
-				$('#brojArtikalaPorudzbina'+ idPorudzbine1+'').text(Vrednost);
+				$(link).text(Vrednost);
 				//treba nam porudzbina
-				var linkZaPreuzimanjePorudzbine='rest/porudzbina/'+ idPorudzbine[0];
+				var linkZaPreuzimanjePorudzbine='rest/porudzbina/'+ idPorudzbine;
 				$.ajax({
 					url: linkZaPreuzimanjePorudzbine,
 					type: "GET",
 					success: function(porudzbina){
-						$('#ukupnaCenaPorudzbineAdmin'+idPorudzbine[0]).text(porudzbina.ukupnaCena);
-						$('#izlistajPorudzbineAdminGlavnaLista'+idPorudzbine[0]).html('<b>Porudzbina ' +(idPorudzbine[0]+1)
+						$('#ukupnaCenaPorudzbineAdmin'+idPorudzbine).text(porudzbina.ukupnaCena);
+						$('#izlistajPorudzbineAdminGlavnaLista'+idPorudzbine).html('<b>Porudzbina ' +(idPorudzbine+1)
 								+ '</br>'+ porudzbina.ukupnaCena +' din</b>');
 					}
 				});
@@ -1325,25 +1328,32 @@ $('#formaIzmenaVozila').submit(function(event){
  $(document).on("click",".povecajBrojArtikalaUPorudzbiniAdmin",function(e){
 	 e.preventDefault();
 	 var kliknutiElement= e.target; //ovo nam vraca element koji je kliknut		  
-	 let url= $(kliknutiElement).attr('href'); 
+	 let url= $(kliknutiElement).attr('href');
+	 let delovi = url.split("_");
+	 //let idPorudzbine = url.charAt(48);
+	 let idPorudzbine = delovi[0].substring(48,delovi[0].length);
+	 // let idArtikla= url.substring(49,url.length);
+	 let idArtikla=delovi[1];
+	 idArtikla = idArtikla.replace(/ /g,'');
+	 var link='#brojArtikalaPorudzbina'+ idPorudzbine + idArtikla;
+	 var vrednostTrenutna = $(link).text();
 	 $.ajax({
 			url: url, //url
 			type: "GET" ,
-			success : function(idPorudzbine) {
-				var idPorudzbine1 = idPorudzbine.replace(' ','');
-				var link='#brojArtikalaPorudzbina'+ idPorudzbine1;
+			success : function(nebitno) {
+				//var idPorudzbine1 = idPorudzbine.replace(' ','');
+				//var link='#brojArtikalaPorudzbina'+ idPorudzbine1;
 				
-				var Vrednost = $(link).text();
-				Vrednost++;
-				$('#brojArtikalaPorudzbina'+ idPorudzbine1+'').text(Vrednost);
+				vrednostTrenutna++;
+				$(link).text(vrednostTrenutna);
 				//treba nam porudzbina
-				var linkZaPreuzimanjePorudzbine='rest/porudzbina/'+ idPorudzbine[0];
+				var linkZaPreuzimanjePorudzbine='rest/porudzbina/'+ idPorudzbine;
 				$.ajax({
 					url: linkZaPreuzimanjePorudzbine,
 					type: "GET",
 					success: function(porudzbina){
-						$('#ukupnaCenaPorudzbineAdmin'+idPorudzbine[0]).text(porudzbina.ukupnaCena);
-						$('#izlistajPorudzbineAdminGlavnaLista'+idPorudzbine[0]).html('<b>Porudzbina ' +(idPorudzbine[0]+1)
+						$('#ukupnaCenaPorudzbineAdmin'+idPorudzbine).text(porudzbina.ukupnaCena);
+						$('#izlistajPorudzbineAdminGlavnaLista'+idPorudzbine).html('<b>Porudzbina ' +(idPorudzbine+1)
 								+ '</br>'+ porudzbina.ukupnaCena +' din</b>');
 					}
 				});
@@ -1570,7 +1580,7 @@ $(document).on("click","#dodavanjeArtiklaPorudzbiniAdmin",function(e){
 		success : function(artikal) {
 			//sada cemo ubaciti ovaj artikal u tabelu
 			let artikalID = artikal.naziv+artikal.restoran;
-			artikalID = artikalID.replace(' ','');
+			artikalID = artikalID.replace(/ /g,'');
 			
 			let tr = $('<tr></tr>');
 			let tdObrisi = $('<td><a class="obrisiArtikalPorudzbinaKreiranjeAdmin" href="/WebProjekat/rest/porudzbina/ukloniArtikalPorudzbinaKreiranjeAdmin/'+artikal.naziv+ artikal.restoran+'">x</a></td>');
@@ -1708,6 +1718,13 @@ $(document).on("click","#izlogujAdministratora",function(e){
 				$("#pretragaArtiklaAdministrator").hide();
 				//a takodje i restorana
 				$("#pretragaRestoranaAdmin").hide();
+				//ukoliko je ostala nedovrseno kreiranje porudzbine od strane admina, to se brise
+				$("#podaciOPorudzbiniNovaPorudzbina tbody tr").remove();
+				$("#podaciOPorudzbiniNovaPorudzbina thead tr").remove();
+
+				//ukoliko je nesto ostalo boldovano mi brisemo bold!
+				 $("[class*='selektovanaTabelaAdmin']").removeClass('selektovanaTabelaAdmin');
+
 			}
 		}
 	});
@@ -1733,7 +1750,7 @@ $('#promeniStatusPorudzbine2').submit(function(event){
 	var statusPorudzbine=$("#statusPorudzbineIzmena").val();
 	
 	$.ajax({
-		url: 'rest/porudzbina/menjajStatus/'+indexPorudzbine+statusPorudzbine, //url
+		url: 'rest/porudzbina/menjajStatus/'+indexPorudzbine+"_"+statusPorudzbine, //url
 		type: "GET" ,
 		success : function(povratnaVrednost) {
 			$("#promeniStatusPorudzbine").hide();

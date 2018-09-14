@@ -113,10 +113,12 @@ public class PorudzbinaDAO {
 	 * 
 	 * */
 	public String promeniBrojArtikalaPoruzbine(String artikal, String manjeVise) throws IOException {
-		String idPorudzbine = artikal.substring(0,1);
+		String porudzbineString[]= artikal.split("_");
+		
+		String idPorudzbine = porudzbineString[0];
 		int idPorudzbeInt = Integer.parseInt(idPorudzbine);
 		Porudzbina porudzbinaZaMenjati = porudzbine.get(idPorudzbeInt);
-		String idArtikla = artikal.substring(1);
+		String idArtikla = porudzbineString[1];
 		
 		int broj=porudzbinaZaMenjati.getMapaARTIKALbrojPorudzbina().get(idArtikla);
 		if(manjeVise.equals("smanji")){
@@ -163,7 +165,9 @@ public class PorudzbinaDAO {
 	 * Uklanja artikal iz porudzbine i smanjuje ukupnu cenu naspram artikla
 	 * */
 	public String ukloniArtikalIzPorudzbine(String dodatak) throws IOException {
-		String idPorudzbine = dodatak.substring(0, 1);
+		String porudzbineString[]= dodatak.split("_");
+		
+		String idPorudzbine = porudzbineString[0];
 		int idPorudzbineInt = Integer.parseInt(idPorudzbine);
 		
 		Porudzbina porudzbinaZaMenjati= porudzbine.get(idPorudzbineInt);
@@ -357,18 +361,20 @@ public class PorudzbinaDAO {
 		
 		
 		//ovde cemo sada prema nagradnim bodovima da namestimo ukupnu cenu porudzbine!
-		int nagradniBodovi = Integer.parseInt(informacije.getPrezime());
-		if(kupacKojiNarucuje.getNagradniBodovi()<nagradniBodovi){
-			return "kupacNemaBodova";
+		int nagradniBodovi;
+		if(!informacije.getPrezime().isEmpty()){
+			nagradniBodovi = Integer.parseInt(informacije.getPrezime());
+			if(kupacKojiNarucuje.getNagradniBodovi()<nagradniBodovi){
+				return "kupacNemaBodova";
+			}
+			
+			int procenatUkupneCene= porudzbinaZaNaruciti.getUkupnaCena()/100;
+			int popust = 3*nagradniBodovi*procenatUkupneCene;
+			//sada smanjujemo ukupn cenu
+			porudzbinaZaNaruciti.setUkupnaCena(porudzbinaZaNaruciti.getUkupnaCena()-popust);
+			//i smanjujemo nagradne bodove kupcu
+			kupacKojiNarucuje.setNagradniBodovi(kupacKojiNarucuje.getNagradniBodovi()-nagradniBodovi);
 		}
-		
-		int procenatUkupneCene= porudzbinaZaNaruciti.getUkupnaCena()/100;
-		int popust = 3*nagradniBodovi*procenatUkupneCene;
-		//sada smanjujemo ukupn cenu
-		porudzbinaZaNaruciti.setUkupnaCena(porudzbinaZaNaruciti.getUkupnaCena()-popust);
-		//i smanjujemo nagradne bodove kupcu
-		kupacKojiNarucuje.setNagradniBodovi(kupacKojiNarucuje.getNagradniBodovi()-nagradniBodovi);
-		
 		
 		porudzbinaZaNaruciti.setKupacKojiNarucuje(kupacKojiNarucuje);
 		porudzbinaZaNaruciti.setDostavljac(dostavljacKojiNarucuje);
@@ -401,8 +407,9 @@ public class PorudzbinaDAO {
 	 * Funkcija koja menja status porudzbine
 	 * */
 	public Porudzbina promeniStatus(String idIStatus, KupacDAO kupacDao) throws IOException {
-		String idPorudzbine = idIStatus.substring(0,1);
-		String status=idIStatus.substring(1);
+		String porudzbineString[]= idIStatus.split("_");
+		String idPorudzbine = porudzbineString[0];
+		String status=porudzbineString[1];
 		
 		Porudzbina porudzbina= porudzbine.get(Integer.parseInt(idPorudzbine));
 		if(status.contains("Toku")){
@@ -414,10 +421,19 @@ public class PorudzbinaDAO {
 			 * Ovde gledamo da li je porudzbina premasia sumu od 500 din, ako jeste
 			 * onda cemo dodati jedan angradni bod kupcu (naravno ukoliko nema vec 10!)
 			 * */
+			//prvo trebamo da nadjemo kupca koji je vezan za tu porudzbinu, jer nakon gasenja servera veza kupca iz 
+			//porudzbine i pravog kupca se gube, te ostaje veza samo po korisnickom imenu
+			Kupac kupacKojiNarucuje=null;
+			for(Kupac item : kupacDao.getKupci().values()){
+				if(porudzbina.getKupacKojiNarucuje().getKorisnickoIme().equals(item.getKorisnickoIme())){
+					kupacKojiNarucuje = item;
+					break;
+				}
+			}
 			if(porudzbina.getUkupnaCena()>500){
-				int trenutniNagradniBodoviKupca = porudzbina.getKupacKojiNarucuje().getNagradniBodovi();
+				int trenutniNagradniBodoviKupca = kupacKojiNarucuje.getNagradniBodovi();
 				if(trenutniNagradniBodoviKupca<10){
-					porudzbina.getKupacKojiNarucuje().setNagradniBodovi(++trenutniNagradniBodoviKupca);
+					kupacKojiNarucuje.setNagradniBodovi(++trenutniNagradniBodoviKupca);
 					kupacDao.saveKupac();
 				}
 			}

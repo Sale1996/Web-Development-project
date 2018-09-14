@@ -55,25 +55,27 @@ $(document).ready(function() {
 			url : 'rest/kupac/otvoriKorpu',
 			type: 'GET',
 			success: function(porudzbina){
-				for(let artikal of porudzbina.artikli){
-					let tr = $('<tr></tr>');
-					let tdObrisi = $('<td><a class="obrisiArtikalPorudzbina" href="/WebProjekat/rest/kupac/ukloniArtikalPorudzbina/'+artikal.naziv+ artikal.restoran+'">x</a></td>');
-					let tdNaziv= $('<td>'+artikal.naziv+'</td>');
-					let tdKolicina = $('<td>'+ artikal.brojArtikala+'</td>');
-					let tdCena = $('<td>'+artikal.jedinicnaCena+'</td>');
-					tr.append(tdObrisi).append(tdNaziv).append(tdKolicina).append(tdCena);
-					$("#podaciOUnutrasnjostiKorpe tbody").append(tr);
+				//ako nemamo nijedan artikal u korpi, onda nema ni porudzbine, jednostavno je necemo otvoriti
+				if(porudzbina!=null){
+					for(let artikal of porudzbina.artikli){
+						let tr = $('<tr></tr>');
+						let tdObrisi = $('<td><a class="obrisiArtikalPorudzbina" href="/WebProjekat/rest/kupac/ukloniArtikalPorudzbina/'+artikal.naziv+ artikal.restoran+'">x</a></td>');
+						let tdNaziv= $('<td>'+artikal.naziv+'</td>');
+						let tdKolicina = $('<td>'+ artikal.brojArtikala+'</td>');
+						let tdCena = $('<td>'+artikal.jedinicnaCena+'</td>');
+						tr.append(tdObrisi).append(tdNaziv).append(tdKolicina).append(tdCena);
+						$("#podaciOUnutrasnjostiKorpe tbody").append(tr);
+						
+						$("#dugmePoruciArtikle").removeAttr('disabled'); //ako ima artikala onda ce ukloniti disable sa dugmeta
+					}
 					
-					$("#dugmePoruciArtikle").removeAttr('disabled'); //ako ima artikala onda ce ukloniti disable sa dugmeta
+					let tr1=$('<tr></tr>');
+					let tdKraj=$('<td><b>Ukupna cena:</b></td><td></td><td></td><td><b id="ukupnaCenaKorpa">'+porudzbina.ukupnaCena+'</b></td>')
+					tr1.append(tdKraj);
+					$("#podaciOUnutrasnjostiKorpe tbody").append(tr1);
+					
+					$("#korisnickaKorpa").show();
 				}
-				
-				let tr1=$('<tr></tr>');
-				let tdKraj=$('<td><b>Ukupna cena:</b></td><td></td><td></td><td><b id="ukupnaCenaKorpa">'+porudzbina.ukupnaCena+'</b></td>')
-				tr1.append(tdKraj);
-				$("#podaciOUnutrasnjostiKorpe tbody").append(tr1);
-				
-				$("#korisnickaKorpa").show();
-				
 			}
 		});
 		
@@ -94,9 +96,10 @@ $(document).ready(function() {
 					$(kliknutiElement).parent().parent().remove(); //brise dati artikal iz korpe , tj taj red
 					$('#ukupnaCenaKorpa').text(novaCena); //postavljamo novu ukupnuCenu
 					if(novaCena=="0"){
-						$("#dugmePoruciArtikle").prop("disabled", true); //nadam se da radi da iskljuci dugme kada je bez artikala korpa
 						$("#kupcevaKorpa").text("Korpa");
 						$("#kupcevaKorpa").css("color","white");
+						$("#dugmePoruciArtikle").prop("disabled", true); //nadam se da radi da iskljuci dugme kada je bez artikala korpa
+						
 					}
 				}
 			});
@@ -187,6 +190,11 @@ $(document).ready(function() {
 		
 		if(telefon==""){
 			$('#errorTelefon').text('Polje telefon je obavezno!');
+			$('#errorTelefon').show().delay(9000).fadeOut();
+			greska=1;
+		}
+		if(isNaN(telefon)){
+			$('#errorTelefon').text('Polje telefon mora biti sastavljeno iskljucivo od pozitivnih brojeva!');
 			$('#errorTelefon').show().delay(9000).fadeOut();
 			greska=1;
 		}
@@ -363,6 +371,11 @@ $(document).ready(function() {
 			$('#errorTelefonIzmena').show().delay(9000).fadeOut();
 			greska=1;
 		}
+		if(isNaN(telefon)){
+			$('#errorTelefonIzmena').text('Polje telefon mora biti sastavljeno iskljucivo od pozitivnih brojeva!');
+			$('#errorTelefonIzmena').show().delay(9000).fadeOut();
+			greska=1;
+		}
 		if(email==""){
 			$('#errorEmailIzmena').text('Polje email ne sme biti prazno prilikom izmene!');
 			$('#errorEmailIzmena').show().delay(9000).fadeOut();
@@ -418,6 +431,8 @@ $(document).ready(function() {
 				if(status=="ok"){
 					$("[class*='kupacUlogovan']").addClass("kupacNijeUlogovan"); //vracamo elementima ovu klasu koja ih skriva zapravo
 					$('#navigacijaPreciceNeregistrovaniKorisnik').show();
+					$("#kupcevaKorpa").text("Korpa");
+					$("#kupcevaKorpa").css("color","white");
 
 				}
 			}

@@ -12,6 +12,8 @@ $(document).on("click","#izmeniDodajVoziloDostavlajc",function(e){
 		url: 'rest/vozila',
 		type:"GET",
 		success: function(vozila) {
+			//prvo sam ocistio option polja
+			$("#slobodnaVozila option").remove();
 			for(let vozilo of vozila){
 				if(vozilo.obrisan==false){
 					if(vozilo.daLiJeUUpotrebi==false){
@@ -63,7 +65,7 @@ $(document).on("click",".statusPorudzbine",function(e){
 		 type: "GET" ,
 		 success : function(porudzbina) {
 			if(porudzbina.statusPorudzbine=="u toku"){
-			 $("#LinkIzmenaStatusaPorudzbine"+porudzbina.id).html('<a class="statusPorudzbine" href="/WebProjekat/rest/porudzbina/menjajStatus/'+porudzbina.id+'dostavljeno">Promeni u dostavljeno</a>');	
+			 $("#LinkIzmenaStatusaPorudzbine"+porudzbina.id).html('<a class="statusPorudzbine" href="/WebProjekat/rest/porudzbina/menjajStatus/'+porudzbina.id+'_' +'dostavljeno">Promeni u dostavljeno</a>');	
 			 $("#promeniStatusPorudzbine"+porudzbina.id).html(porudzbina.statusPorudzbine);
 			 
 			}else if(porudzbina.statusPorudzbine=="dostavljeno"){
@@ -104,7 +106,7 @@ $(document).on("click",".preuzmiPorudzbinu",function(e){
 							+'"><b>Status porudzbine:</b> <i id="spanPorudzbinaStatusPorudzbine'+porudzbina.id+'">'+ porudzbina.statusPorudzbine +'</i> </br><b>Napomena:</b> '+ porudzbina.napomena +' </br><b>Cena:</b> <i id="spanPorudzbinaUkupnaCena'+porudzbina.id+'">'+ porudzbina.ukupnaCena + '</i> din</br><b>Kupac:</b> <i id="spanPorudzbinaKupac'+porudzbina.id+'">'+ porudzbina.kupacKojiNarucuje.korisnickoIme +
 							'</i> </br><b>Dostavljac:'+porudzbina.dostavljac.korisnickoIme+'</b> </br></span>'+
 							' </div>');	
-				    let tdIzmeni = $('<td id="LinkIzmenaStatusaPorudzbine'+porudzbina.id+'" ><a class="statusPorudzbine" href="/WebProjekat/rest/porudzbina/menjajStatus/'+porudzbina.id+'uToku">Promeni u toku</a></td>');
+				    let tdIzmeni = $('<td id="LinkIzmenaStatusaPorudzbine'+porudzbina.id+'" ><a class="statusPorudzbine" href="/WebProjekat/rest/porudzbina/menjajStatus/'+porudzbina.id+'_' +'uToku">Promeni u toku</a></td>');
 				    let tdStatus = $('<td id="promeniStatusPorudzbine'+porudzbina.id+'">'+porudzbina.statusPorudzbine+'</td>');
 	
 				    tr.append(tdNaziv).append(tdStatus).append(tdIzmeni);
